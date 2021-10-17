@@ -1,7 +1,7 @@
 grammar MML;
 
 @header {
-package MML4J.main.antlr;
+package MML4J.main.parser.antlr;
 }
 
 // ----- Lexing rules

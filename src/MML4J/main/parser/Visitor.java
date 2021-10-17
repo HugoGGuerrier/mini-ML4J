@@ -1,6 +1,6 @@
 package MML4J.main.parser;
 
-import MML4J.main.antlr.MMLParser;
+import MML4J.main.parser.antlr.MMLParser;
 import MML4J.main.ast.*;
 
 class Visitor extends BaseVisitor {

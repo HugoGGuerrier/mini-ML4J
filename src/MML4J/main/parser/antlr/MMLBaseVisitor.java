@@ -1,6 +1,6 @@
 // Generated from MML.g4 by ANTLR 4.9.2
 
-package MML4J.main.antlr;
+package MML4J.main.parser.antlr;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 

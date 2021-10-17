@@ -4,8 +4,8 @@ public class ArrowNode extends Node {
 
     // ----- Attributes -----
 
-    private Node left;
-    private Node right;
+    protected Node left;
+    protected Node right;
 
     // ----- Constructors -----
 
@@ -49,6 +49,26 @@ public class ArrowNode extends Node {
         return super.getEquationsString() +
                 left.getEquationsString() +
                 right.getEquationsString();
+    }
+
+    @Override
+    public boolean structEquals(Node other) {
+        if(this == other) return true;
+        if(other == null || getClass() != other.getClass()) return false;
+        ArrowNode arrowNode = (ArrowNode) other;
+
+        boolean childrenEquality = children.size() == arrowNode.children.size();
+        if(childrenEquality) {
+            for(Node child : children) {
+                boolean childEq = false;
+                for(Node otherChild : arrowNode.children) {
+                    if(child.structEquals(otherChild)) childEq = true;
+                }
+                childrenEquality = childrenEquality && childEq;
+            }
+        }
+
+        return left.structEquals(arrowNode.left) && right.structEquals(arrowNode.right) && childrenEquality;
     }
 
 }

@@ -7,8 +7,8 @@ public class Node {
 
     // ----- Attributes -----
 
-    private final Set<Node> parents;
-    private final Set<Node> children;
+    protected final Set<Node> parents;
+    protected final Set<Node> children;
 
     // ----- Constructors -----
 
@@ -61,6 +61,16 @@ public class Node {
     }
 
     // ----- Class methods -----
+
+    /**
+     * Get if the two nodes are structurally equals
+     *
+     * @param other The other node
+     * @return True if they are equals
+     */
+    public boolean structEquals(Node other) {
+        return false;
+    }
 
     /**
      * Get all equations string representation writable from this node

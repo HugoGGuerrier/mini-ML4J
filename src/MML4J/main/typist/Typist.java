@@ -1,5 +1,6 @@
 package MML4J.main.typist;
 
+import MML4J.main.Utils;
 import MML4J.main.ast.ASTAbs;
 import MML4J.main.ast.ASTApp;
 import MML4J.main.ast.ASTExpr;
@@ -11,6 +12,9 @@ import MML4J.main.typist.equation_graph.SimpleNode;
 import MML4J.main.typist.type.Type;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Typist {
 
@@ -43,8 +47,9 @@ public class Typist {
      * @param context The typing context
      * @throws TypingException If the var is not found in the context
      */
-    private void recursEqG(ASTExpr expr, Node target, HashMap<String, Node> context) throws TypingException {
+    private void recursEqG(ASTExpr expr, Node target, Map<String, Node> context) throws TypingException {
 
+        // If the expression is a variable
         if(expr instanceof ASTVar) {
             ASTVar var = (ASTVar) expr;
 
@@ -57,6 +62,7 @@ public class Typist {
             target.addParent(varNode);
         }
 
+        // If the expression is an application
         else if(expr instanceof ASTApp) {
             ASTApp app = (ASTApp) expr;
 
@@ -71,6 +77,7 @@ public class Typist {
             recursEqG(app.getArg(), newSimpleNode, context);
         }
 
+        // If the expression is an abstraction
         else if(expr instanceof ASTAbs) {
             ASTAbs abs = (ASTAbs) expr;
 
@@ -84,17 +91,44 @@ public class Typist {
             newArrowNode.addParent(target);
             
             // Copy the context and enlarge it
-            HashMap<String, Node> newContext = ((HashMap<String, Node>) context.clone());
+            Map<String, Node> newContext = Utils.cloneMap(context);
             newContext.put(abs.getParam(), varSimpleNode);
 
             // Type the body with the new context
             recursEqG(abs.getBody(), newSimpleNode, newContext);
         }
 
+        // Else, there is an error
         else {
             throw new TypingException("Unknown AST type");
         }
 
+    }
+
+    /**
+     * Unify a given node recursively
+     *
+     * @param node The node to unify
+     * @param visited The visited nodes
+     */
+    private void recursUnification(Node node, Set<Node> visited) throws TypingException {
+        // Verify that the node is not in the visited
+        if(visited.contains(node)) {
+            throw new TypingException("Type equality graph is cyclic");
+        }
+
+        // Add the current node to the visited
+        Set<Node> v = new HashSet<>(visited);
+        v.add(node);
+
+        // Start the unification on all children (infix recursion)
+        Set<Node> nodeChildren = new HashSet<>(node.getChildren());
+        for(Node child : nodeChildren) {
+            recursUnification(child, v);
+        }
+
+        // Unify the node with all its children
+        // TODO
     }
 
     // ----- Class methods -----
@@ -124,7 +158,19 @@ public class Typist {
      * @param graph The equation graph to unify
      * @return The final type
      */
-    public Type unify(Node graph) {
+    public Type unify(Node graph) throws TypingException {
+        // TODO : Start the unifying
+        return null;
+    }
+
+    /**
+     * Get the inferred type for the given expression
+     *
+     * @param expr The expresion
+     * @return The inferred type
+     */
+    public Type typeExpression(ASTExpr expr) {
+        // TODO : Generate equations and the type of the expression
         return null;
     }
 

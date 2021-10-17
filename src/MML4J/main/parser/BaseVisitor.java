@@ -1,9 +1,8 @@
 package MML4J.main.parser;
 
-import MML4J.main.antlr.MMLBaseVisitor;
-import MML4J.main.antlr.MMLParser;
+import MML4J.main.parser.antlr.MMLBaseVisitor;
+import MML4J.main.parser.antlr.MMLParser;
 import MML4J.main.ast.AST;
-import MML4J.main.ast.ASTExpr;
 
 /**
  * This class define all visit methods for the visitor pattern
