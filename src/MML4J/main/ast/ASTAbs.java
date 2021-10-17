@@ -1,0 +1,49 @@
+package MML4J.main.ast;
+
+import java.util.Objects;
+
+public class ASTAbs extends ASTExpr {
+
+    // ----- Attributes -----
+
+    private final String param;
+    private final ASTExpr body;
+
+    // ----- Constructors -----
+
+    public ASTAbs(String param, ASTExpr body) {
+        this.param = param;
+        this.body = body;
+    }
+
+    // ----- Getters -----
+
+    public String getParam() {
+        return param;
+    }
+
+    public ASTExpr getBody() {
+        return body;
+    }
+
+    // ----- Override methods -----
+
+    @Override
+    public String toString() {
+        return "fn(" + param + "){ " + body.toString() + " }";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ASTAbs abs = (ASTAbs) o;
+        return Objects.equals(param, abs.param) && Objects.equals(body, abs.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(param, body);
+    }
+
+}

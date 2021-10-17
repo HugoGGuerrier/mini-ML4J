@@ -1,0 +1,8 @@
+# IDEA files
+out
+.idea
+*.iml
+
+# Ant files
+build
+bin
