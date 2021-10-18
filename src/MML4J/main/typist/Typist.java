@@ -9,6 +9,8 @@ import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_graph.ArrowNode;
 import MML4J.main.typist.equation_graph.Node;
 import MML4J.main.typist.equation_graph.SimpleNode;
+import MML4J.main.typist.type.ArrowType;
+import MML4J.main.typist.type.SimpleType;
 import MML4J.main.typist.type.Type;
 
 import java.util.HashMap;
@@ -20,7 +22,9 @@ public class Typist {
 
     // ----- Attributes -----
 
-    private int counter;
+    private int nodeCounter;
+    private int typeCounter;
+    private Map<Node, Type> typeMap;
     private int iteration;
 
     // ----- Constructors -----
@@ -29,7 +33,9 @@ public class Typist {
      * Create and initialize the typist
      */
     public Typist() {
-        this.counter = 0;
+        this.nodeCounter = 0;
+        this.typeCounter = 0;
+        this.typeMap = new HashMap<>();
         this.iteration = 0;
     }
 
@@ -41,7 +47,31 @@ public class Typist {
      * @return The next node
      */
     private SimpleNode getNextNode() {
-        return new SimpleNode("T" + counter++);
+        return new SimpleNode("T" + nodeCounter++);
+    }
+
+    /**
+     * Get the next available type
+     *
+     * @return The type
+     */
+    private SimpleType getNextType() {
+        return new SimpleType("T" + typeCounter++);
+    }
+
+    /**
+     * Get the type associated with the node
+     *
+     * @param node The node
+     * @return The type
+     */
+    private Type getTypeForNode(Node node) {
+        Type res = typeMap.getOrDefault(node, null);
+        if(res == null) {
+            res = getNextType();
+            typeMap.put(node, res);
+        }
+        return res;
     }
 
     /**
@@ -123,13 +153,17 @@ public class Typist {
             System.out.println("Start recursive unification on " + node + " | Children : " + node.getChildren());
         }
 
-        // Start the unification on all children (infix recursion)
+        // Copy the node children to visit them
         Set<Node> nodeChildren = new HashSet<>(node.getChildren());
+
+        // If the node is an arrow, add the left and right to the children
         if(node instanceof ArrowNode) {
             ArrowNode arrowNode = (ArrowNode) node;
             nodeChildren.add(arrowNode.getLeft());
             nodeChildren.add(arrowNode.getRight());
         }
+
+        // Unify the children
         for(Node child : nodeChildren) {
             // Recurs on the children
             recursUnification(child);
@@ -148,6 +182,36 @@ public class Typist {
         return currentNode;
     }
 
+    /**
+     * Create a type with the given node
+     *
+     * @param node The node to create the type from
+     * @return The created type
+     * @throws TypingException If the type is not unified
+     */
+    private Type getTypeFromNode(Node node) throws TypingException {
+        // Verify that the node has no child
+        if(node.getChildren().size() > 0) {
+            throw new TypingException("Cannot create a type from a not childless node : " + node);
+        }
+
+        // If the node is a simple node just return a new type
+        if(node instanceof SimpleNode) {
+            return getTypeForNode(node);
+        }
+
+        // If the node is an arrow node return the arrow type
+        else if(node instanceof ArrowNode) {
+            ArrowNode arrowNode = (ArrowNode) node;
+            return new ArrowType(getTypeFromNode(arrowNode.getLeft()), getTypeFromNode(arrowNode.getRight()));
+        }
+
+        // Else, there is an error
+        else {
+            throw new TypingException("Unknown node type");
+        }
+    }
+
     // ----- Class methods -----
 
     /**
@@ -158,7 +222,7 @@ public class Typist {
      */
     public Node getEquationGraph(ASTExpr expr) throws TypingException {
         // Reset the counter
-        counter = 0;
+        nodeCounter = 0;
 
         // Verify the non nullity of the expr
         if(expr == null) throw new TypingException("Cannot generate equations from a null AST");
@@ -185,17 +249,16 @@ public class Typist {
         // Unify the graph
         Node theNode = recursUnification(graph);
 
-        // Display the algorithm efficiency
+        // Display the algorithm iterations
         if(Utils.DEBUG) {
             System.out.println("Iterations = " + iteration);
         }
 
-        // Verify the unification
-        // TODO
+        // Reset the type counter
+        typeCounter = 0;
 
         // Turn the graph into a type
-        // TODO
-        return null;
+        return getTypeFromNode(theNode);
     }
 
     /**

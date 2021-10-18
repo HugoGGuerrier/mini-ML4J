@@ -8,6 +8,9 @@ import MML4J.main.typist.Typist;
 import MML4J.main.typist.equation_graph.ArrowNode;
 import MML4J.main.typist.equation_graph.Node;
 import MML4J.main.typist.equation_graph.SimpleNode;
+import MML4J.main.typist.type.ArrowType;
+import MML4J.main.typist.type.SimpleType;
+import MML4J.main.typist.type.Type;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +62,11 @@ public class TestTypist {
             assertTrue(real.structEquals(t0));
 
             // Test the equation unification
-            typist.unify(real);
+            SimpleType type0 = new SimpleType("T0");
+            Type expectedType = new ArrowType(type0, type0);
+
+            Type realType = typist.unify(real);
+            assertEquals(expectedType, realType);
         } catch (Exception e) {
             fail(e);
         }
@@ -88,7 +95,12 @@ public class TestTypist {
             assertTrue(real.structEquals(t0));
 
             // Test the equation unification
-            typist.unify(real);
+            SimpleType type0 = new SimpleType("T0");
+            SimpleType type1 = new SimpleType("T1");
+            Type expectedType = new ArrowType(new ArrowType(type0, type1), new ArrowType(type0, type1));
+
+            Type realType = typist.unify(real);
+            assertEquals(expectedType, realType);
         } catch (Exception e) {
             fail(e);
         }
@@ -124,7 +136,16 @@ public class TestTypist {
             assertTrue(real.structEquals(t0));
 
             // Test the equation unification
-            typist.unify(real);
+            SimpleType type0 = new SimpleType("T0");
+            SimpleType type1 = new SimpleType("T1");
+            SimpleType type2 = new SimpleType("T2");
+            Type expectedType = new ArrowType(
+                    new ArrowType(type0, new ArrowType(type1, type2)),
+                    new ArrowType(new ArrowType(type0, type1), new ArrowType(type0, type2))
+            );
+
+            Type realType = typist.unify(real);
+            assertEquals(expectedType, realType);
         } catch (Exception e) {
             fail(e);
         }
@@ -154,7 +175,14 @@ public class TestTypist {
             assertTrue(real.structEquals(t0));
 
             // Test the equation unification
-            typist.unify(real);
+            SimpleType type0 = new SimpleType("T0");
+            Type expectedType = new ArrowType(
+                    new ArrowType(type0, type0),
+                    new ArrowType(type0, type0)
+            );
+
+            Type realType = typist.unify(real);
+            assertEquals(expectedType, realType);
         } catch (Exception e) {
             fail(e);
         }
