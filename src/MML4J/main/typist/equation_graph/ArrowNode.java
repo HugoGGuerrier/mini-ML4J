@@ -28,11 +28,26 @@ public class ArrowNode extends Node {
 
     // ----- Setters -----
 
+    public void setLeft(Node left) {
+        this.left = left;
+    }
+
+    public void setRight(Node right) {
+        this.right = right;
+    }
+
     @Override
     public void replaceChild(Node oldChild, Node newChild) {
         if(oldChild == left) left = newChild;
         else if(oldChild == right) right = newChild;
         else super.replaceChild(oldChild, newChild);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        left = null;
+        right = null;
     }
 
     // ----- Override methods -----

@@ -7,6 +7,12 @@ import java.util.Set;
 
 public class Utils {
 
+    // ----- Macros -----
+
+    public static final boolean DEBUG = false;
+
+    // ----- Utils functions ------
+
     /**
      * Clone a given map into an hashmap
      *

@@ -53,6 +53,11 @@ public class Node {
         if(parents.remove(oldParent)) parents.add(newParent);
     }
 
+    public void destroy() {
+        parents.clear();
+        children.clear();
+    }
+
     // ----- Override methods -----
 
     @Override
