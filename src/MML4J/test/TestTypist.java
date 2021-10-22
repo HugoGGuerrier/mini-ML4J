@@ -1,6 +1,5 @@
 package MML4J.test;
 
-import MML4J.main.ast.AST;
 import MML4J.main.ast.ASTExpr;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.parser.Parser;
