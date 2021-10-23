@@ -11,17 +11,22 @@ public class ASTApp extends ASTExpr {
 
     // ----- Attributes -----
 
+
     private final ASTExpr function;
     private final ASTExpr arg;
 
+
     // ----- Constructors -----
+
 
     public ASTApp(ASTExpr function, ASTExpr arg) {
         this.function = function;
         this.arg = arg;
     }
 
+
     // ----- Getters -----
+
 
     public ASTExpr getFunction() {
         return function;
@@ -31,7 +36,9 @@ public class ASTApp extends ASTExpr {
         return arg;
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public void acceptEqGenerator(EquationGenerator gen, Node target, Map<String, Node> context) throws TypingException {

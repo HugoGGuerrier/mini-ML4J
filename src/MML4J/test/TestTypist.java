@@ -57,14 +57,14 @@ public class TestTypist {
             t1.addChild(t2);
 
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){a}");
-            Node real = typist.getEquationGraph(expr);
+            Node real = typist.generateEquations(expr);
             assertTrue(real.structEquals(t0));
 
             // Test the equation unification
-            SimpleType type0 = new SimpleType("T0");
+            SimpleType type0 = new SimpleType(0);
             Type expectedType = new ArrowType(type0, type0);
 
-            Type realType = typist.unify(real);
+            Type realType = typist.unifyEquations(real);
             assertEquals(expectedType, realType);
         } catch (Exception e) {
             fail(e);
@@ -90,15 +90,15 @@ public class TestTypist {
             t3.addChild(t5);
 
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){fn(b){ a(b) }}");
-            Node real = typist.getEquationGraph(expr);
+            Node real = typist.generateEquations(expr);
             assertTrue(real.structEquals(t0));
 
             // Test the equation unification
-            SimpleType type0 = new SimpleType("T0");
-            SimpleType type1 = new SimpleType("T1");
+            SimpleType type0 = new SimpleType(0);
+            SimpleType type1 = new SimpleType(1);
             Type expectedType = new ArrowType(new ArrowType(type0, type1), new ArrowType(type0, type1));
 
-            Type realType = typist.unify(real);
+            Type realType = typist.unifyEquations(real);
             assertEquals(expectedType, realType);
         } catch (Exception e) {
             fail(e);
@@ -131,19 +131,19 @@ public class TestTypist {
             t5.addChild(t9);
 
             ASTExpr expr = (ASTExpr) parser.parseString("fn(x){fn(y){fn(z){ (x(z))(y(z)) }}}");
-            Node real = typist.getEquationGraph(expr);
+            Node real = typist.generateEquations(expr);
             assertTrue(real.structEquals(t0));
 
             // Test the equation unification
-            SimpleType type0 = new SimpleType("T0");
-            SimpleType type1 = new SimpleType("T1");
-            SimpleType type2 = new SimpleType("T2");
+            SimpleType type0 = new SimpleType(0);
+            SimpleType type1 = new SimpleType(1);
+            SimpleType type2 = new SimpleType(2);
             Type expectedType = new ArrowType(
                     new ArrowType(type0, new ArrowType(type1, type2)),
                     new ArrowType(new ArrowType(type0, type1), new ArrowType(type0, type2))
             );
 
-            Type realType = typist.unify(real);
+            Type realType = typist.unifyEquations(real);
             assertEquals(expectedType, realType);
         } catch (Exception e) {
             fail(e);
@@ -170,17 +170,17 @@ public class TestTypist {
             t3.addChild(t6);
 
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){fn(b){ a(a(b)) }}");
-            Node real = typist.getEquationGraph(expr);
+            Node real = typist.generateEquations(expr);
             assertTrue(real.structEquals(t0));
 
             // Test the equation unification
-            SimpleType type0 = new SimpleType("T0");
+            SimpleType type0 = new SimpleType(0);
             Type expectedType = new ArrowType(
                     new ArrowType(type0, type0),
                     new ArrowType(type0, type0)
             );
 
-            Type realType = typist.unify(real);
+            Type realType = typist.unifyEquations(real);
             assertEquals(expectedType, realType);
         } catch (Exception e) {
             fail(e);
@@ -200,10 +200,10 @@ public class TestTypist {
             t1.addChild(new ArrowNode(t3, t2));
 
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){a(a)}");
-            Node real = typist.getEquationGraph(expr);
+            Node real = typist.generateEquations(expr);
 
             // Test the unification
-            assertThrows(TypingException.class, () -> typist.unify(real));
+            assertThrows(TypingException.class, () -> typist.unifyEquations(real));
         } catch (Exception e) {
             fail(e);
         }

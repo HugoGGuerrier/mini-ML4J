@@ -11,6 +11,7 @@ public class Parser {
 
     // ----- Class methods -----
 
+
     public AST parseString(String toParse) throws ParsingException {
         // Create the lexer and parser
         MMLLexer lexer = new MMLLexer(CharStreams.fromString(toParse));

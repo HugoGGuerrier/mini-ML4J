@@ -1,17 +1,18 @@
 package MML4J.main;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Utils {
 
     // ----- Macros -----
 
+
     public static final boolean DEBUG = true;
 
+
     // ----- Utils functions ------
+
 
     /**
      * Clone a given map into an hashmap

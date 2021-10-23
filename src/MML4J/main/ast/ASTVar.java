@@ -11,21 +11,28 @@ public class ASTVar extends ASTExpr {
 
     // ----- Attributes -----
 
+
     private final String name;
 
+
     // ----- Constructors -----
+
 
     public ASTVar(String name) {
         this.name = name;
     }
 
+
     // ----- Getters -----
+
 
     public String getName() {
         return name;
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public void acceptEqGenerator(EquationGenerator gen, Node target, Map<String, Node> context) throws TypingException {

@@ -10,11 +10,14 @@ public class ASTLet extends ASTExpr {
 
     // ----- Attributes -----
 
+
     private final String name;
     private final ASTExpr value;
     private final ASTExpr in;
 
+
     // ----- Constructors -----
+
 
     public ASTLet(String name, ASTExpr value, ASTExpr in) {
         this.name = name;
@@ -22,7 +25,9 @@ public class ASTLet extends ASTExpr {
         this.in = in;
     }
 
+
     // ----- Getters -----
+
 
     public String getName() {
         return name;
@@ -36,7 +41,9 @@ public class ASTLet extends ASTExpr {
         return in;
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public void acceptEqGenerator(EquationGenerator gen, Node target, Map<String, Node> context) throws TypingException {

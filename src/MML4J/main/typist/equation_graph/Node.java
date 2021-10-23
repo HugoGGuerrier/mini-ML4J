@@ -1,23 +1,32 @@
 package MML4J.main.typist.equation_graph;
 
+import MML4J.main.exceptions.TypingException;
+import MML4J.main.typist.TypeTranslator;
+import MML4J.main.typist.type.Type;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class Node {
+public abstract class Node {
 
     // ----- Attributes -----
+
 
     protected final Set<Node> parents;
     protected final Set<Node> children;
 
+
     // ----- Constructors -----
+
 
     public Node() {
         parents = new HashSet<>();
         children = new HashSet<>();
     }
 
+
     // ----- Getters -----
+
 
     public Set<Node> getParents() {
         return parents;
@@ -27,7 +36,9 @@ public class Node {
         return children;
     }
 
+
     // ----- Setters -----
+
 
     public void addChild(Node child) {
         children.add(child);
@@ -58,14 +69,43 @@ public class Node {
         children.clear();
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public String toString() {
         return "VOID TYPE NODE";
     }
 
+
     // ----- Class methods -----
+
+
+    /**
+     * Start the unification of the node with all its children
+     *
+     * @return The node that came from the unification
+     * @throws TypingException If there is an error during typing
+     */
+    public abstract Node unify() throws TypingException;
+
+    /**
+     * Merge the node with an other node
+     *
+     * @param other The node to merge with
+     * @return The node that result from the merge
+     * @throws TypingException If there is a problem during merging
+     */
+    public abstract Node merge(Node other) throws TypingException;
+
+    /**
+     * Get if the other node is in the current node
+     *
+     * @param other The other node
+     * @return If the other node is in this node
+     */
+    public abstract boolean contains(Node other);
 
     /**
      * Get if the two nodes are structurally equals
@@ -73,9 +113,16 @@ public class Node {
      * @param other The other node
      * @return True if they are equals
      */
-    public boolean structEquals(Node other) {
-        return false;
-    }
+    public abstract boolean structEquals(Node other);
+
+    /**
+     * Translate a node into a usable type
+     *
+     * @param translator The translator
+     * @return The type for the node
+     * @throws TypingException If the translator cannot translate
+     */
+    public abstract Type acceptTranslator(TypeTranslator translator) throws TypingException;
 
     /**
      * Get all equations string representation writable from this node
@@ -85,7 +132,6 @@ public class Node {
     public String getEquationsString() {
         // Prepare the string builder
         StringBuilder res = new StringBuilder();
-
 
         if(children.size() > 0) {
             // Add this node equations
@@ -101,15 +147,6 @@ public class Node {
         }
 
         return res.toString();
-    }
-
-    /**
-     * Get the full representation of the node with parents and children
-     *
-     * @return The full representation
-     */
-    public String getFullDisplay() {
-        return null;
     }
 
 }

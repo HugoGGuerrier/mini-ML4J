@@ -13,21 +13,28 @@ public class EquationGenerator {
 
     // ----- Attributes -----
 
+
     private int nodeCounter;
 
+
     // ----- Constructors -----
+
 
     public EquationGenerator() {
         nodeCounter = 0;
     }
 
+
     // ----- Internal methods -----
+
 
     SimpleNode getNextNode() {
         return new SimpleNode(nodeCounter++);
     }
 
+
     // ----- Class methods -----
+
 
     // Generate equations for an abstraction
     public void generate(ASTAbs abs, Node target, Map<String, Node> context) throws TypingException {

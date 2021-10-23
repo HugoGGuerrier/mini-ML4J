@@ -11,11 +11,14 @@ public class ASTIfem extends ASTExpr {
 
     // ----- Attributes -----
 
+
     private final ASTExpr condition;
     private final ASTExpr consequence;
     private final ASTExpr alternative;
 
+
     // ----- Constructors -----
+
 
     public ASTIfem(ASTExpr condition, ASTExpr consequence, ASTExpr alternative) {
         this.condition = condition;
@@ -23,7 +26,9 @@ public class ASTIfem extends ASTExpr {
         this.alternative = alternative;
     }
 
+
     // ----- Getters -----
+
 
     public ASTExpr getCondition() {
         return condition;
@@ -37,7 +42,9 @@ public class ASTIfem extends ASTExpr {
         return alternative;
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public void acceptEqGenerator(EquationGenerator gen, Node target, Map<String, Node> context) throws TypingException {

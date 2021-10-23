@@ -11,8 +11,10 @@ public class ASTAbsRec extends ASTExpr {
 
     // ----- Attributes -----
 
+
     private final String param;
     private final ASTExpr body;
+
 
     // ----- Constructors -----
 
@@ -21,7 +23,9 @@ public class ASTAbsRec extends ASTExpr {
         this.body = body;
     }
 
+
     // ----- Getters -----
+
 
     public String getParam() {
         return param;
@@ -31,7 +35,9 @@ public class ASTAbsRec extends ASTExpr {
         return body;
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public void acceptEqGenerator(EquationGenerator gen, Node target, Map<String, Node> context) throws TypingException {

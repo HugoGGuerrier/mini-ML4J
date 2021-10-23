@@ -4,6 +4,7 @@ public class Type {
 
     // ----- Override methods -----
 
+
     @Override
     public String toString() {
         return "VOID TYPE";

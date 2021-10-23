@@ -11,21 +11,28 @@ public class ASTInt extends ASTExpr {
 
     // ----- Attributes -----
 
+
     private final int value;
 
+
     // ----- Constructors -----
+
 
     public ASTInt(int value) {
         this.value = value;
     }
 
+
     // ----- Getters -----
+
 
     public int getValue() {
         return value;
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public void acceptEqGenerator(EquationGenerator gen, Node target, Map<String, Node> context) throws TypingException {

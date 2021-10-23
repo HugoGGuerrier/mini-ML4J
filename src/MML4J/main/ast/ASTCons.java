@@ -11,17 +11,22 @@ public class ASTCons extends ASTExpr {
 
     // ----- Attributes -----
 
+
     private final ASTExpr head;
     private final ASTExpr tail;
 
+
     // ----- Constructors -----
+
 
     public ASTCons(ASTExpr head, ASTExpr tail) {
         this.head = head;
         this.tail = tail;
     }
 
+
     // ----- Getters -----
+
 
     public ASTExpr getHead() {
         return head;
@@ -31,7 +36,9 @@ public class ASTCons extends ASTExpr {
         return tail;
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public void acceptEqGenerator(EquationGenerator gen, Node target, Map<String, Node> context) throws TypingException {

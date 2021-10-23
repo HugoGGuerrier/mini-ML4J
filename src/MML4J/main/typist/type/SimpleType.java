@@ -6,25 +6,31 @@ public class SimpleType extends Type {
 
     // ----- Attributes -----
 
-    private final String name;
+
+    private final int id;
+
 
     // ----- Constructors -----
 
-    public SimpleType(String name) {
-        this.name = name;
+
+    public SimpleType(int name) {
+        this.id = name;
     }
+
 
     // ----- Getters -----
 
+
     public String getName() {
-        return name;
+        return "T" + id;
     }
+
 
     // ----- Override type -----
 
     @Override
     public String toString() {
-        return name;
+        return getName();
     }
 
     @Override
@@ -32,7 +38,7 @@ public class SimpleType extends Type {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SimpleType that = (SimpleType) o;
-        return Objects.equals(name, that.name);
+        return id == that.id;
     }
 
 }

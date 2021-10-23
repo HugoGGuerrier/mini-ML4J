@@ -1,13 +1,24 @@
 package MML4J.main.typist.equation_graph;
 
+import MML4J.main.Utils;
+import MML4J.main.exceptions.TypingException;
+import MML4J.main.typist.TypeTranslator;
+import MML4J.main.typist.type.Type;
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class ArrowNode extends Node {
 
     // ----- Attributes -----
 
+
     protected Node left;
     protected Node right;
 
+
     // ----- Constructors -----
+
 
     public ArrowNode(Node left, Node right) {
         this.left = left;
@@ -16,7 +27,9 @@ public class ArrowNode extends Node {
         right.addParent(this);
     }
 
+
     // ----- Getters -----
+
 
     public Node getLeft() {
         return left;
@@ -26,7 +39,9 @@ public class ArrowNode extends Node {
         return right;
     }
 
+
     // ----- Setters -----
+
 
     public void setLeft(Node left) {
         this.left = left;
@@ -50,14 +65,14 @@ public class ArrowNode extends Node {
         right = null;
     }
 
+
     // ----- Override methods -----
+
 
     @Override
     public String toString() {
         return "(" + left.toString() + " -> " + right.toString() + ")";
     }
-
-    // ----- Class methods -----
 
     @Override
     public String getEquationsString() {
@@ -84,6 +99,99 @@ public class ArrowNode extends Node {
         }
 
         return left.structEquals(arrowNode.left) && right.structEquals(arrowNode.right) && childrenEquality;
+    }
+
+
+    // ----- Class methods -----
+
+
+    @Override
+    public Node unify() throws TypingException {
+        // Make debug print
+        if(Utils.DEBUG) {
+            System.out.println("Start unification on " + this + " | Children = " + children);
+        }
+
+        // Get the children clone set and unify all children
+        Set<Node> childrenClone = new HashSet<>(children);
+        for(Node child : childrenClone) {
+            child.unify();
+        }
+
+        // Merge all children with the current node
+        Node currentNode = this;
+        childrenClone = new HashSet<>(children);
+        for(Node child : childrenClone) {
+            // Prepare the debug print
+            String debugPrint = "Merging " + currentNode + " with " + child;
+
+            currentNode = currentNode.merge(child);
+
+            // Display the debug
+            if(Utils.DEBUG) {
+                System.out.println(debugPrint + " | Result = " + currentNode);
+            }
+        }
+
+        // Unify the left and the right
+        this.left.unify();
+        this.right.unify();
+
+        // Return the result
+        return currentNode;
+    }
+
+    @Override
+    public Node merge(Node other) throws TypingException {
+        // Verify that the node doesn't contains the other
+        if(this.contains(other)) throw new TypingException("Error during unification : Recursive type definition");
+
+        // Get the other parents
+        for(Node otherParent : other.parents) {
+            if(otherParent != this) {
+                otherParent.replaceChild(other, this);
+                this.addParent(otherParent);
+            }
+        }
+
+        // Remove the child
+        this.removeChild(other);
+
+        // Get the other children
+        for(Node otherChild : other.children) {
+            if(otherChild != this) {
+                otherChild.replaceParent(other, this);
+                this.addChild(otherChild);
+            }
+        }
+
+        // If the other is an arrow node, there is a special way
+        if(other instanceof ArrowNode) {
+            ArrowNode arrowOther = (ArrowNode) other;
+
+            // Add the left constraint
+            left.addChild(arrowOther.left);
+            arrowOther.left.addParent(left);
+
+            // Add the right constraint
+            right.addChild(arrowOther.right);
+            arrowOther.right.addParent(right);
+        }
+
+        // Destroy the other node
+        other.destroy();
+
+        return this;
+    }
+
+    @Override
+    public boolean contains(Node other) {
+        return this.left.contains(other) || this.right.contains(other);
+    }
+
+    @Override
+    public Type acceptTranslator(TypeTranslator translator) throws TypingException {
+        return translator.translate(this);
     }
 
 }
