@@ -50,9 +50,9 @@ public class TestTypist {
     void test1() {
         try {
             // Test the equation generation
-            SimpleNode t0 = new SimpleNode("T0");
-            SimpleNode t1 = new SimpleNode("T1");
-            SimpleNode t2 = new SimpleNode("T2");
+            SimpleNode t0 = new SimpleNode(0);
+            SimpleNode t1 = new SimpleNode(1);
+            SimpleNode t2 = new SimpleNode(2);
             t0.addChild(new ArrowNode(t1, t2));
             t1.addChild(t2);
 
@@ -78,12 +78,12 @@ public class TestTypist {
     void test2() {
         try {
             // Test the equation generation
-            SimpleNode t0 = new SimpleNode("T0");
-            SimpleNode t1 = new SimpleNode("T1");
-            SimpleNode t2 = new SimpleNode("T2");
-            SimpleNode t3 = new SimpleNode("T3");
-            SimpleNode t4 = new SimpleNode("T4");
-            SimpleNode t5 = new SimpleNode("T5");
+            SimpleNode t0 = new SimpleNode(0);
+            SimpleNode t1 = new SimpleNode(1);
+            SimpleNode t2 = new SimpleNode(2);
+            SimpleNode t3 = new SimpleNode(3);
+            SimpleNode t4 = new SimpleNode(4);
+            SimpleNode t5 = new SimpleNode(5);
             t0.addChild(new ArrowNode(t1, t2));
             t1.addChild(new ArrowNode(t5, t4));
             t2.addChild(new ArrowNode(t3, t4));
@@ -112,20 +112,20 @@ public class TestTypist {
     void test3() {
         try {
             // Test the equation generation
-            SimpleNode t0 = new SimpleNode("T0");
-            SimpleNode t1 = new SimpleNode("T1");
-            SimpleNode t2 = new SimpleNode("T2");
-            SimpleNode t3 = new SimpleNode("T3");
-            SimpleNode t4 = new SimpleNode("T4");
-            SimpleNode t5 = new SimpleNode("T5");
-            SimpleNode t6 = new SimpleNode("T6");
-            SimpleNode t7 = new SimpleNode("T7");
-            SimpleNode t8 = new SimpleNode("T8");
-            SimpleNode t9 = new SimpleNode("T9");
+            SimpleNode t0 = new SimpleNode(0);
+            SimpleNode t1 = new SimpleNode(1);
+            SimpleNode t2 = new SimpleNode(2);
+            SimpleNode t3 = new SimpleNode(3);
+            SimpleNode t4 = new SimpleNode(4);
+            SimpleNode t5 = new SimpleNode(5);
+            SimpleNode t6 = new SimpleNode(6);
+            SimpleNode t7 = new SimpleNode(7);
+            SimpleNode t8 = new SimpleNode(8);
+            SimpleNode t9 = new SimpleNode(9);
             t0.addChild(new ArrowNode(t1, t2));
-            t1.addChild(new ArrowNode(t8, new ArrowNode(t7, t6)));
+            t1.addChild(new ArrowNode(t9, new ArrowNode(t7, t6)));
             t2.addChild(new ArrowNode(t3, t4));
-            t3.addChild(new ArrowNode(t9, t7));
+            t3.addChild(new ArrowNode(t8, t7));
             t4.addChild(new ArrowNode(t5, t6));
             t5.addChild(t8);
             t5.addChild(t9);
@@ -156,13 +156,13 @@ public class TestTypist {
     @Test
     void test4() {
         try {
-            SimpleNode t0 = new SimpleNode("T0");
-            SimpleNode t1 = new SimpleNode("T1");
-            SimpleNode t2 = new SimpleNode("T2");
-            SimpleNode t3 = new SimpleNode("T3");
-            SimpleNode t4 = new SimpleNode("T4");
-            SimpleNode t5 = new SimpleNode("T5");
-            SimpleNode t6 = new SimpleNode("T6");
+            SimpleNode t0 = new SimpleNode(0);
+            SimpleNode t1 = new SimpleNode(1);
+            SimpleNode t2 = new SimpleNode(2);
+            SimpleNode t3 = new SimpleNode(3);
+            SimpleNode t4 = new SimpleNode(4);
+            SimpleNode t5 = new SimpleNode(5);
+            SimpleNode t6 = new SimpleNode(6);
             t0.addChild(new ArrowNode(t1, t2));
             t1.addChild(new ArrowNode(t6, t5));
             t1.addChild(new ArrowNode(t5, t4));
@@ -191,10 +191,10 @@ public class TestTypist {
     void testError() {
         try {
             // Test the equation generation
-            SimpleNode t0 = new SimpleNode("T0");
-            SimpleNode t1 = new SimpleNode("T1");
-            SimpleNode t2 = new SimpleNode("T2");
-            SimpleNode t3 = new SimpleNode("T3");
+            SimpleNode t0 = new SimpleNode(0);
+            SimpleNode t1 = new SimpleNode(1);
+            SimpleNode t2 = new SimpleNode(2);
+            SimpleNode t3 = new SimpleNode(3);
             t0.addChild(new ArrowNode(t1, t2));
             t1.addChild(t3);
             t1.addChild(new ArrowNode(t3, t2));

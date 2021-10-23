@@ -7,28 +7,28 @@ import MML4J.main.typist.equation_graph.Node;
 import java.util.Map;
 import java.util.Objects;
 
-public class ASTApp extends ASTExpr {
+public class ASTAbsRec extends ASTExpr {
 
     // ----- Attributes -----
 
-    private final ASTExpr function;
-    private final ASTExpr arg;
+    private final String param;
+    private final ASTExpr body;
 
     // ----- Constructors -----
 
-    public ASTApp(ASTExpr function, ASTExpr arg) {
-        this.function = function;
-        this.arg = arg;
+    public ASTAbsRec(String param, ASTExpr body) {
+        this.param = param;
+        this.body = body;
     }
 
     // ----- Getters -----
 
-    public ASTExpr getFunction() {
-        return function;
+    public String getParam() {
+        return param;
     }
 
-    public ASTExpr getArg() {
-        return arg;
+    public ASTExpr getBody() {
+        return body;
     }
 
     // ----- Override methods -----
@@ -40,20 +40,20 @@ public class ASTApp extends ASTExpr {
 
     @Override
     public String toString() {
-        return function.toString() + '(' + arg.toString() + ')';
+        return "fnrec(" + param + "){ " + body.toString() + " }";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ASTApp app = (ASTApp) o;
-        return Objects.equals(function, app.function) && Objects.equals(arg, app.arg);
+        ASTAbsRec astAbsRec = (ASTAbsRec) o;
+        return Objects.equals(param, astAbsRec.param) && Objects.equals(body, astAbsRec.body);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(function, arg);
+        return Objects.hash(param, body);
     }
 
 }

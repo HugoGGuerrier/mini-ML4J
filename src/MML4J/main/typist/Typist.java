@@ -22,9 +22,8 @@ public class Typist {
 
     // ----- Attributes -----
 
-    private int nodeCounter;
     private int typeCounter;
-    private Map<Node, Type> typeMap;
+    private final Map<Node, Type> typeMap;
     private int iteration;
 
     // ----- Constructors -----
@@ -33,22 +32,12 @@ public class Typist {
      * Create and initialize the typist
      */
     public Typist() {
-        this.nodeCounter = 0;
         this.typeCounter = 0;
         this.typeMap = new HashMap<>();
         this.iteration = 0;
     }
 
     // ----- Internal methods -----
-
-    /**
-     * Get the next available simple node
-     *
-     * @return The next node
-     */
-    private SimpleNode getNextNode() {
-        return new SimpleNode("T" + nodeCounter++);
-    }
 
     /**
      * Get the next available type
@@ -72,72 +61,6 @@ public class Typist {
             typeMap.put(node, res);
         }
         return res;
-    }
-
-    /**
-     * Process the equation generation on an expression
-     *
-     * @param expr The AST node
-     * @param target The target type
-     * @param context The typing context
-     * @throws TypingException If the var is not found in the context
-     */
-    private void recursEquationGeneration(ASTExpr expr, Node target, Map<String, Node> context) throws TypingException {
-
-        // If the expression is a variable
-        if(expr instanceof ASTVar) {
-            ASTVar var = (ASTVar) expr;
-
-            // Get the node in the context and verify it
-            Node varNode = context.getOrDefault(var.getName(), null);
-            if(varNode == null) throw new TypingException("Variable " + var.getName() + " type isn't in the current context...");
-
-            // Add the relation
-            varNode.addChild(target);
-            target.addParent(varNode);
-        }
-
-        // If the expression is an application
-        else if(expr instanceof ASTApp) {
-            ASTApp app = (ASTApp) expr;
-
-            // Create the new types
-            SimpleNode newSimpleNode = getNextNode();
-            ArrowNode newArrowNode = new ArrowNode(newSimpleNode, target);
-
-            // Type the function
-            recursEquationGeneration(app.getFunction(), newArrowNode, context);
-
-            // Type the arguments
-            recursEquationGeneration(app.getArg(), newSimpleNode, context);
-        }
-
-        // If the expression is an abstraction
-        else if(expr instanceof ASTAbs) {
-            ASTAbs abs = (ASTAbs) expr;
-
-            // Create the new nodes
-            SimpleNode varSimpleNode = getNextNode();
-            SimpleNode newSimpleNode = getNextNode();
-            ArrowNode newArrowNode = new ArrowNode(varSimpleNode, newSimpleNode);
-
-            // Add the equivalence between target and new arrow node
-            target.addChild(newArrowNode);
-            newArrowNode.addParent(target);
-            
-            // Copy the context and enlarge it
-            Map<String, Node> newContext = Utils.cloneMap(context);
-            newContext.put(abs.getParam(), varSimpleNode);
-
-            // Type the body with the new context
-            recursEquationGeneration(abs.getBody(), newSimpleNode, newContext);
-        }
-
-        // Else, there is an error
-        else {
-            throw new TypingException("Unknown AST type");
-        }
-
     }
 
     /**
@@ -221,16 +144,16 @@ public class Typist {
      * @return The equation graph extracted from the expression
      */
     public Node getEquationGraph(ASTExpr expr) throws TypingException {
-        // Reset the counter
-        nodeCounter = 0;
-
         // Verify the non nullity of the expr
         if(expr == null) throw new TypingException("Cannot generate equations from a null AST");
 
-        // Generate the equations and return the result
-        Node res = getNextNode();
-        recursEquationGeneration(expr, res, new HashMap<>());
-        return res;
+        // Create the equation generator and visit the ast
+        EquationGenerator generator = new EquationGenerator();
+        SimpleNode baseNode = generator.getNextNode();
+        expr.acceptEqGenerator(generator, baseNode, new HashMap<>());
+
+        // Return the base node
+        return baseNode;
     }
 
     /**

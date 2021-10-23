@@ -5,24 +5,35 @@ import MML4J.main.typist.EquationGenerator;
 import MML4J.main.typist.equation_graph.Node;
 
 import java.util.Map;
-import java.util.Objects;
 
-public class ASTVar extends ASTExpr {
+public class ASTLet extends ASTExpr {
 
     // ----- Attributes -----
 
     private final String name;
+    private final ASTExpr value;
+    private final ASTExpr in;
 
     // ----- Constructors -----
 
-    public ASTVar(String name) {
+    public ASTLet(String name, ASTExpr value, ASTExpr in) {
         this.name = name;
+        this.value = value;
+        this.in = in;
     }
 
     // ----- Getters -----
 
     public String getName() {
         return name;
+    }
+
+    public ASTExpr getValue() {
+        return value;
+    }
+
+    public ASTExpr getIn() {
+        return in;
     }
 
     // ----- Override methods -----
@@ -34,20 +45,6 @@ public class ASTVar extends ASTExpr {
 
     @Override
     public String toString() {
-        return name;
+        return "let " + name + " = " + value + " in " + in;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ASTVar var = (ASTVar) o;
-        return Objects.equals(name, var.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
 }

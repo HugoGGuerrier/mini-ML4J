@@ -1,10 +1,14 @@
 package MML4J.main.ast;
 
-public class AST {
+import MML4J.main.exceptions.TypingException;
+import MML4J.main.typist.EquationGenerator;
+import MML4J.main.typist.equation_graph.Node;
 
-    @Override
-    public String toString() {
-        return "VOID AST NODE";
-    }
+import java.util.Map;
+
+public abstract class AST {
+
+    // Accept the equation generator
+    public abstract void acceptEqGenerator(EquationGenerator gen, Node target, Map<String, Node> context) throws TypingException;
 
 }

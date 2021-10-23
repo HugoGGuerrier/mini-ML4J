@@ -5,16 +5,38 @@ import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_graph.ArrowNode;
 import MML4J.main.typist.equation_graph.Node;
 import MML4J.main.typist.equation_graph.SimpleNode;
+import org.junit.jupiter.api.DisplayNameGenerator;
 
 public class Unifier {
 
     // ----- Internal methods -----
 
+    private boolean isRecursive(SimpleNode node, ArrowNode arrow) {
+        // Test the left
+        boolean leftEquals = false;
+        if(arrow.getLeft().equals(node)) leftEquals = true;
+        else if(arrow.getLeft() instanceof ArrowNode) {
+            ArrowNode left = (ArrowNode) arrow.getLeft();
+            leftEquals = isRecursive(node, left);
+        }
+
+        // Test the right
+        boolean rightEquals = false;
+        if(arrow.getRight().equals(node)) rightEquals = true;
+        else if(arrow.getRight() instanceof ArrowNode) {
+            ArrowNode right = (ArrowNode) arrow.getRight();
+            rightEquals = isRecursive(node, right);
+        }
+
+        // Return te result
+        return leftEquals || rightEquals;
+    }
+
     private Node unifySimpleNode(SimpleNode me, Node other) throws TypingException {
-        // If the other is an arrow node, verify that i'm not the left or right
+        // Verify that the other is not recursive
         if(other instanceof ArrowNode) {
             ArrowNode arrowNode = (ArrowNode) other;
-            if(arrowNode.getLeft() == me || arrowNode.getRight() == me) throw new TypingException("Cyclic type definition : " + me + " = " + arrowNode);
+            if(isRecursive(me, arrowNode)) throw new TypingException("Type is recursive");
         }
 
         // Give all the node parent to the child
@@ -42,8 +64,11 @@ public class Unifier {
     }
 
     private Node unifyArrowNode(ArrowNode me, Node other) throws TypingException {
-        // If the left or right is the other node, throw an error
-        if(me.getLeft() == other || me.getRight() == other) throw new TypingException("Cyclic type definition : " + me + " = " + other);
+        // Verify that the other is not recursive
+        if(other instanceof SimpleNode) {
+            SimpleNode simpleNode = (SimpleNode) other;
+            if(isRecursive(simpleNode, me)) throw new TypingException("Type is recursive");
+        }
 
         // Get the parents from the other node
         for(Node otherParent : other.getParents()) {

@@ -4,25 +4,25 @@ public class SimpleNode extends Node {
 
     // ----- Attributes -----
 
-    protected final String name;
+    protected final int id;
 
     // ----- Constructors -----
 
-    public SimpleNode(String name) {
-        this.name = name;
+    public SimpleNode(int id) {
+        this.id = id;
     }
 
     // ----- Getters -----
 
-    public String getName() {
-        return name;
+    public int getId() {
+        return id;
     }
 
     // ----- Override methods -----
 
     @Override
     public String toString() {
-        return name;
+        return "T" + id;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SimpleNode extends Node {
             }
         }
 
-        return name.equals(simpleNode.name) && childrenEquality;
+        return id == simpleNode.id && childrenEquality;
     }
 
 }
