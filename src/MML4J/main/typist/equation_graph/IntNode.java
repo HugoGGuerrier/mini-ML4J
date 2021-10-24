@@ -84,12 +84,18 @@ public class IntNode extends Node {
 
     @Override
     public Node merge(Node other) throws TypingException {
+        // If the other node is the node, just return it
+        if(other == this) {
+            this.removeChild(this);
+            this.removeParent(this);
+            return this;
+        }
+
         // Verify that the other doesn't contain the node
         if(other.contains(this)) throw new TypingException("Error during unification : Recursive type definition");
-        if(other.isSpecific()) throw new TypingException("Error during unification : Trying to merge int with a specific");
-        if(other instanceof ArrowNode) throw new TypingException("Error during unification : Trying to merge int and arrow");
+        if(other.isSpecific() && !(other instanceof IntNode)) throw new TypingException("Error during unification : Trying to merge int with a specific");
 
-        // Take other parents
+        // Take other's parents
         for(Node otherParent : other.parents) {
             if(otherParent != this) {
                 otherParent.replaceChild(other, this);
@@ -100,7 +106,7 @@ public class IntNode extends Node {
         // Remove the other from the child
         this.removeChild(other);
 
-        // Take all other children
+        // Take all other's children
         for(Node otherChild : other.children) {
             if(otherChild != this) {
                 otherChild.replaceParent(other, this);

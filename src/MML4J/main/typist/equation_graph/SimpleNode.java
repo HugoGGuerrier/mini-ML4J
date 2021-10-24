@@ -104,6 +104,13 @@ public class SimpleNode extends Node {
 
     @Override
     public Node merge(Node other) throws TypingException {
+        // If the other node is the node, just return it
+        if(other == this) {
+            this.removeChild(this);
+            this.removeParent(this);
+            return this;
+        }
+
         // Verify that the other doesn't contain the node
         if(other.contains(this)) throw new TypingException("Error during unification : Recursive type definition");
 

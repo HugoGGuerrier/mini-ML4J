@@ -63,12 +63,9 @@ public class EquationGenerator {
 
     // Generate equations for an addition
     public void generate(ASTAdd add, Node target, Map<String, Node> context) throws TypingException {
-        // Create the add operator type int -> int -> int
-        ArrowNode addNode = new ArrowNode(IntNode.getInstance(), new ArrowNode(IntNode.getInstance(), IntNode.getInstance()));
-
-        // Add the constraint
-        target.addChild(addNode);
-        addNode.addParent(target);
+        // Add the constraint that the target is int
+        target.addChild(IntNode.getInstance());
+        IntNode.getInstance().addParent(target);
 
         // Start the typing on the left and right
         add.getLeft().acceptEqGenerator(this, IntNode.getInstance(), context);
@@ -125,12 +122,9 @@ public class EquationGenerator {
 
     // Generate equations for a sub
     public void generate(ASTSub sub, Node target, Map<String, Node> context) throws TypingException {
-        // Create the add operator type int -> int -> int
-        ArrowNode subNode = new ArrowNode(IntNode.getInstance(), new ArrowNode(IntNode.getInstance(), IntNode.getInstance()));
-
-        // Add the constraint
-        target.addChild(subNode);
-        subNode.addParent(target);
+        // Add the constraint that the target is int
+        target.addChild(IntNode.getInstance());
+        IntNode.getInstance().addParent(target);
 
         // Start the typing on the left and right
         sub.getLeft().acceptEqGenerator(this, IntNode.getInstance(), context);

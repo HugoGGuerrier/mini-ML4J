@@ -103,7 +103,7 @@ public class ArrowNode extends Node {
 
     @Override
     public boolean isSpecific() {
-        return false;
+        return true;
     }
 
 
@@ -139,8 +139,8 @@ public class ArrowNode extends Node {
         }
 
         // Unify the left and the right
-        this.left.unify();
-        this.right.unify();
+        left.unify();
+        right.unify();
 
         // Return the result
         return currentNode;
@@ -148,9 +148,16 @@ public class ArrowNode extends Node {
 
     @Override
     public Node merge(Node other) throws TypingException {
+        // If the other node is the node, just return it
+        if(other == this) {
+            this.removeChild(this);
+            this.removeParent(this);
+            return this;
+        }
+
         // Verify that the other node
         if(this.contains(other)) throw new TypingException("Error during unification : Recursive type definition");
-        if(other.isSpecific()) throw new TypingException("Error during unification : Trying to merge arrow with a specific node");
+        if(other.isSpecific() && !(other instanceof ArrowNode)) throw new TypingException("Error during unification : Trying to merge arrow with a specific node");
 
         // Get the other parents
         for(Node otherParent : other.parents) {
@@ -187,11 +194,16 @@ public class ArrowNode extends Node {
         // Destroy the other node
         other.destroy();
 
+        // Return the node
         return this;
     }
 
     @Override
     public boolean contains(Node other) {
+        if(other instanceof ArrowNode) {
+            ArrowNode arrowOther = (ArrowNode) other;
+            return this.left.contains(arrowOther.left) || this.right.contains(arrowOther.right);
+        }
         return this.left.contains(other) || this.right.contains(other);
     }
 
