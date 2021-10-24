@@ -48,4 +48,9 @@ public class ArrowType extends Type {
         return Objects.equals(left, arrowType.left) && Objects.equals(right, arrowType.right);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(left, right);
+    }
+
 }

@@ -83,6 +83,21 @@ public abstract class Node {
 
 
     /**
+     * Get if the two nodes are structurally equals
+     *
+     * @param other The other node
+     * @return True if they are equals
+     */
+    public abstract boolean structEquals(Node other);
+
+    /**
+     * Get if the node is a specific one
+     *
+     * @return If the node is specific
+     */
+    public abstract boolean isSpecific();
+
+    /**
      * Start the unification of the node with all its children
      *
      * @return The node that came from the unification
@@ -106,14 +121,6 @@ public abstract class Node {
      * @return If the other node is in this node
      */
     public abstract boolean contains(Node other);
-
-    /**
-     * Get if the two nodes are structurally equals
-     *
-     * @param other The other node
-     * @return True if they are equals
-     */
-    public abstract boolean structEquals(Node other);
 
     /**
      * Translate a node into a usable type

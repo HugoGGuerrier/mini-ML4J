@@ -2,48 +2,48 @@ package MML4J.main.typist.type;
 
 import java.util.Objects;
 
-public class SimpleType extends Type {
+public class ListType extends Type {
 
     // ----- Attributes -----
 
 
-    private final int id;
+    private final Type type;
 
 
     // ----- Constructors -----
 
 
-    public SimpleType(int name) {
-        this.id = name;
+    public ListType(Type type) {
+        this.type = type;
     }
-
 
     // ----- Getters -----
 
 
-    public String getName() {
-        return "T" + id;
+    public Type getType() {
+        return type;
     }
 
 
-    // ----- Override type -----
+    // ----- Override methods -----
+
 
     @Override
     public String toString() {
-        return getName();
+        return "[" + type + "]";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SimpleType that = (SimpleType) o;
-        return id == that.id;
+        ListType listType = (ListType) o;
+        return Objects.equals(type, listType.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(type);
     }
 
 }

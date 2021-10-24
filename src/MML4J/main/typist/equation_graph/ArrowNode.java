@@ -101,6 +101,11 @@ public class ArrowNode extends Node {
         return left.structEquals(arrowNode.left) && right.structEquals(arrowNode.right) && childrenEquality;
     }
 
+    @Override
+    public boolean isSpecific() {
+        return false;
+    }
+
 
     // ----- Class methods -----
 
@@ -143,8 +148,9 @@ public class ArrowNode extends Node {
 
     @Override
     public Node merge(Node other) throws TypingException {
-        // Verify that the node doesn't contains the other
+        // Verify that the other node
         if(this.contains(other)) throw new TypingException("Error during unification : Recursive type definition");
+        if(other.isSpecific()) throw new TypingException("Error during unification : Trying to merge arrow with a specific node");
 
         // Get the other parents
         for(Node otherParent : other.parents) {

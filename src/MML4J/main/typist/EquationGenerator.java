@@ -4,6 +4,7 @@ import MML4J.main.Utils;
 import MML4J.main.ast.*;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_graph.ArrowNode;
+import MML4J.main.typist.equation_graph.IntNode;
 import MML4J.main.typist.equation_graph.Node;
 import MML4J.main.typist.equation_graph.SimpleNode;
 
@@ -62,7 +63,16 @@ public class EquationGenerator {
 
     // Generate equations for an addition
     public void generate(ASTAdd add, Node target, Map<String, Node> context) throws TypingException {
+        // Create the add operator type int -> int -> int
+        ArrowNode addNode = new ArrowNode(IntNode.getInstance(), new ArrowNode(IntNode.getInstance(), IntNode.getInstance()));
 
+        // Add the constraint
+        target.addChild(addNode);
+        addNode.addParent(target);
+
+        // Start the typing on the left and right
+        add.getLeft().acceptEqGenerator(this, IntNode.getInstance(), context);
+        add.getRight().acceptEqGenerator(this, IntNode.getInstance(), context);
     }
 
     // Generate equations for an application
@@ -98,7 +108,9 @@ public class EquationGenerator {
 
     // Generate equations for an integer
     public void generate(ASTInt intg, Node target, Map<String, Node> context) throws TypingException {
-
+        // Add the integer constraint
+        target.addChild(IntNode.getInstance());
+        IntNode.getInstance().addParent(target);
     }
 
     // Generate equations for a let
@@ -113,7 +125,16 @@ public class EquationGenerator {
 
     // Generate equations for a sub
     public void generate(ASTSub sub, Node target, Map<String, Node> context) throws TypingException {
+        // Create the add operator type int -> int -> int
+        ArrowNode subNode = new ArrowNode(IntNode.getInstance(), new ArrowNode(IntNode.getInstance(), IntNode.getInstance()));
 
+        // Add the constraint
+        target.addChild(subNode);
+        subNode.addParent(target);
+
+        // Start the typing on the left and right
+        sub.getLeft().acceptEqGenerator(this, IntNode.getInstance(), context);
+        sub.getRight().acceptEqGenerator(this, IntNode.getInstance(), context);
     }
 
     // Generate equations for a tail operator

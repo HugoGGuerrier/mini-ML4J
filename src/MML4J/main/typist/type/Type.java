@@ -1,6 +1,6 @@
 package MML4J.main.typist.type;
 
-public class Type {
+public abstract class Type {
 
     // ----- Override methods -----
 

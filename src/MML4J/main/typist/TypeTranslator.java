@@ -1,12 +1,8 @@
 package MML4J.main.typist;
 
 import MML4J.main.exceptions.TypingException;
-import MML4J.main.typist.equation_graph.ArrowNode;
-import MML4J.main.typist.equation_graph.Node;
-import MML4J.main.typist.equation_graph.SimpleNode;
-import MML4J.main.typist.type.ArrowType;
-import MML4J.main.typist.type.SimpleType;
-import MML4J.main.typist.type.Type;
+import MML4J.main.typist.equation_graph.*;
+import MML4J.main.typist.type.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,11 +48,24 @@ public class TypeTranslator {
     // ----- Class methods -----
 
 
+    // Translate an arrow node
     public Type translate(ArrowNode arrowNode) throws TypingException {
         if(arrowNode.getChildren().size() > 0) throw new TypingException("Cannot type a non-childless node");
         return new ArrowType(arrowNode.getLeft().acceptTranslator(this), arrowNode.getRight().acceptTranslator(this));
     }
 
+    // Translate an integer node
+    public Type translate(IntNode intNode) throws TypingException {
+        if(intNode.getChildren().size() > 0) throw new TypingException("Cannot type a non-childless node");
+        return IntType.getInstance();
+    }
+
+    public Type translate(ListNode listNode) throws TypingException {
+        if(listNode.getChildren().size() > 0) throw new TypingException("Cannot type a non-childless node");
+        return new ListType(listNode.getType().acceptTranslator(this));
+    }
+
+    // Translate a simple node
     public Type translate(SimpleNode simpleNode) throws TypingException {
         if(simpleNode.getChildren().size() > 0) throw new TypingException("Cannot type a non-childless node");
         return typeForNode(simpleNode);

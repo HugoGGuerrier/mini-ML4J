@@ -8,27 +8,22 @@ import MML4J.main.typist.type.Type;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SimpleNode extends Node {
+public class IntNode extends Node {
 
     // ----- Attributes -----
 
 
-    protected final int id;
+    private static IntNode instance = null;
 
 
     // ----- Constructors -----
 
 
-    public SimpleNode(int id) {
-        this.id = id;
-    }
+    private IntNode() {}
 
-
-    // ----- Getters -----
-
-
-    public int getId() {
-        return id;
+    public static IntNode getInstance() {
+        if(instance == null) instance = new IntNode();
+        return instance;
     }
 
 
@@ -37,32 +32,17 @@ public class SimpleNode extends Node {
 
     @Override
     public String toString() {
-        return "T" + id;
+        return "int";
     }
 
     @Override
     public boolean structEquals(Node other) {
-        if(this == other) return true;
-        if(other == null || getClass() != other.getClass()) return false;
-        SimpleNode simpleNode = (SimpleNode) other;
-
-        boolean childrenEquality = children.size() == simpleNode.children.size();
-        if(childrenEquality) {
-            for(Node child : children) {
-                boolean childEq = false;
-                for(Node otherChild : simpleNode.children) {
-                    if(child.structEquals(otherChild)) childEq = true;
-                }
-                childrenEquality = childrenEquality && childEq;
-            }
-        }
-
-        return id == simpleNode.id && childrenEquality;
+        return this == other;
     }
 
     @Override
     public boolean isSpecific() {
-        return false;
+        return true;
     }
 
 
@@ -106,31 +86,33 @@ public class SimpleNode extends Node {
     public Node merge(Node other) throws TypingException {
         // Verify that the other doesn't contain the node
         if(other.contains(this)) throw new TypingException("Error during unification : Recursive type definition");
+        if(other.isSpecific()) throw new TypingException("Error during unification : Trying to merge int with a specific");
+        if(other instanceof ArrowNode) throw new TypingException("Error during unification : Trying to merge int and arrow");
 
-        // Give all node's parent to the other
-        for(Node parent : this.parents) {
-            if(parent != other) {
-                parent.replaceChild(this, other);
-                other.addParent(parent);
+        // Take other parents
+        for(Node otherParent : other.parents) {
+            if(otherParent != this) {
+                otherParent.replaceChild(other, this);
+                this.addParent(otherParent);
             }
         }
 
-        // Give all node's child to the other
-        for(Node child : this.children) {
-            if(child != other) {
-                child.replaceParent(this, other);
-                other.addChild(child);
+        // Remove the other from the child
+        this.removeChild(other);
+
+        // Take all other children
+        for(Node otherChild : other.children) {
+            if(otherChild != this) {
+                otherChild.replaceParent(other, this);
+                this.addChild(otherChild);
             }
         }
 
-        // Remove the node from the other's parent
-        other.removeParent(this);
+        // Destroy the other node
+        other.destroy();
 
-        // Destroy the node and return the other
-        this.destroy();
-
-        // Return the result
-        return other;
+        // Return the node
+        return this;
     }
 
     @Override
