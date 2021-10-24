@@ -20,6 +20,20 @@ public interface MMLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProg(MMLParser.ProgContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Integer}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInteger(MMLParser.IntegerContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Nil}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNil(MMLParser.NilContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Variable}
 	 * labeled alternative in {@link MMLParser#expr}.
 	 * @param ctx the parse tree
@@ -27,12 +41,33 @@ public interface MMLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariable(MMLParser.VariableContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code IfEmpty}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfEmpty(MMLParser.IfEmptyContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Priorised}
 	 * labeled alternative in {@link MMLParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPriorised(MMLParser.PriorisedContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BinOp}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinOp(MMLParser.BinOpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code IfZero}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfZero(MMLParser.IfZeroContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Abstraction}
 	 * labeled alternative in {@link MMLParser#expr}.
@@ -47,4 +82,39 @@ public interface MMLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitApplication(MMLParser.ApplicationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LetIn}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLetIn(MMLParser.LetInContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BuildIn}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBuildIn(MMLParser.BuildInContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RecAbstraction}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRecAbstraction(MMLParser.RecAbstractionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SoleArgs}
+	 * labeled alternative in {@link MMLParser#args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSoleArgs(MMLParser.SoleArgsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code MultiArgs}
+	 * labeled alternative in {@link MMLParser#args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiArgs(MMLParser.MultiArgsContext ctx);
 }

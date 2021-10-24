@@ -60,6 +60,11 @@ public class EquationGenerator {
 
     }
 
+    // Generate equations for an addition
+    public void generate(ASTAdd add, Node target, Map<String, Node> context) throws TypingException {
+
+    }
+
     // Generate equations for an application
     public void generate(ASTApp app, Node target, Map<String, Node> context) throws TypingException {
         // Create the new types
@@ -73,6 +78,11 @@ public class EquationGenerator {
 
     // Generate equations for a list constructor
     public void generate(ASTCons cons, Node target, Map<String, Node> context) throws TypingException {
+
+    }
+
+    // Generate equations for a list head operator
+    public void generate(ASTHead head, Node target, Map<String, Node> context) throws TypingException {
 
     }
 
@@ -98,6 +108,16 @@ public class EquationGenerator {
 
     // Generate equations for a Nil
     public void generate(ASTNil nil, Node target, Map<String, Node> context) throws TypingException {
+
+    }
+
+    // Generate equations for a sub
+    public void generate(ASTSub sub, Node target, Map<String, Node> context) throws TypingException {
+
+    }
+
+    // Generate equations for a tail operator
+    public void generate(ASTTail tail, Node target, Map<String, Node> context) throws TypingException {
 
     }
 

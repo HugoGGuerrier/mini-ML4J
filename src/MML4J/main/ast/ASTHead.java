@@ -7,39 +7,27 @@ import MML4J.main.typist.equation_graph.Node;
 import java.util.Map;
 import java.util.Objects;
 
-public class ASTLet extends ASTExpr {
+public class ASTHead extends ASTExpr {
 
     // ----- Attributes -----
 
 
-    private final String name;
-    private final ASTExpr value;
-    private final ASTExpr in;
+    private final ASTExpr list;
 
 
     // ----- Constructors -----
 
 
-    public ASTLet(String name, ASTExpr value, ASTExpr in) {
-        this.name = name;
-        this.value = value;
-        this.in = in;
+    public ASTHead(ASTExpr list) {
+        this.list = list;
     }
 
 
     // ----- Getters -----
 
 
-    public String getName() {
-        return name;
-    }
-
-    public ASTExpr getValue() {
-        return value;
-    }
-
-    public ASTExpr getIn() {
-        return in;
+    public ASTExpr getList() {
+        return list;
     }
 
 
@@ -53,20 +41,20 @@ public class ASTLet extends ASTExpr {
 
     @Override
     public String toString() {
-        return "let " + name + " = " + value + " in " + in;
+        return "head(" + list + ")";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ASTLet astLet = (ASTLet) o;
-        return Objects.equals(name, astLet.name) && Objects.equals(value, astLet.value) && Objects.equals(in, astLet.in);
+        ASTHead astHead = (ASTHead) o;
+        return Objects.equals(list, astHead.list);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, value, in);
+        return Objects.hash(list);
     }
 
 }

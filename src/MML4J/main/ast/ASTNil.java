@@ -21,4 +21,9 @@ public class ASTNil extends ASTExpr {
         return "nil";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof ASTNil;
+    }
+
 }

@@ -12,17 +12,13 @@ FN_REC : 'fnrec' ;
 NIL : 'nil' ;
 IF_ZERO : 'ifz' ;
 IF_EMPTY : 'ifem' ;
+ELSE : 'else' ;
 LET : 'let' ;
 IN : 'in' ;
 
-// Build in keyword
-HEAD : 'head' ;
-TAIL : 'tail' ;
-CONS : 'cons' ;
-
 // Operators an build in function
 BIN_OP : '+'|'-' ;
-BUILD_IN : HEAD|TAIL|CONS ;
+BUILD_IN : 'cons'|'head'|'tail' ;
 
 // Regex symbols
 INTEGER : '-'?[0-9] ;
@@ -39,15 +35,21 @@ program : body=expr EOF # Prog;
 expr :
     IDENT # Variable
     | INTEGER # Integer
+    | NIL # Nil
     | '(' inside=expr ')' # Priorised
+    | left=expr op=BIN_OP right=expr # BinOp
+    | name=BUILD_IN '(' arguments=args ')' # BuildIn
     | func=expr '(' arg=expr ')' # Application
+    | IF_ZERO '(' cond=expr ')' '{' cons=expr '}' ELSE '{' altern=expr '}' # IfZero
+    | IF_EMPTY '(' cond=expr ')' '{' cons=expr '}' ELSE '{' altern=expr '}' # IfEmpty
     | FN '(' param=IDENT ')' '{' body=expr '}' # Abstraction
     | FN_REC '(' param=IDENT ')' '{' body=expr '}' # RecAbstraction
+    | LET name=IDENT '=' value=expr IN body=expr # LetIn
     ;
 
-op_args :
-    arg=expr # OpSoleArg
-    | arg=expr ',' tail=op_args # OpMultiArgs
+args :
+    arg=expr # SoleArgs
+    | arg=expr ',' tail=args # MultiArgs
     ;
 
 //params :
