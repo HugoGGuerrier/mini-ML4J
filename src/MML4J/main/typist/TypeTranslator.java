@@ -60,6 +60,7 @@ public class TypeTranslator {
         return IntType.getInstance();
     }
 
+    // Translate a list node
     public Type translate(ListNode listNode) throws TypingException {
         if(listNode.getChildren().size() > 0) throw new TypingException("Cannot type a non-childless node");
         return new ListType(listNode.getType().acceptTranslator(this));

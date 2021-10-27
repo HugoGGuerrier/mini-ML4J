@@ -1,5 +1,8 @@
 package MML4J.main.typist.type;
 
+import MML4J.main.typist.Generalizer;
+import MML4J.main.typist.equation_graph.Node;
+
 import java.util.Objects;
 
 public class SimpleType extends Type {

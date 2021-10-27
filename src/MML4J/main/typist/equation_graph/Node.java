@@ -1,6 +1,7 @@
 package MML4J.main.typist.equation_graph;
 
 import MML4J.main.exceptions.TypingException;
+import MML4J.main.typist.Generalizer;
 import MML4J.main.typist.TypeTranslator;
 import MML4J.main.typist.type.Type;
 
@@ -130,6 +131,14 @@ public abstract class Node {
      * @throws TypingException If the translator cannot translate
      */
     public abstract Type acceptTranslator(TypeTranslator translator) throws TypingException;
+
+    /**
+     * Accept a node generalizer
+     *
+     * @param generalizer The generalizer
+     * @return The generalized node
+     */
+    public abstract Node acceptGeneralizer(Generalizer generalizer);
 
     /**
      * Get all equations string representation writable from this node

@@ -2,6 +2,7 @@ package MML4J.main.typist.equation_graph;
 
 import MML4J.main.Utils;
 import MML4J.main.exceptions.TypingException;
+import MML4J.main.typist.Generalizer;
 import MML4J.main.typist.TypeTranslator;
 import MML4J.main.typist.type.Type;
 
@@ -153,6 +154,11 @@ public class ListNode extends Node {
     @Override
     public Type acceptTranslator(TypeTranslator translator) throws TypingException {
         return translator.translate(this);
+    }
+
+    @Override
+    public Node acceptGeneralizer(Generalizer generalizer) {
+        return generalizer.generalize(this);
     }
 
 }
