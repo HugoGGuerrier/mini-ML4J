@@ -3,6 +3,7 @@ package MML4J.main.typist.equation_graph;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.Generalizer;
 import MML4J.main.typist.TypeTranslator;
+import MML4J.main.typist.Ungeneralizer;
 import MML4J.main.typist.type.Type;
 
 import java.util.HashSet;
@@ -139,6 +140,14 @@ public abstract class Node {
      * @return The generalized node
      */
     public abstract Node acceptGeneralizer(Generalizer generalizer);
+
+    /**
+     * Accept an ungeneralizer to instantiate the type
+     *
+     * @param ungeneralizer The ungeneralizer
+     * @return The instantiated type
+     */
+    public abstract Node acceptUngeneralizer(Ungeneralizer ungeneralizer);
 
     /**
      * Get all equations string representation writable from this node

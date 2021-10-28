@@ -3,10 +3,7 @@ package MML4J.main.typist;
 import MML4J.main.Utils;
 import MML4J.main.ast.*;
 import MML4J.main.exceptions.TypingException;
-import MML4J.main.typist.equation_graph.ArrowNode;
-import MML4J.main.typist.equation_graph.IntNode;
-import MML4J.main.typist.equation_graph.Node;
-import MML4J.main.typist.equation_graph.SimpleNode;
+import MML4J.main.typist.equation_graph.*;
 
 import java.util.Map;
 
@@ -90,7 +87,11 @@ public class EquationGenerator {
 
     // Generate equations for a list head operator
     public void generate(ASTHead head, Node target, Map<String, Node> context) throws TypingException {
+        // Create the new target
+        ListNode listNode = new ListNode(target);
 
+        // Start the typing on the tail arg
+        head.getList().acceptEqGenerator(this, listNode, context);
     }
 
     // Generate equations for an if empty
@@ -133,7 +134,11 @@ public class EquationGenerator {
 
     // Generate equations for a tail operator
     public void generate(ASTTail tail, Node target, Map<String, Node> context) throws TypingException {
+        // Create the new target
+        ListNode listNode = new ListNode(target);
 
+        // Start the typing on the tail arg
+        tail.getList().acceptEqGenerator(this, listNode, context);
     }
 
     // Generate equations for a variable

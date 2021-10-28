@@ -4,6 +4,7 @@ import MML4J.main.Utils;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.Generalizer;
 import MML4J.main.typist.TypeTranslator;
+import MML4J.main.typist.Ungeneralizer;
 import MML4J.main.typist.type.Type;
 
 import java.util.HashSet;
@@ -216,6 +217,11 @@ public class ArrowNode extends Node {
     @Override
     public Node acceptGeneralizer(Generalizer generalizer) {
         return generalizer.generalize(this);
+    }
+
+    @Override
+    public Node acceptUngeneralizer(Ungeneralizer ungeneralizer) {
+        return ungeneralizer.ungeneralize(this);
     }
 
 }

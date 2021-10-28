@@ -11,14 +11,14 @@ public class Generalizer {
     // ----- Attributes -----
 
 
-    private ForAllNode generalNode;
-    private Set<Node> linked;
+    private final ForAllNode generalNode;
+    private final Set<Node> linked;
 
 
     // ----- Constructor -----
 
 
-    public Generalizer(ForAllNode generalNode, Set<Node> linked) {
+    private Generalizer(ForAllNode generalNode, Set<Node> linked) {
         this.generalNode = generalNode;
         this.linked = linked;
     }
@@ -27,7 +27,7 @@ public class Generalizer {
     // ----- Class methods -----
 
 
-    public static ForAllNode generalizeNode(Node toGeneralize, Map<String, Node> context) {
+    public static ForAllNode generalize(Node toGeneralize, Map<String, Node> context) {
         ForAllNode res = new ForAllNode();
         Generalizer generalizer = new Generalizer(res, new HashSet<>(context.values()));
         res.setType(toGeneralize.acceptGeneralizer(generalizer));

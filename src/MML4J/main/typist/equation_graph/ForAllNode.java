@@ -1,8 +1,10 @@
 package MML4J.main.typist.equation_graph;
 
+import MML4J.main.Utils;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.Generalizer;
 import MML4J.main.typist.TypeTranslator;
+import MML4J.main.typist.Ungeneralizer;
 import MML4J.main.typist.type.Type;
 
 import java.util.HashSet;
@@ -92,12 +94,50 @@ public class ForAllNode extends Node {
 
     @Override
     public Node unify() throws TypingException {
-        return null;
+        // Make debug print
+        if(Utils.DEBUG) {
+            System.out.println("Start unification on " + this + " | Children = " + children);
+        }
+
+        // Start the unification on all children
+        Set<Node> childrenClone = new HashSet<>(children);
+        for(Node child : childrenClone) {
+            child.unify();
+        }
+
+        // For each child, instantiate the for all node and merge the two
+        childrenClone = new HashSet<>(children);
+        for(Node child : childrenClone) {
+            // Remove the child from the node
+            removeChild(child);
+
+            // Instantiate the node and add the child to it
+            Node instance = Ungeneralizer.ungenralize(this);
+            child.replaceParent(this, instance);
+            instance.addChild(child);
+
+            // Unify the instance
+            instance.unify();
+        }
+
+        // Remove node's parent and replace them by an instantiation
+        Set<Node> parentClone = new HashSet<>(parents);
+        for(Node parent : parentClone) {
+            // Remove the parent from the node
+            removeParent(parent);
+
+            // Replace the child in the parent
+            Node instance = Ungeneralizer.ungenralize(this);
+            parent.replaceChild(this, instance);
+        }
+
+        // Return an instantiation of the node
+        return Ungeneralizer.ungenralize(this);
     }
 
     @Override
     public Node merge(Node other) throws TypingException {
-        return null;
+        throw new TypingException("Cannot merge a for all node");
     }
 
     @Override
@@ -113,6 +153,11 @@ public class ForAllNode extends Node {
     @Override
     public Node acceptGeneralizer(Generalizer generalizer) {
         return generalizer.generalize(this);
+    }
+
+    @Override
+    public Node acceptUngeneralizer(Ungeneralizer ungeneralizer) {
+        return ungeneralizer.ungeneralize(this);
     }
 
 }
