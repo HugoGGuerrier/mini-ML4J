@@ -15,3 +15,7 @@ Version : 0.1
 * Create a reusable JAR : `ant jar`
 * Start all unit tests : `ant test`
 * Clean the generated files : `ant clean`
+
+## Todos
+
+* Replace the equation graph by an equational system

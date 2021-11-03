@@ -1,8 +1,5 @@
 package MML4J.main.typist.type;
 
-import MML4J.main.typist.Generalizer;
-import MML4J.main.typist.equation_graph.Node;
-
 public class IntType extends Type {
 
     // ----- Attributes -----

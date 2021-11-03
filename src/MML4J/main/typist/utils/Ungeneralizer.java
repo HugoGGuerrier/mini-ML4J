@@ -1,6 +1,6 @@
-package MML4J.main.typist;
+package MML4J.main.typist.utils;
 
-import MML4J.main.typist.equation_graph.*;
+import MML4J.main.typist.equation_system.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,8 +16,8 @@ public class Ungeneralizer {
     // ----- Constructors -----
 
 
-    private Ungeneralizer(Set<Node> linked) {
-        this.generalized = linked;
+    private Ungeneralizer(Set<Node> generalized) {
+        this.generalized = generalized;
     }
 
 

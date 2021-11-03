@@ -1,6 +1,6 @@
-package MML4J.main.typist;
+package MML4J.main.typist.utils;
 
-import MML4J.main.typist.equation_graph.*;
+import MML4J.main.typist.equation_system.*;
 
 import java.util.HashSet;
 import java.util.Map;
