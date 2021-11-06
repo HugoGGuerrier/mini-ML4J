@@ -2,6 +2,7 @@ package MML4J.main.typist.utils;
 
 import MML4J.main.typist.equation_system.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,7 @@ public class Generalizer {
 
     private final ForAllNode generalNode;
     private final Set<Node> linked;
+    private final Map<Node, Node> processedNodes;
 
 
     // ----- Constructor -----
@@ -21,6 +23,7 @@ public class Generalizer {
     private Generalizer(ForAllNode generalNode, Set<Node> linked) {
         this.generalNode = generalNode;
         this.linked = linked;
+        this.processedNodes = new HashMap<>();
     }
 
 
@@ -67,7 +70,12 @@ public class Generalizer {
         if(linked.contains(simpleNode)) {
             return simpleNode;
         }
-        return generalNode.getNextNode();
+        Node res = processedNodes.getOrDefault(simpleNode, null);
+        if(res == null) {
+            res = generalNode.getNewNode();
+            processedNodes.put(simpleNode, res);
+        }
+        return res;
     }
 
 }

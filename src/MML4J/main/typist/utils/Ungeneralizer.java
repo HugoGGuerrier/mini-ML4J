@@ -2,6 +2,7 @@ package MML4J.main.typist.utils;
 
 import MML4J.main.typist.equation_system.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,14 +11,16 @@ public class Ungeneralizer {
     // ----- Attributes -----
 
 
-    private final Set<Node> generalized;
+    private final Set<Node> generalNodes;
+    private final HashMap<Node, Node> processedNodes;
 
 
     // ----- Constructors -----
 
 
-    private Ungeneralizer(Set<Node> generalized) {
-        this.generalized = generalized;
+    private Ungeneralizer(Set<Node> generalNodes) {
+        this.generalNodes = generalNodes;
+        this.processedNodes = new HashMap<>();
     }
 
 
@@ -58,10 +61,15 @@ public class Ungeneralizer {
 
     // Generalize a simple node
     public Node ungeneralize(SimpleNode simpleNode) {
-        if(generalized.contains(simpleNode)) {
-            return new SimpleNode(simpleNode.getId());
+        if(!generalNodes.contains(simpleNode)) {
+            return simpleNode;
         }
-        return simpleNode;
+        Node res = processedNodes.getOrDefault(simpleNode, null);
+        if(res == null) {
+            res = new SimpleNode(-simpleNode.getId());
+            processedNodes.put(simpleNode, res);
+        }
+        return res;
     }
 
 }

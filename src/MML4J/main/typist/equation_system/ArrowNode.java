@@ -8,6 +8,9 @@ import MML4J.main.typist.utils.Generalizer;
 import MML4J.main.typist.utils.INodeContainer;
 import MML4J.main.typist.utils.Ungeneralizer;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * This class represent an arrow type before its unification process
  *
@@ -87,6 +90,11 @@ public class ArrowNode extends Node implements INodeContainer {
         if(right != null) right.removeContainer(this);
     }
 
+    @Override
+    public Node instantiate() {
+        return this;
+    }
+
 
     // ----- Class methods -----
 
@@ -106,7 +114,8 @@ public class ArrowNode extends Node implements INodeContainer {
 
         // If the other node is another node
         else {
-            for(INodeContainer otherContainer : other.containers) {
+            Set<INodeContainer> otherContainersCopy = new HashSet<>(other.containers);
+            for(INodeContainer otherContainer : otherContainersCopy) {
                 otherContainer.replaceNode(other, this);
             }
             other.destroy();

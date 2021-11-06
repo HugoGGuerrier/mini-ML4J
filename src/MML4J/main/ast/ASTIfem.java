@@ -53,7 +53,7 @@ public class ASTIfem extends ASTExpr {
 
     @Override
     public String toString() {
-        return "ifem(" + condition + ") then { " + condition + " } else { " + alternative + " }";
+        return "ifem(" + condition + ") then { " + consequence + " } else { " + alternative + " }";
     }
 
     @Override

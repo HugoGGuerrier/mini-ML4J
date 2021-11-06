@@ -57,4 +57,10 @@ public class NodePair extends Pair<Node, Node> implements INodeContainer {
         if(right != null) right.removeContainer(this);
     }
 
+    public void reverse() {
+        Node tmp = this.right;
+        right = left;
+        left = tmp;
+    }
+
 }

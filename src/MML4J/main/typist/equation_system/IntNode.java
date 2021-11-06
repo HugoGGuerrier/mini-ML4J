@@ -7,6 +7,9 @@ import MML4J.main.typist.utils.Generalizer;
 import MML4J.main.typist.utils.INodeContainer;
 import MML4J.main.typist.utils.Ungeneralizer;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * This class represent the only instance of integer type
  *
@@ -44,6 +47,11 @@ public class IntNode extends Node {
         return true;
     }
 
+    @Override
+    public Node instantiate() {
+        return this;
+    }
+
 
     // ----- Class methods -----
 
@@ -54,7 +62,8 @@ public class IntNode extends Node {
         if(other.isSpecific() && !(other instanceof IntNode)) throw new TypingException("Cannot merge non identical specific nodes");
 
         // Replace the other by the int node
-        for(INodeContainer otherContainer : other.containers) {
+        Set<INodeContainer> otherContainersClone = new HashSet<>(other.containers);
+        for(INodeContainer otherContainer : otherContainersClone) {
             otherContainer.replaceNode(other, this);
         }
         other.destroy();

@@ -28,7 +28,7 @@ public class ForAllNode extends Node {
 
 
     public ForAllNode() {
-        counter = 0;
+        counter = 1;
         generalizedNodes = new HashSet<>();
         type = null;
     }
@@ -67,11 +67,16 @@ public class ForAllNode extends Node {
         return true;
     }
 
+    @Override
+    public Node instantiate() {
+        return Ungeneralizer.ungenralize(this);
+    }
+
 
     // ----- Class methods -----
 
 
-    public SimpleNode getNextNode() {
+    public SimpleNode getNewNode() {
         SimpleNode res = new SimpleNode(counter++);
         generalizedNodes.add(res);
         return res;

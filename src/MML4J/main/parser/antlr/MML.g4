@@ -21,7 +21,7 @@ BIN_OP : '+'|'-' ;
 BUILD_IN : 'cons'|'head'|'tail' ;
 
 // Regex symbols
-INTEGER : '-'?[0-9] ;
+INTEGER : '-'?[0-9]+;
 IDENT : [a-zA-Z]+ ;
 
 // Ignored

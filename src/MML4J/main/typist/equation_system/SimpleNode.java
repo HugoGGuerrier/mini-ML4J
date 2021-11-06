@@ -1,6 +1,5 @@
 package MML4J.main.typist.equation_system;
 
-import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.TypeTranslator;
 import MML4J.main.typist.type.Type;
 import MML4J.main.typist.utils.Generalizer;
@@ -44,6 +43,9 @@ public class SimpleNode extends Node {
 
     @Override
     public String toString() {
+        if(id < 0) {
+            return "GT" + -id;
+        }
         return "T" + id;
     }
 
@@ -52,16 +54,19 @@ public class SimpleNode extends Node {
         return false;
     }
 
+    @Override
+    public Node instantiate() {
+        return this;
+    }
+
 
     // ----- Class methods -----
 
 
     @Override
     public void merge(Node other, EquationSystem system) {
-        // Create a copy of the containers
-        Set<INodeContainer> containersCopy = new HashSet<>(containers);
-
         // Replace this node by the other
+        Set<INodeContainer> containersCopy = new HashSet<>(containers);
         for(INodeContainer cont : containersCopy) {
             cont.replaceNode(this, other);
         }

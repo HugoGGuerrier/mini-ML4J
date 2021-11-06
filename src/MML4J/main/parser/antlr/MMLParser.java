@@ -19,8 +19,8 @@ public class MMLParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, FN=8, FN_REC=9, 
-		NIL=10, IF_ZERO=11, IF_EMPTY=12, LET=13, IN=14, BIN_OP=15, BUILD_IN=16, 
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, FN=7, FN_REC=8, NIL=9, 
+		IF_ZERO=10, IF_EMPTY=11, ELSE=12, LET=13, IN=14, BIN_OP=15, BUILD_IN=16, 
 		INTEGER=17, IDENT=18, IGNORED__=19;
 	public static final int
 		RULE_program = 0, RULE_expr = 1, RULE_args = 2;
@@ -33,16 +33,16 @@ public class MMLParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'('", "')'", "'{'", "'}'", "'else'", "'='", "','", "'fn'", "'fnrec'", 
-			"'nil'", "'ifz'", "'ifem'", "'let'", "'in'"
+			null, "'('", "')'", "'{'", "'}'", "'='", "','", "'fn'", "'fnrec'", "'nil'", 
+			"'ifz'", "'ifem'", "'else'", "'let'", "'in'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, null, "FN", "FN_REC", "NIL", 
-			"IF_ZERO", "IF_EMPTY", "LET", "IN", "BIN_OP", "BUILD_IN", "INTEGER", 
-			"IDENT", "IGNORED__"
+			null, null, null, null, null, null, null, "FN", "FN_REC", "NIL", "IF_ZERO", 
+			"IF_EMPTY", "ELSE", "LET", "IN", "BIN_OP", "BUILD_IN", "INTEGER", "IDENT", 
+			"IGNORED__"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -188,6 +188,7 @@ public class MMLParser extends Parser {
 		public ExprContext cons;
 		public ExprContext altern;
 		public TerminalNode IF_EMPTY() { return getToken(MMLParser.IF_EMPTY, 0); }
+		public TerminalNode ELSE() { return getToken(MMLParser.ELSE, 0); }
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -236,6 +237,7 @@ public class MMLParser extends Parser {
 		public ExprContext cons;
 		public ExprContext altern;
 		public TerminalNode IF_ZERO() { return getToken(MMLParser.IF_ZERO, 0); }
+		public TerminalNode ELSE() { return getToken(MMLParser.ELSE, 0); }
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -424,7 +426,7 @@ public class MMLParser extends Parser {
 				setState(28);
 				match(T__3);
 				setState(29);
-				match(T__4);
+				match(ELSE);
 				setState(30);
 				match(T__2);
 				setState(31);
@@ -453,7 +455,7 @@ public class MMLParser extends Parser {
 				setState(40);
 				match(T__3);
 				setState(41);
-				match(T__4);
+				match(ELSE);
 				setState(42);
 				match(T__2);
 				setState(43);
@@ -514,7 +516,7 @@ public class MMLParser extends Parser {
 				setState(63);
 				((LetInContext)_localctx).name = match(IDENT);
 				setState(64);
-				match(T__5);
+				match(T__4);
 				setState(65);
 				((LetInContext)_localctx).value = expr(0);
 				setState(66);
@@ -648,7 +650,7 @@ public class MMLParser extends Parser {
 				setState(85);
 				((MultiArgsContext)_localctx).arg = expr(0);
 				setState(86);
-				match(T__6);
+				match(T__5);
 				setState(87);
 				((MultiArgsContext)_localctx).tail = args();
 				}
@@ -692,21 +694,22 @@ public class MMLParser extends Parser {
 		"\3\3\3\3\3\3\3\3\3\3\3\3\7\3R\n\3\f\3\16\3U\13\3\3\4\3\4\3\4\3\4\3\4\5"+
 		"\4\\\n\4\3\4\2\3\4\5\2\4\6\2\2\2f\2\b\3\2\2\2\4G\3\2\2\2\6[\3\2\2\2\b"+
 		"\t\5\4\3\2\t\n\7\2\2\3\n\3\3\2\2\2\13\f\b\3\1\2\fH\7\24\2\2\rH\7\23\2"+
-		"\2\16H\7\f\2\2\17\20\7\3\2\2\20\21\5\4\3\2\21\22\7\4\2\2\22H\3\2\2\2\23"+
-		"\24\7\22\2\2\24\25\7\3\2\2\25\26\5\6\4\2\26\27\7\4\2\2\27H\3\2\2\2\30"+
-		"\31\7\r\2\2\31\32\7\3\2\2\32\33\5\4\3\2\33\34\7\4\2\2\34\35\7\5\2\2\35"+
-		"\36\5\4\3\2\36\37\7\6\2\2\37 \7\7\2\2 !\7\5\2\2!\"\5\4\3\2\"#\7\6\2\2"+
-		"#H\3\2\2\2$%\7\16\2\2%&\7\3\2\2&\'\5\4\3\2\'(\7\4\2\2()\7\5\2\2)*\5\4"+
-		"\3\2*+\7\6\2\2+,\7\7\2\2,-\7\5\2\2-.\5\4\3\2./\7\6\2\2/H\3\2\2\2\60\61"+
-		"\7\n\2\2\61\62\7\3\2\2\62\63\7\24\2\2\63\64\7\4\2\2\64\65\7\5\2\2\65\66"+
-		"\5\4\3\2\66\67\7\6\2\2\67H\3\2\2\289\7\13\2\29:\7\3\2\2:;\7\24\2\2;<\7"+
-		"\4\2\2<=\7\5\2\2=>\5\4\3\2>?\7\6\2\2?H\3\2\2\2@A\7\17\2\2AB\7\24\2\2B"+
-		"C\7\b\2\2CD\5\4\3\2DE\7\20\2\2EF\5\4\3\3FH\3\2\2\2G\13\3\2\2\2G\r\3\2"+
-		"\2\2G\16\3\2\2\2G\17\3\2\2\2G\23\3\2\2\2G\30\3\2\2\2G$\3\2\2\2G\60\3\2"+
-		"\2\2G8\3\2\2\2G@\3\2\2\2HS\3\2\2\2IJ\f\n\2\2JK\7\21\2\2KR\5\4\3\13LM\f"+
-		"\b\2\2MN\7\3\2\2NO\5\4\3\2OP\7\4\2\2PR\3\2\2\2QI\3\2\2\2QL\3\2\2\2RU\3"+
-		"\2\2\2SQ\3\2\2\2ST\3\2\2\2T\5\3\2\2\2US\3\2\2\2V\\\5\4\3\2WX\5\4\3\2X"+
-		"Y\7\t\2\2YZ\5\6\4\2Z\\\3\2\2\2[V\3\2\2\2[W\3\2\2\2\\\7\3\2\2\2\6GQS[";
+		"\2\16H\7\13\2\2\17\20\7\3\2\2\20\21\5\4\3\2\21\22\7\4\2\2\22H\3\2\2\2"+
+		"\23\24\7\22\2\2\24\25\7\3\2\2\25\26\5\6\4\2\26\27\7\4\2\2\27H\3\2\2\2"+
+		"\30\31\7\f\2\2\31\32\7\3\2\2\32\33\5\4\3\2\33\34\7\4\2\2\34\35\7\5\2\2"+
+		"\35\36\5\4\3\2\36\37\7\6\2\2\37 \7\16\2\2 !\7\5\2\2!\"\5\4\3\2\"#\7\6"+
+		"\2\2#H\3\2\2\2$%\7\r\2\2%&\7\3\2\2&\'\5\4\3\2\'(\7\4\2\2()\7\5\2\2)*\5"+
+		"\4\3\2*+\7\6\2\2+,\7\16\2\2,-\7\5\2\2-.\5\4\3\2./\7\6\2\2/H\3\2\2\2\60"+
+		"\61\7\t\2\2\61\62\7\3\2\2\62\63\7\24\2\2\63\64\7\4\2\2\64\65\7\5\2\2\65"+
+		"\66\5\4\3\2\66\67\7\6\2\2\67H\3\2\2\289\7\n\2\29:\7\3\2\2:;\7\24\2\2;"+
+		"<\7\4\2\2<=\7\5\2\2=>\5\4\3\2>?\7\6\2\2?H\3\2\2\2@A\7\17\2\2AB\7\24\2"+
+		"\2BC\7\7\2\2CD\5\4\3\2DE\7\20\2\2EF\5\4\3\3FH\3\2\2\2G\13\3\2\2\2G\r\3"+
+		"\2\2\2G\16\3\2\2\2G\17\3\2\2\2G\23\3\2\2\2G\30\3\2\2\2G$\3\2\2\2G\60\3"+
+		"\2\2\2G8\3\2\2\2G@\3\2\2\2HS\3\2\2\2IJ\f\n\2\2JK\7\21\2\2KR\5\4\3\13L"+
+		"M\f\b\2\2MN\7\3\2\2NO\5\4\3\2OP\7\4\2\2PR\3\2\2\2QI\3\2\2\2QL\3\2\2\2"+
+		"RU\3\2\2\2SQ\3\2\2\2ST\3\2\2\2T\5\3\2\2\2US\3\2\2\2V\\\5\4\3\2WX\5\4\3"+
+		"\2XY\7\b\2\2YZ\5\6\4\2Z\\\3\2\2\2[V\3\2\2\2[W\3\2\2\2\\\7\3\2\2\2\6GQ"+
+		"S[";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

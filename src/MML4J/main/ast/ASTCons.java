@@ -47,7 +47,7 @@ public class ASTCons extends ASTExpr {
 
     @Override
     public String toString() {
-        return "cons(" + head + ", " + tail;
+        return "cons(" + head + ", " + tail + ")";
     }
 
     @Override

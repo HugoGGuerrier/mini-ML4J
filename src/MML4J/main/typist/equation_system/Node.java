@@ -53,6 +53,13 @@ public abstract class Node {
     public abstract boolean isSpecific();
 
     /**
+     * Get the instantiated node
+     *
+     * @return An instance of the node
+     */
+    public abstract Node instantiate();
+
+    /**
      * Merge the node with an other node
      *
      * @param other The node to merge with

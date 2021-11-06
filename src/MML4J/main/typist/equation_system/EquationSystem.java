@@ -66,9 +66,19 @@ public class EquationSystem {
 
 
     public void addEquation(Node left, Node right) {
-        NodePair newPair = new NodePair(left, right);
-        if(left == initNode) initialEquation = newPair;
-        else equations.add(newPair);
+        NodePair newEquation = new NodePair(left, right);
+        if(initialEquation == null) {
+            if(left == initNode) {
+                initialEquation = newEquation;
+                return;
+            }
+            else if(right == initNode) {
+                newEquation.reverse();
+                initialEquation = newEquation;
+                return;
+            }
+        }
+        equations.add(newEquation);
     }
 
     public Node unify() throws TypingException {
@@ -76,8 +86,8 @@ public class EquationSystem {
         while(equations.size() > 0) {
             // Get the head of the list
             NodePair equation = equations.remove(0);
-            Node left = equation.getLeft();
-            Node right = equation.getRight();
+            Node left = equation.getLeft().instantiate();
+            Node right = equation.getRight().instantiate();
 
             // Remove the equation from the system
             equation.destroy();
