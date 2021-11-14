@@ -4,9 +4,12 @@ import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.TypeTranslator;
 import MML4J.main.typist.type.Type;
 import MML4J.main.typist.utils.Generalizer;
+import MML4J.main.typist.utils.NodePair;
 import MML4J.main.typist.utils.Ungeneralizer;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,8 +23,9 @@ public class ForAllNode extends Node {
 
 
     private int counter;
-    private Set<SimpleNode> generalizedNodes;
     private Node type;
+    private final Set<SimpleNode> generalizedNodes;
+    private final List<NodePair> externalConstraints;
 
 
     // ----- Constructors -----
@@ -29,8 +33,9 @@ public class ForAllNode extends Node {
 
     public ForAllNode() {
         counter = 1;
-        generalizedNodes = new HashSet<>();
         type = null;
+        generalizedNodes = new HashSet<>();
+        externalConstraints = new LinkedList<>();
     }
 
 
@@ -45,6 +50,10 @@ public class ForAllNode extends Node {
         return type;
     }
 
+    public List<NodePair> getExternalConstraints() {
+        return externalConstraints;
+    }
+
 
     // ----- Setters -----
 
@@ -53,13 +62,19 @@ public class ForAllNode extends Node {
         this.type = type;
     }
 
+    public void addExternalConstraint(Node externalNode, Node internalNode) {
+        NodePair extConst = new NodePair(externalNode, internalNode);
+        externalConstraints.add(extConst);
+    }
+
 
     // ----- Override methods -----
 
 
     @Override
     public String toString() {
-        return "for_all" + generalizedNodes + " " + type;
+        return "for_all" + generalizedNodes + " " + type +
+                (!externalConstraints.isEmpty() ? " | External constraint : " + externalConstraints : "");
     }
 
     @Override
@@ -68,8 +83,8 @@ public class ForAllNode extends Node {
     }
 
     @Override
-    public Node instantiate() {
-        return Ungeneralizer.ungenralize(this);
+    public Node instantiate(EquationSystem system) {
+        return Ungeneralizer.ungeneralize(this, system);
     }
 
 

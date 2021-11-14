@@ -2,10 +2,7 @@ package MML4J.main.typist.utils;
 
 import MML4J.main.typist.equation_system.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Generalizer {
 
@@ -31,9 +28,26 @@ public class Generalizer {
 
 
     public static ForAllNode generalize(Node toGeneralize, Map<String, Node> context) {
+        return generalize(toGeneralize, context, null);
+    }
+    
+    public static ForAllNode generalize(Node toGeneralize, Map<String, Node> context, List<NodePair> externalEquations) {
+        // Prepare the generalisation result
         ForAllNode res = new ForAllNode();
+
+        // Create the generalizer and generalize the type to process
         Generalizer generalizer = new Generalizer(res, new HashSet<>(context.values()));
         res.setType(toGeneralize.acceptGeneralizer(generalizer));
+
+        // If the external equations is not null, process it
+        if(externalEquations != null) {
+            for(NodePair extEq : externalEquations) {
+                res.addExternalConstraint(extEq.getLeft(), extEq.getRight().acceptGeneralizer(generalizer));
+                extEq.destroy();
+            }
+        }
+
+        // Return the result
         return res;
     }
 

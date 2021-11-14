@@ -27,9 +27,18 @@ public class Ungeneralizer {
     // ----- Class methods -----
 
 
-    public static Node ungenralize(ForAllNode forAllNode) {
+    public static Node ungeneralize(ForAllNode forAllNode, EquationSystem system) {
+        // Prepare the ungeneralizer and the result
         Ungeneralizer ungeneralizer = new Ungeneralizer(new HashSet<>(forAllNode.getGeneralizedNodes()));
-        return forAllNode.getType().acceptUngeneralizer(ungeneralizer);
+        Node res = forAllNode.getType().acceptUngeneralizer(ungeneralizer);
+
+        // For each external constraint, add it to the system
+        for(NodePair extConst : forAllNode.getExternalConstraints()) {
+            system.addEquation(extConst.getLeft(), extConst.getRight().acceptUngeneralizer(ungeneralizer));
+        }
+
+        // Return the result
+        return res;
     }
 
 

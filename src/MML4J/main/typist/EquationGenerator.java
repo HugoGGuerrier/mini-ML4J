@@ -5,7 +5,10 @@ import MML4J.main.ast.*;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_system.*;
 import MML4J.main.typist.utils.Generalizer;
+import MML4J.main.typist.utils.NodePair;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EquationGenerator {
@@ -108,16 +111,53 @@ public class EquationGenerator {
 
     // Generate equations for a let
     public void generate(ASTLet let, Node target, Map<String, Node> context) throws TypingException {
+        // Do debug print
+        if(Utils.DEBUG) System.out.println("=== Internal typing for the expression " + let.getValue() + "\n");
+
         // Generate equations for the let value
         EquationSystem system = new EquationSystem();
         EquationGenerator generator = new EquationGenerator(system);
-        let.getValue().acceptEqGenerator(generator, system.getInitNode(), context);
+
+        // For each node in the context, create an equivalent node and clone the context
+        Map<String, Node> internalContext = new HashMap<>();
+        for(String var : context.keySet()) {
+            // Get the external and the internal value
+            Node externalNode = context.get(var);
+            Node internalNode = generator.getNewNode();
+
+            // Add the external equation to the system
+            system.addExternalEquation(externalNode, internalNode);
+
+            // Add the internal node to the internal context
+            internalContext.put(var, internalNode);
+        }
+
+        // Start the equation generation
+        let.getValue().acceptEqGenerator(generator, system.getInitNode(), internalContext);
+
+        // Do debug print
+        if(Utils.DEBUG) {
+            System.out.println("Equation system :");
+            System.out.println(system);
+        }
 
         // Get the type node
         Node letValueNode = system.unify();
 
+        // Do debug print
+        if(Utils.DEBUG) {
+            System.out.println("Unified equation system : " + letValueNode);
+            List<NodePair> externalEquations = system.getExternalEquations();
+            if(externalEquations.size() > 0) {
+                System.out.println("External equations : " + externalEquations);
+            }
+        }
+
         // Generalize the let node
-        Node generalizedLetNode = Generalizer.generalize(letValueNode, context);
+        ForAllNode generalizedLetNode = Generalizer.generalize(letValueNode, context, system.getExternalEquations());
+
+        // Do debug print
+        if(Utils.DEBUG) System.out.println("Generalized node : " + generalizedLetNode + "\n===\n");
 
         // Put the generalized node in the context
         Map<String, Node> contextCopy = Utils.cloneMap(context);

@@ -48,7 +48,7 @@ public class IntNode extends Node {
     }
 
     @Override
-    public Node instantiate() {
+    public Node instantiate(EquationSystem system) {
         return this;
     }
 

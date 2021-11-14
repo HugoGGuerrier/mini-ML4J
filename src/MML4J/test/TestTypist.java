@@ -325,6 +325,10 @@ public class TestTypist {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){ let x = fn(b){ a(b) } in x(42) }");
             Type real = typist.typeExpression(expr);
+
+            SimpleType t0 = new SimpleType(0);
+            ArrowType expected = new ArrowType(new ArrowType(IntType.getInstance(), t0), t0);
+            assertEquals(expected, real);
         } catch (Exception e) {
             fail(e);
         }

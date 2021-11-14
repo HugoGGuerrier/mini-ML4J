@@ -15,12 +15,16 @@ public abstract class Node {
     // ----- Attributes -----
 
 
+    /** All object that contains the node */
     protected final Set<INodeContainer> containers;
 
 
     // ----- Constructors -----
 
 
+    /**
+     * Create a node with just a container set
+     */
     public Node() {
         containers = new HashSet<>();
     }
@@ -29,14 +33,27 @@ public abstract class Node {
     // ----- Setters -----
 
 
+    /**
+     * Add a container for the node
+     *
+     * @param container The container to add
+     */
     public void addContainer(INodeContainer container) {
         containers.add(container);
     }
 
+    /**
+     * Remove a container from the node's containers list
+     *
+     * @param container The container to remove
+     */
     public void removeContainer(INodeContainer container) {
         containers.remove(container);
     }
 
+    /**
+     * Destroy the node from the system (Remove all of its containers)
+     */
     public void destroy() {
         containers.clear();
     }
@@ -55,9 +72,10 @@ public abstract class Node {
     /**
      * Get the instantiated node
      *
+     * @param system The equation system to instantiate the node in
      * @return An instance of the node
      */
-    public abstract Node instantiate();
+    public abstract Node instantiate(EquationSystem system);
 
     /**
      * Merge the node with an other node

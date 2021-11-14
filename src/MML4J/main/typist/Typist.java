@@ -21,9 +21,6 @@ public class Typist {
      * @return The inferred type
      */
     public Type typeExpression(ASTExpr expr) throws TypingException {
-        // Start with a debug print
-        if(Utils.DEBUG) System.out.println("=== Typing the expression " + expr + "\n");
-
         // Create the equation system from the ast
         EquationSystem equationSystem = new EquationSystem();
         EquationGenerator generator = new EquationGenerator(equationSystem);
@@ -31,6 +28,7 @@ public class Typist {
 
         // Do debug print
         if(Utils.DEBUG) {
+            System.out.println("=== Typing the expression " + expr + "\n");
             System.out.println("Equation system :");
             System.out.println(equationSystem);
         }

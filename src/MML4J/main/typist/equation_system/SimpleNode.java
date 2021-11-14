@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class represent a simple type before its unification
+ * This class represent a simple type before its translating into type
  *
  * @author Hugo GUERRIER
  */
@@ -55,7 +55,7 @@ public class SimpleNode extends Node {
     }
 
     @Override
-    public Node instantiate() {
+    public Node instantiate(EquationSystem system) {
         return this;
     }
 

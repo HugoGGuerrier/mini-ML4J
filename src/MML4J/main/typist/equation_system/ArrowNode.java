@@ -91,7 +91,7 @@ public class ArrowNode extends Node implements INodeContainer {
     }
 
     @Override
-    public Node instantiate() {
+    public Node instantiate(EquationSystem system) {
         return this;
     }
 
