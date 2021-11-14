@@ -12,8 +12,8 @@ public class ASTCons extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final ASTExpr head;
-    private final ASTExpr tail;
+    protected final ASTExpr head;
+    protected final ASTExpr tail;
 
 
     // ----- Constructors -----

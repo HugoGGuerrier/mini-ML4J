@@ -12,9 +12,9 @@ public class ASTIfz extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final ASTExpr condition;
-    private final ASTExpr consequence;
-    private final ASTExpr alternative;
+    protected final ASTExpr condition;
+    protected final ASTExpr consequence;
+    protected final ASTExpr alternative;
 
 
     // ----- Constructors -----

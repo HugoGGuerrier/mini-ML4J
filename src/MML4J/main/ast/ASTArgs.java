@@ -9,7 +9,7 @@ public class ASTArgs extends AST {
     // ----- Attributes -----
 
 
-    private final List<ASTExpr> args;
+    protected final List<ASTExpr> args;
 
 
     // ----- Constructors -----

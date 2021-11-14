@@ -65,6 +65,7 @@ class Visitor extends MMLBaseVisitor<AST> {
     @Override
     public AST visitRecAbstraction(MMLParser.RecAbstractionContext ctx) {
         return new ASTAbsRec(
+                ctx.name.getText(),
                 ctx.param.getText(),
                 (ASTExpr) ctx.body.accept(this)
         );

@@ -15,7 +15,6 @@ public class TestTypist {
     // ----- Attributes for the tests -----
 
     private static Parser parser;
-    private static Typist typist;
 
     // ----- Init methods -----
 
@@ -25,7 +24,6 @@ public class TestTypist {
     @BeforeAll
     static void init() {
         parser = new Parser();
-        typist = new Typist();
     }
 
     // ----- Test methods -----
@@ -45,7 +43,7 @@ public class TestTypist {
     void testError() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){a(a)}");
-            assertThrows(TypingException.class, () -> typist.typeExpression(expr));
+            assertThrows(TypingException.class, () -> Typist.typeExpression(expr));
         } catch (Exception e) {
             fail(e);
         }
@@ -58,7 +56,7 @@ public class TestTypist {
     void test1() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){a}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             Type expected = new ArrowType(new SimpleType(0), new SimpleType(0));
             assertEquals(expected, real);
@@ -74,7 +72,7 @@ public class TestTypist {
     void test2() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){fn(b){ a(b) }}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             SimpleType t1 = new SimpleType(1);
@@ -94,7 +92,7 @@ public class TestTypist {
     void test3() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(x){fn(y){fn(z){ (x(z))(y(z)) }}}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             SimpleType t1 = new SimpleType(1);
@@ -115,12 +113,29 @@ public class TestTypist {
     void test4() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){fn(b){ a(a(b)) }}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             ArrowType left = new ArrowType(t0, t0);
             ArrowType right = new ArrowType(t0, t0);
             Type expected = new ArrowType(left, right);
+            assertEquals(expected, real);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
+     * Test the abstraction recursive typing
+     */
+    @Test
+    void testAbsRec() {
+        try {
+            ASTExpr expr = (ASTExpr) parser.parseString("rec x(a) { x(a - 1) }");
+            Type real = Typist.typeExpression(expr);
+
+            SimpleType t0 = new SimpleType(0);
+            ArrowType expected = new ArrowType(IntType.getInstance(), t0);
             assertEquals(expected, real);
         } catch (Exception e) {
             fail(e);
@@ -134,7 +149,7 @@ public class TestTypist {
     void testInt() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){42}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             Type expected = new ArrowType(new SimpleType(0), IntType.getInstance());
             assertEquals(expected, real);
@@ -150,10 +165,10 @@ public class TestTypist {
     void testAddSub() {
         try {
             ASTExpr expr1 = (ASTExpr) parser.parseString("fn(a){fn(b){a + b}}");
-            Type real1 = typist.typeExpression(expr1);
+            Type real1 = Typist.typeExpression(expr1);
 
             ASTExpr expr2 = (ASTExpr) parser.parseString("fn(a){fn(b){a - b}}");
-            Type real2 = typist.typeExpression(expr2);
+            Type real2 = Typist.typeExpression(expr2);
 
             Type expected = new ArrowType(IntType.getInstance(), new ArrowType(IntType.getInstance(), IntType.getInstance()));
             assertEquals(expected, real1);
@@ -170,7 +185,7 @@ public class TestTypist {
     void testNil() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("cons(1, cons(2, nil))");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             Type expected = new ListType(IntType.getInstance());
             assertEquals(expected, real);
@@ -186,7 +201,7 @@ public class TestTypist {
     void testCons() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){fn(b){cons(a, b)}}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             ArrowType right = new ArrowType(new ListType(t0), new ListType(t0));
@@ -204,7 +219,7 @@ public class TestTypist {
     void testHead() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){head(a)}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             Type expected = new ArrowType(new ListType(t0), t0);
@@ -221,7 +236,7 @@ public class TestTypist {
     void testTail() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){tail(a)}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             Type expected = new ArrowType(new ListType(t0), new ListType(t0));
@@ -238,7 +253,7 @@ public class TestTypist {
     void testIfem() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){fn(b){ifem(a){b} else{a}}}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             ListType l0 = new ListType(t0);
@@ -256,7 +271,7 @@ public class TestTypist {
     void testIfz() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){fn(b){ifz(a) {b} else{a}}}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             Type expected = new ArrowType(IntType.getInstance(), new ArrowType(IntType.getInstance(), IntType.getInstance()));
             assertEquals(expected, real);
@@ -272,7 +287,7 @@ public class TestTypist {
     void testLet1() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("let a = 42 in a + 15");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             Type expected = IntType.getInstance();
             assertEquals(expected, real);
@@ -288,7 +303,7 @@ public class TestTypist {
     void testLet2() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("let a = fn(a){a + 15} in a(42)");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             Type expected = IntType.getInstance();
             assertEquals(expected, real);
@@ -304,7 +319,7 @@ public class TestTypist {
     void testLet3() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("let x = fn(a){fn(b){a(b)}} in fn(a){fn(b){x(a)(b)}}");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             SimpleType t1 = new SimpleType(1);
@@ -324,7 +339,7 @@ public class TestTypist {
     void testLet4() {
         try {
             ASTExpr expr = (ASTExpr) parser.parseString("fn(a){ let x = fn(b){ a(b) } in x(42) }");
-            Type real = typist.typeExpression(expr);
+            Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
             ArrowType expected = new ArrowType(new ArrowType(IntType.getInstance(), t0), t0);

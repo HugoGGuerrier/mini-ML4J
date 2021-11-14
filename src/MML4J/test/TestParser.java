@@ -60,10 +60,10 @@ public class TestParser {
     @Test
     void testAbsRec() {
         try {
-            assertEquals(parser.parseString("fnrec(a){a}"), new ASTAbsRec("a", new ASTVar("a")));
+            assertEquals(parser.parseString("rec func(a){a}"), new ASTAbsRec("func" ,"a", new ASTVar("a")));
 
-            assertThrows(ParsingException.class, () -> parser.parseString("fnrec(a)"));
-            assertThrows(ParsingException.class, () -> parser.parseString("fnrec(a){a"));
+            assertThrows(ParsingException.class, () -> parser.parseString("rec f(a)"));
+            assertThrows(ParsingException.class, () -> parser.parseString("rec f(a){a"));
         } catch (ParsingException e) {
             fail(e);
         }

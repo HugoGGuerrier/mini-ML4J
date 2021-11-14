@@ -8,7 +8,7 @@ package MML4J.main.parser.antlr;
 
 // Syntaxic keywords
 FN : 'fn' ;
-FN_REC : 'fnrec' ;
+REC : 'rec' ;
 NIL : 'nil' ;
 IF_ZERO : 'ifz' ;
 IF_EMPTY : 'ifem' ;
@@ -43,7 +43,7 @@ expr :
     | IF_ZERO '(' cond=expr ')' '{' cons=expr '}' ELSE '{' altern=expr '}' # IfZero
     | IF_EMPTY '(' cond=expr ')' '{' cons=expr '}' ELSE '{' altern=expr '}' # IfEmpty
     | FN '(' param=IDENT ')' '{' body=expr '}' # Abstraction
-    | FN_REC '(' param=IDENT ')' '{' body=expr '}' # RecAbstraction
+    | REC name=IDENT '(' param=IDENT ')' '{' body=expr '}' # RecAbstraction
     | LET name=IDENT '=' value=expr IN body=expr # LetIn
     ;
 

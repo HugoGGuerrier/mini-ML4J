@@ -12,9 +12,9 @@ public class ASTLet extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final String name;
-    private final ASTExpr value;
-    private final ASTExpr in;
+    protected final String name;
+    protected final ASTExpr value;
+    protected final ASTExpr in;
 
 
     // ----- Constructors -----

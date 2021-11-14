@@ -12,7 +12,7 @@ public class ASTHead extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final ASTExpr list;
+    protected final ASTExpr list;
 
 
     // ----- Constructors -----

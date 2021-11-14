@@ -12,7 +12,7 @@ public class ASTVar extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final String name;
+    protected final String name;
 
 
     // ----- Constructors -----

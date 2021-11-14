@@ -12,8 +12,8 @@ public class ASTApp extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final ASTExpr function;
-    private final ASTExpr arg;
+    protected final ASTExpr function;
+    protected final ASTExpr arg;
 
 
     // ----- Constructors -----

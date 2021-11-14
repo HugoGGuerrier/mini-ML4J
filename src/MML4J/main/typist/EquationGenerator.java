@@ -69,7 +69,21 @@ public class EquationGenerator {
 
     // Generate equations for a recursive abstraction
     public void generate(ASTAbsRec absRec, Node target, Map<String, Node> context) throws TypingException {
+        // Create the new nodes
+        SimpleNode paramNode = getNewNode();
+        SimpleNode resultNode = getNewNode();
+        ArrowNode recNode = new ArrowNode(paramNode, resultNode);
 
+        // Add the equation between the target and the abs node
+        system.addEquation(target, recNode);
+
+        // Add the variable to the context
+        Map<String, Node> contextCopy = Utils.cloneMap(context);
+        contextCopy.put(absRec.getParam(), paramNode);
+        contextCopy.put(absRec.getName(), recNode);
+
+        // Type the body with the result target
+        absRec.getBody().acceptEqGenerator(this, resultNode, contextCopy);
     }
 
     // Generate equations for an application

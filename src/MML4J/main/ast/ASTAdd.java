@@ -12,8 +12,8 @@ public class ASTAdd extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final ASTExpr left;
-    private final ASTExpr right;
+    protected final ASTExpr left;
+    protected final ASTExpr right;
 
 
     // ----- Constructors -----

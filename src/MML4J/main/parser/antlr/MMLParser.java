@@ -19,9 +19,9 @@ public class MMLParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, FN=7, FN_REC=8, NIL=9, 
-		IF_ZERO=10, IF_EMPTY=11, ELSE=12, LET=13, IN=14, BIN_OP=15, BUILD_IN=16, 
-		INTEGER=17, IDENT=18, IGNORED__=19;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, FN=7, REC=8, NIL=9, IF_ZERO=10, 
+		IF_EMPTY=11, ELSE=12, LET=13, IN=14, BIN_OP=15, BUILD_IN=16, INTEGER=17, 
+		IDENT=18, IGNORED__=19;
 	public static final int
 		RULE_program = 0, RULE_expr = 1, RULE_args = 2;
 	private static String[] makeRuleNames() {
@@ -33,14 +33,14 @@ public class MMLParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'('", "')'", "'{'", "'}'", "'='", "','", "'fn'", "'fnrec'", "'nil'", 
+			null, "'('", "')'", "'{'", "'}'", "'='", "','", "'fn'", "'rec'", "'nil'", 
 			"'ifz'", "'ifem'", "'else'", "'let'", "'in'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, "FN", "FN_REC", "NIL", "IF_ZERO", 
+			null, null, null, null, null, null, null, "FN", "REC", "NIL", "IF_ZERO", 
 			"IF_EMPTY", "ELSE", "LET", "IN", "BIN_OP", "BUILD_IN", "INTEGER", "IDENT", 
 			"IGNORED__"
 		};
@@ -317,10 +317,14 @@ public class MMLParser extends Parser {
 		}
 	}
 	public static class RecAbstractionContext extends ExprContext {
+		public Token name;
 		public Token param;
 		public ExprContext body;
-		public TerminalNode FN_REC() { return getToken(MMLParser.FN_REC, 0); }
-		public TerminalNode IDENT() { return getToken(MMLParser.IDENT, 0); }
+		public TerminalNode REC() { return getToken(MMLParser.REC, 0); }
+		public List<TerminalNode> IDENT() { return getTokens(MMLParser.IDENT); }
+		public TerminalNode IDENT(int i) {
+			return getToken(MMLParser.IDENT, i);
+		}
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -347,7 +351,7 @@ public class MMLParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(69);
+			setState(70);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IDENT:
@@ -485,24 +489,26 @@ public class MMLParser extends Parser {
 				match(T__3);
 				}
 				break;
-			case FN_REC:
+			case REC:
 				{
 				_localctx = new RecAbstractionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(54);
-				match(FN_REC);
+				match(REC);
 				setState(55);
-				match(T__0);
+				((RecAbstractionContext)_localctx).name = match(IDENT);
 				setState(56);
-				((RecAbstractionContext)_localctx).param = match(IDENT);
+				match(T__0);
 				setState(57);
-				match(T__1);
+				((RecAbstractionContext)_localctx).param = match(IDENT);
 				setState(58);
-				match(T__2);
+				match(T__1);
 				setState(59);
-				((RecAbstractionContext)_localctx).body = expr(0);
+				match(T__2);
 				setState(60);
+				((RecAbstractionContext)_localctx).body = expr(0);
+				setState(61);
 				match(T__3);
 				}
 				break;
@@ -511,17 +517,17 @@ public class MMLParser extends Parser {
 				_localctx = new LetInContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(62);
-				match(LET);
 				setState(63);
-				((LetInContext)_localctx).name = match(IDENT);
+				match(LET);
 				setState(64);
-				match(T__4);
+				((LetInContext)_localctx).name = match(IDENT);
 				setState(65);
-				((LetInContext)_localctx).value = expr(0);
+				match(T__4);
 				setState(66);
-				match(IN);
+				((LetInContext)_localctx).value = expr(0);
 				setState(67);
+				match(IN);
+				setState(68);
 				((LetInContext)_localctx).body = expr(1);
 				}
 				break;
@@ -529,7 +535,7 @@ public class MMLParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(81);
+			setState(82);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -537,7 +543,7 @@ public class MMLParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(79);
+					setState(80);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 					case 1:
@@ -545,11 +551,11 @@ public class MMLParser extends Parser {
 						_localctx = new BinOpContext(new ExprContext(_parentctx, _parentState));
 						((BinOpContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(71);
-						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
 						setState(72);
-						((BinOpContext)_localctx).op = match(BIN_OP);
+						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
 						setState(73);
+						((BinOpContext)_localctx).op = match(BIN_OP);
+						setState(74);
 						((BinOpContext)_localctx).right = expr(9);
 						}
 						break;
@@ -558,20 +564,20 @@ public class MMLParser extends Parser {
 						_localctx = new ApplicationContext(new ExprContext(_parentctx, _parentState));
 						((ApplicationContext)_localctx).func = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(74);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(75);
-						match(T__0);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(76);
-						((ApplicationContext)_localctx).arg = expr(0);
+						match(T__0);
 						setState(77);
+						((ApplicationContext)_localctx).arg = expr(0);
+						setState(78);
 						match(T__1);
 						}
 						break;
 					}
 					} 
 				}
-				setState(83);
+				setState(84);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			}
@@ -632,14 +638,14 @@ public class MMLParser extends Parser {
 		ArgsContext _localctx = new ArgsContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_args);
 		try {
-			setState(89);
+			setState(90);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				_localctx = new SoleArgsContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(84);
+				setState(85);
 				((SoleArgsContext)_localctx).arg = expr(0);
 				}
 				break;
@@ -647,11 +653,11 @@ public class MMLParser extends Parser {
 				_localctx = new MultiArgsContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(85);
-				((MultiArgsContext)_localctx).arg = expr(0);
 				setState(86);
-				match(T__5);
+				((MultiArgsContext)_localctx).arg = expr(0);
 				setState(87);
+				match(T__5);
+				setState(88);
 				((MultiArgsContext)_localctx).tail = args();
 				}
 				break;
@@ -686,30 +692,30 @@ public class MMLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\25^\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\25_\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3H\n\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\7\3R\n\3\f\3\16\3U\13\3\3\4\3\4\3\4\3\4\3\4\5"+
-		"\4\\\n\4\3\4\2\3\4\5\2\4\6\2\2\2f\2\b\3\2\2\2\4G\3\2\2\2\6[\3\2\2\2\b"+
-		"\t\5\4\3\2\t\n\7\2\2\3\n\3\3\2\2\2\13\f\b\3\1\2\fH\7\24\2\2\rH\7\23\2"+
-		"\2\16H\7\13\2\2\17\20\7\3\2\2\20\21\5\4\3\2\21\22\7\4\2\2\22H\3\2\2\2"+
-		"\23\24\7\22\2\2\24\25\7\3\2\2\25\26\5\6\4\2\26\27\7\4\2\2\27H\3\2\2\2"+
-		"\30\31\7\f\2\2\31\32\7\3\2\2\32\33\5\4\3\2\33\34\7\4\2\2\34\35\7\5\2\2"+
-		"\35\36\5\4\3\2\36\37\7\6\2\2\37 \7\16\2\2 !\7\5\2\2!\"\5\4\3\2\"#\7\6"+
-		"\2\2#H\3\2\2\2$%\7\r\2\2%&\7\3\2\2&\'\5\4\3\2\'(\7\4\2\2()\7\5\2\2)*\5"+
-		"\4\3\2*+\7\6\2\2+,\7\16\2\2,-\7\5\2\2-.\5\4\3\2./\7\6\2\2/H\3\2\2\2\60"+
-		"\61\7\t\2\2\61\62\7\3\2\2\62\63\7\24\2\2\63\64\7\4\2\2\64\65\7\5\2\2\65"+
-		"\66\5\4\3\2\66\67\7\6\2\2\67H\3\2\2\289\7\n\2\29:\7\3\2\2:;\7\24\2\2;"+
-		"<\7\4\2\2<=\7\5\2\2=>\5\4\3\2>?\7\6\2\2?H\3\2\2\2@A\7\17\2\2AB\7\24\2"+
-		"\2BC\7\7\2\2CD\5\4\3\2DE\7\20\2\2EF\5\4\3\3FH\3\2\2\2G\13\3\2\2\2G\r\3"+
-		"\2\2\2G\16\3\2\2\2G\17\3\2\2\2G\23\3\2\2\2G\30\3\2\2\2G$\3\2\2\2G\60\3"+
-		"\2\2\2G8\3\2\2\2G@\3\2\2\2HS\3\2\2\2IJ\f\n\2\2JK\7\21\2\2KR\5\4\3\13L"+
-		"M\f\b\2\2MN\7\3\2\2NO\5\4\3\2OP\7\4\2\2PR\3\2\2\2QI\3\2\2\2QL\3\2\2\2"+
-		"RU\3\2\2\2SQ\3\2\2\2ST\3\2\2\2T\5\3\2\2\2US\3\2\2\2V\\\5\4\3\2WX\5\4\3"+
-		"\2XY\7\b\2\2YZ\5\6\4\2Z\\\3\2\2\2[V\3\2\2\2[W\3\2\2\2\\\7\3\2\2\2\6GQ"+
-		"S[";
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3I\n\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3S\n\3\f\3\16\3V\13\3\3\4\3\4\3\4\3\4\3"+
+		"\4\5\4]\n\4\3\4\2\3\4\5\2\4\6\2\2\2g\2\b\3\2\2\2\4H\3\2\2\2\6\\\3\2\2"+
+		"\2\b\t\5\4\3\2\t\n\7\2\2\3\n\3\3\2\2\2\13\f\b\3\1\2\fI\7\24\2\2\rI\7\23"+
+		"\2\2\16I\7\13\2\2\17\20\7\3\2\2\20\21\5\4\3\2\21\22\7\4\2\2\22I\3\2\2"+
+		"\2\23\24\7\22\2\2\24\25\7\3\2\2\25\26\5\6\4\2\26\27\7\4\2\2\27I\3\2\2"+
+		"\2\30\31\7\f\2\2\31\32\7\3\2\2\32\33\5\4\3\2\33\34\7\4\2\2\34\35\7\5\2"+
+		"\2\35\36\5\4\3\2\36\37\7\6\2\2\37 \7\16\2\2 !\7\5\2\2!\"\5\4\3\2\"#\7"+
+		"\6\2\2#I\3\2\2\2$%\7\r\2\2%&\7\3\2\2&\'\5\4\3\2\'(\7\4\2\2()\7\5\2\2)"+
+		"*\5\4\3\2*+\7\6\2\2+,\7\16\2\2,-\7\5\2\2-.\5\4\3\2./\7\6\2\2/I\3\2\2\2"+
+		"\60\61\7\t\2\2\61\62\7\3\2\2\62\63\7\24\2\2\63\64\7\4\2\2\64\65\7\5\2"+
+		"\2\65\66\5\4\3\2\66\67\7\6\2\2\67I\3\2\2\289\7\n\2\29:\7\24\2\2:;\7\3"+
+		"\2\2;<\7\24\2\2<=\7\4\2\2=>\7\5\2\2>?\5\4\3\2?@\7\6\2\2@I\3\2\2\2AB\7"+
+		"\17\2\2BC\7\24\2\2CD\7\7\2\2DE\5\4\3\2EF\7\20\2\2FG\5\4\3\3GI\3\2\2\2"+
+		"H\13\3\2\2\2H\r\3\2\2\2H\16\3\2\2\2H\17\3\2\2\2H\23\3\2\2\2H\30\3\2\2"+
+		"\2H$\3\2\2\2H\60\3\2\2\2H8\3\2\2\2HA\3\2\2\2IT\3\2\2\2JK\f\n\2\2KL\7\21"+
+		"\2\2LS\5\4\3\13MN\f\b\2\2NO\7\3\2\2OP\5\4\3\2PQ\7\4\2\2QS\3\2\2\2RJ\3"+
+		"\2\2\2RM\3\2\2\2SV\3\2\2\2TR\3\2\2\2TU\3\2\2\2U\5\3\2\2\2VT\3\2\2\2W]"+
+		"\5\4\3\2XY\5\4\3\2YZ\7\b\2\2Z[\5\6\4\2[]\3\2\2\2\\W\3\2\2\2\\X\3\2\2\2"+
+		"]\7\3\2\2\2\6HRT\\";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

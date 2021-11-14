@@ -5,7 +5,7 @@ T__3=4
 T__4=5
 T__5=6
 FN=7
-FN_REC=8
+REC=8
 NIL=9
 IF_ZERO=10
 IF_EMPTY=11
@@ -24,7 +24,7 @@ IGNORED__=19
 '='=5
 ','=6
 'fn'=7
-'fnrec'=8
+'rec'=8
 'nil'=9
 'ifz'=10
 'ifem'=11

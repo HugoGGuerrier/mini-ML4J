@@ -7,32 +7,28 @@ import MML4J.main.typist.equation_system.Node;
 import java.util.Map;
 import java.util.Objects;
 
-public class ASTAbsRec extends ASTExpr {
+public class ASTAbsRec extends ASTAbs {
 
     // ----- Attributes -----
 
 
-    private final String param;
-    private final ASTExpr body;
+    protected final String name;
 
 
     // ----- Constructors -----
 
-    public ASTAbsRec(String param, ASTExpr body) {
-        this.param = param;
-        this.body = body;
+
+    public ASTAbsRec(String name, String param, ASTExpr body) {
+        super(param, body);
+        this.name = name;
     }
 
 
     // ----- Getters -----
 
 
-    public String getParam() {
-        return param;
-    }
-
-    public ASTExpr getBody() {
-        return body;
+    public String getName() {
+        return name;
     }
 
 
@@ -46,7 +42,7 @@ public class ASTAbsRec extends ASTExpr {
 
     @Override
     public String toString() {
-        return "fnrec(" + param + "){ " + body.toString() + " }";
+        return "rec " + name + "(" + param + "){ " + body.toString() + " }";
     }
 
     @Override
@@ -54,12 +50,12 @@ public class ASTAbsRec extends ASTExpr {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ASTAbsRec astAbsRec = (ASTAbsRec) o;
-        return Objects.equals(param, astAbsRec.param) && Objects.equals(body, astAbsRec.body);
+        return Objects.equals(name, astAbsRec.name) && Objects.equals(param, astAbsRec.param) && Objects.equals(body, astAbsRec.body);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(param, body);
+        return Objects.hash(name, param, body);
     }
 
 }

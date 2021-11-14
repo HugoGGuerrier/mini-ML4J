@@ -20,7 +20,7 @@ public class Typist {
      * @param expr The expresion
      * @return The inferred type
      */
-    public Type typeExpression(ASTExpr expr) throws TypingException {
+    public static Type typeExpression(ASTExpr expr) throws TypingException {
         // Create the equation system from the ast
         EquationSystem equationSystem = new EquationSystem();
         EquationGenerator generator = new EquationGenerator(equationSystem);

@@ -12,8 +12,8 @@ public class ASTAbs extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final String param;
-    private final ASTExpr body;
+    protected final String param;
+    protected final ASTExpr body;
 
 
     // ----- Constructors -----

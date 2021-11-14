@@ -12,7 +12,7 @@ public class ASTInt extends ASTExpr {
     // ----- Attributes -----
 
 
-    private final int value;
+    protected final int value;
 
 
     // ----- Constructors -----
