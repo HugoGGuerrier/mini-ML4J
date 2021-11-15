@@ -1,5 +1,6 @@
 package MML4J.test;
 
+import MML4J.main.ast.AST;
 import MML4J.main.ast.ASTExpr;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.parser.Parser;
@@ -131,7 +132,7 @@ public class TestTypist {
     @Test
     void testAbsRec() {
         try {
-            ASTExpr expr = (ASTExpr) parser.parseString("rec x(a) { x(a - 1) }");
+            ASTExpr expr = (ASTExpr) parser.parseString("rec x (a) { x(a - 1) }");
             Type real = Typist.typeExpression(expr);
 
             SimpleType t0 = new SimpleType(0);
@@ -297,6 +298,22 @@ public class TestTypist {
     }
 
     /**
+     * Test an alternative simple let structure
+     */
+    @Test
+    void testLet1_2() {
+        try {
+            ASTExpr expr = (ASTExpr) parser.parseString("let a = 42 + 15 in a");
+            Type real = Typist.typeExpression(expr);
+
+            Type expected = IntType.getInstance();
+            assertEquals(expected, real);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
      * Test a let structure
      */
     @Test
@@ -349,4 +366,48 @@ public class TestTypist {
         }
     }
 
+    /**
+     * Test the unit
+     */
+    @Test
+    void testUnit() {
+        try {
+            ASTExpr expr = (ASTExpr) parser.parseString("let a = () in a");
+            Type real = Typist.typeExpression(expr);
+
+            UnitType expected = UnitType.getInstance();
+            assertEquals(expected, real);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
+     * Test the reference and de-reference
+     */
+    @Test
+    void testRefDeRef() {
+        try {
+            ASTExpr expr = (ASTExpr) parser.parseString("let a = @[1] in !a");
+            Type real = Typist.typeExpression(expr);
+
+            ListType expected = new ListType(IntType.getInstance());
+            assertEquals(expected, real);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
+     * Test the assignment
+     */
+    @Test
+    void testAssign() {
+        try {
+            ASTExpr expr = (ASTExpr) parser.parseString("let a = @8 in let _ = a := 10 in a");
+            Type real = Typist.typeExpression(expr);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
 }

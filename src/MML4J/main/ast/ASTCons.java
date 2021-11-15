@@ -4,6 +4,7 @@ import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.EquationGenerator;
 import MML4J.main.typist.equation_system.Node;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,6 +23,19 @@ public class ASTCons extends ASTExpr {
     public ASTCons(ASTExpr head, ASTExpr tail) {
         this.head = head;
         this.tail = tail;
+    }
+
+    public ASTCons(List<ASTExpr> listContent) {
+        if(listContent.size() == 0) {
+            this.head = new ASTNil();
+            this.tail = new ASTNil();
+        } else if(listContent.size() == 1) {
+            this.head = listContent.remove(0);
+            this.tail = new ASTNil();
+        } else {
+            this.head = listContent.remove(0);
+            this.tail = new ASTCons(listContent);
+        }
     }
 
 

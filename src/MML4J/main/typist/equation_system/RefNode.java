@@ -10,52 +10,46 @@ import MML4J.main.typist.utils.Ungeneralizer;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * This class represent a list type before its unification
- *
- * @author Hugo GUERRIER
- */
-public class ListNode extends Node implements INodeContainer {
+public class RefNode extends Node implements INodeContainer {
 
     // ----- Attributes -----
 
 
-    protected Node type;
+    protected Node content;
 
 
     // ----- Constructors -----
 
 
-    public ListNode(Node type) {
-        this.type = type;
-        type.addContainer(this);
+    public RefNode(Node content) {
+        this.content = content;
+        content.addContainer(this);
     }
 
 
-    // ----- Getters -----
+    // ----- Getters ------
 
 
-    public Node getType() {
-        return type;
+    public Node getContent() {
+        return content;
     }
 
 
     // ----- Setters -----
 
 
-    public void setType(Node type) {
-        type.addContainer(this);
-        if(this.type != null) this.type.removeContainer(this);
-        this.type = type;
+    public void setContent(Node content) {
+        content.addContainer(this);
+        if(this.content != null) this.content.removeContainer(this);
+        this.content = content;
     }
 
 
     // ----- Override methods -----
 
-
     @Override
     public String toString() {
-        return "[" + type + "]";
+        return "Ref(" + content + ")";
     }
 
     @Override
@@ -71,12 +65,12 @@ public class ListNode extends Node implements INodeContainer {
     @Override
     public void destroy() {
         super.destroy();
-        if(type != null) type.removeContainer(this);
+        if(content != null) content.removeContainer(this);
     }
 
     @Override
     public void replaceNode(Node oldNode, Node newNode) {
-        if(type == oldNode) setType(newNode);
+        if(content == oldNode) setContent(newNode);
     }
 
 
@@ -85,16 +79,16 @@ public class ListNode extends Node implements INodeContainer {
 
     @Override
     public void merge(Node other, EquationSystem system) throws TypingException {
-        // Verify the other node nature
-        if(other.isSpecific() && !(other instanceof ListNode)) throw new TypingException("Cannot merge non identical specific nodes");
+        // Very the other node nature
+        if(other.isSpecific() && !(other instanceof RefNode)) throw new TypingException("Cannot merge non identical specific nodes");
 
-        // If the other node is a list node
-        if(other instanceof ListNode) {
-            ListNode otherList = (ListNode) other;
-            system.addEquation(type, otherList.type);
+        // If the other is also a ref node
+        if(other instanceof RefNode) {
+            RefNode refOther = (RefNode) other;
+            system.addEquation(content, refOther.content);
         }
 
-        // If the other is another node
+        // If the other is a simple node
         else {
             Set<INodeContainer> otherContainersCopy = new HashSet<>(other.containers);
             for(INodeContainer otherContainer : otherContainersCopy) {
@@ -106,11 +100,11 @@ public class ListNode extends Node implements INodeContainer {
 
     @Override
     public boolean contains(Node other) {
-        if(other instanceof ListNode) {
-            ListNode listOther = (ListNode) other;
-            return type.contains(listOther.type);
+        if(other instanceof RefNode) {
+            RefNode refOther = (RefNode) other;
+            return content.contains(refOther.content);
         }
-        return type.contains(other);
+        return content.contains(other);
     }
 
     @Override
@@ -127,5 +121,4 @@ public class ListNode extends Node implements INodeContainer {
     public Node acceptUngeneralizer(Ungeneralizer ungeneralizer) {
         return ungeneralizer.ungeneralize(this);
     }
-
 }

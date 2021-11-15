@@ -19,30 +19,30 @@ public class MMLParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, FN=7, REC=8, NIL=9, IF_ZERO=10, 
-		IF_EMPTY=11, ELSE=12, LET=13, IN=14, BIN_OP=15, BUILD_IN=16, INTEGER=17, 
-		IDENT=18, IGNORED__=19;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, FN=9, 
+		REC=10, IF_ZERO=11, IF_EMPTY=12, ELSE=13, LET=14, IN=15, NIL=16, UNIT=17, 
+		UN_OP=18, BIN_OP=19, BUILD_IN=20, INTEGER=21, IDENT=22, IGNORED__=23;
 	public static final int
-		RULE_program = 0, RULE_expr = 1, RULE_args = 2;
+		RULE_program = 0, RULE_expr = 1, RULE_exprs = 2, RULE_params = 3;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "expr", "args"
+			"program", "expr", "exprs", "params"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'('", "')'", "'{'", "'}'", "'='", "','", "'fn'", "'rec'", "'nil'", 
-			"'ifz'", "'ifem'", "'else'", "'let'", "'in'"
+			null, "'('", "')'", "'['", "']'", "'{'", "'}'", "'='", "','", "'fn'", 
+			"'rec'", "'ifz'", "'ifem'", "'else'", "'let'", "'in'", "'nil'", "'()'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, "FN", "REC", "NIL", "IF_ZERO", 
-			"IF_EMPTY", "ELSE", "LET", "IN", "BIN_OP", "BUILD_IN", "INTEGER", "IDENT", 
-			"IGNORED__"
+			null, null, null, null, null, null, null, null, null, "FN", "REC", "IF_ZERO", 
+			"IF_EMPTY", "ELSE", "LET", "IN", "NIL", "UNIT", "UN_OP", "BIN_OP", "BUILD_IN", 
+			"INTEGER", "IDENT", "IGNORED__"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -128,9 +128,9 @@ public class MMLParser extends Parser {
 			_localctx = new ProgContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(6);
+			setState(8);
 			((ProgContext)_localctx).body = expr(0);
-			setState(7);
+			setState(9);
 			match(EOF);
 			}
 		}
@@ -154,24 +154,6 @@ public class MMLParser extends Parser {
 		public ExprContext() { }
 		public void copyFrom(ExprContext ctx) {
 			super.copyFrom(ctx);
-		}
-	}
-	public static class IntegerContext extends ExprContext {
-		public TerminalNode INTEGER() { return getToken(MMLParser.INTEGER, 0); }
-		public IntegerContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitInteger(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class NilContext extends ExprContext {
-		public TerminalNode NIL() { return getToken(MMLParser.NIL, 0); }
-		public NilContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitNil(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 	public static class VariableContext extends ExprContext {
@@ -214,6 +196,109 @@ public class MMLParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class ListSugarContext extends ExprContext {
+		public ExprsContext inside;
+		public ExprsContext exprs() {
+			return getRuleContext(ExprsContext.class,0);
+		}
+		public ListSugarContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitListSugar(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class UnitContext extends ExprContext {
+		public TerminalNode UNIT() { return getToken(MMLParser.UNIT, 0); }
+		public UnitContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitUnit(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class AbstractionContext extends ExprContext {
+		public ParamsContext parameters;
+		public ExprContext body;
+		public TerminalNode FN() { return getToken(MMLParser.FN, 0); }
+		public ParamsContext params() {
+			return getRuleContext(ParamsContext.class,0);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public AbstractionContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitAbstraction(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class BuildInContext extends ExprContext {
+		public Token name;
+		public ExprsContext arguments;
+		public TerminalNode BUILD_IN() { return getToken(MMLParser.BUILD_IN, 0); }
+		public ExprsContext exprs() {
+			return getRuleContext(ExprsContext.class,0);
+		}
+		public BuildInContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitBuildIn(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class RecAbstractionContext extends ExprContext {
+		public Token name;
+		public Token param;
+		public ExprContext body;
+		public TerminalNode REC() { return getToken(MMLParser.REC, 0); }
+		public List<TerminalNode> IDENT() { return getTokens(MMLParser.IDENT); }
+		public TerminalNode IDENT(int i) {
+			return getToken(MMLParser.IDENT, i);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public RecAbstractionContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitRecAbstraction(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class IntegerContext extends ExprContext {
+		public TerminalNode INTEGER() { return getToken(MMLParser.INTEGER, 0); }
+		public IntegerContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitInteger(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NilContext extends ExprContext {
+		public TerminalNode NIL() { return getToken(MMLParser.NIL, 0); }
+		public NilContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitNil(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class UnOpContext extends ExprContext {
+		public Token op;
+		public ExprContext arg;
+		public TerminalNode UN_OP() { return getToken(MMLParser.UN_OP, 0); }
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public UnOpContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitUnOp(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class BinOpContext extends ExprContext {
 		public ExprContext left;
 		public Token op;
@@ -248,21 +333,6 @@ public class MMLParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitIfZero(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class AbstractionContext extends ExprContext {
-		public Token param;
-		public ExprContext body;
-		public TerminalNode FN() { return getToken(MMLParser.FN, 0); }
-		public TerminalNode IDENT() { return getToken(MMLParser.IDENT, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public AbstractionContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitAbstraction(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -302,39 +372,6 @@ public class MMLParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class BuildInContext extends ExprContext {
-		public Token name;
-		public ArgsContext arguments;
-		public TerminalNode BUILD_IN() { return getToken(MMLParser.BUILD_IN, 0); }
-		public ArgsContext args() {
-			return getRuleContext(ArgsContext.class,0);
-		}
-		public BuildInContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitBuildIn(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class RecAbstractionContext extends ExprContext {
-		public Token name;
-		public Token param;
-		public ExprContext body;
-		public TerminalNode REC() { return getToken(MMLParser.REC, 0); }
-		public List<TerminalNode> IDENT() { return getTokens(MMLParser.IDENT); }
-		public TerminalNode IDENT(int i) {
-			return getToken(MMLParser.IDENT, i);
-		}
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public RecAbstractionContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitRecAbstraction(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 
 	public final ExprContext expr() throws RecognitionException {
 		return expr(0);
@@ -351,7 +388,7 @@ public class MMLParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(70);
+			setState(79);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IDENT:
@@ -360,7 +397,7 @@ public class MMLParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(10);
+				setState(12);
 				match(IDENT);
 				}
 				break;
@@ -369,7 +406,7 @@ public class MMLParser extends Parser {
 				_localctx = new IntegerContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(11);
+				setState(13);
 				match(INTEGER);
 				}
 				break;
@@ -378,8 +415,17 @@ public class MMLParser extends Parser {
 				_localctx = new NilContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(12);
+				setState(14);
 				match(NIL);
+				}
+				break;
+			case UNIT:
+				{
+				_localctx = new UnitContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(15);
+				match(UNIT);
 				}
 				break;
 			case T__0:
@@ -387,12 +433,36 @@ public class MMLParser extends Parser {
 				_localctx = new PriorisedContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(13);
+				setState(16);
 				match(T__0);
-				setState(14);
+				setState(17);
 				((PriorisedContext)_localctx).inside = expr(0);
-				setState(15);
+				setState(18);
 				match(T__1);
+				}
+				break;
+			case T__2:
+				{
+				_localctx = new ListSugarContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(20);
+				match(T__2);
+				setState(21);
+				((ListSugarContext)_localctx).inside = exprs();
+				setState(22);
+				match(T__3);
+				}
+				break;
+			case UN_OP:
+				{
+				_localctx = new UnOpContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(24);
+				((UnOpContext)_localctx).op = match(UN_OP);
+				setState(25);
+				((UnOpContext)_localctx).arg = expr(9);
 				}
 				break;
 			case BUILD_IN:
@@ -400,13 +470,13 @@ public class MMLParser extends Parser {
 				_localctx = new BuildInContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(17);
+				setState(26);
 				((BuildInContext)_localctx).name = match(BUILD_IN);
-				setState(18);
+				setState(27);
 				match(T__0);
-				setState(19);
-				((BuildInContext)_localctx).arguments = args();
-				setState(20);
+				setState(28);
+				((BuildInContext)_localctx).arguments = exprs();
+				setState(29);
 				match(T__1);
 				}
 				break;
@@ -415,28 +485,28 @@ public class MMLParser extends Parser {
 				_localctx = new IfZeroContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(22);
-				match(IF_ZERO);
-				setState(23);
-				match(T__0);
-				setState(24);
-				((IfZeroContext)_localctx).cond = expr(0);
-				setState(25);
-				match(T__1);
-				setState(26);
-				match(T__2);
-				setState(27);
-				((IfZeroContext)_localctx).cons = expr(0);
-				setState(28);
-				match(T__3);
-				setState(29);
-				match(ELSE);
-				setState(30);
-				match(T__2);
 				setState(31);
-				((IfZeroContext)_localctx).altern = expr(0);
+				match(IF_ZERO);
 				setState(32);
-				match(T__3);
+				match(T__0);
+				setState(33);
+				((IfZeroContext)_localctx).cond = expr(0);
+				setState(34);
+				match(T__1);
+				setState(35);
+				match(T__4);
+				setState(36);
+				((IfZeroContext)_localctx).cons = expr(0);
+				setState(37);
+				match(T__5);
+				setState(38);
+				match(ELSE);
+				setState(39);
+				match(T__4);
+				setState(40);
+				((IfZeroContext)_localctx).altern = expr(0);
+				setState(41);
+				match(T__5);
 				}
 				break;
 			case IF_EMPTY:
@@ -444,28 +514,28 @@ public class MMLParser extends Parser {
 				_localctx = new IfEmptyContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(34);
-				match(IF_EMPTY);
-				setState(35);
-				match(T__0);
-				setState(36);
-				((IfEmptyContext)_localctx).cond = expr(0);
-				setState(37);
-				match(T__1);
-				setState(38);
-				match(T__2);
-				setState(39);
-				((IfEmptyContext)_localctx).cons = expr(0);
-				setState(40);
-				match(T__3);
-				setState(41);
-				match(ELSE);
-				setState(42);
-				match(T__2);
 				setState(43);
-				((IfEmptyContext)_localctx).altern = expr(0);
+				match(IF_EMPTY);
 				setState(44);
-				match(T__3);
+				match(T__0);
+				setState(45);
+				((IfEmptyContext)_localctx).cond = expr(0);
+				setState(46);
+				match(T__1);
+				setState(47);
+				match(T__4);
+				setState(48);
+				((IfEmptyContext)_localctx).cons = expr(0);
+				setState(49);
+				match(T__5);
+				setState(50);
+				match(ELSE);
+				setState(51);
+				match(T__4);
+				setState(52);
+				((IfEmptyContext)_localctx).altern = expr(0);
+				setState(53);
+				match(T__5);
 				}
 				break;
 			case FN:
@@ -473,20 +543,20 @@ public class MMLParser extends Parser {
 				_localctx = new AbstractionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(46);
+				setState(55);
 				match(FN);
-				setState(47);
+				setState(56);
 				match(T__0);
-				setState(48);
-				((AbstractionContext)_localctx).param = match(IDENT);
-				setState(49);
+				setState(57);
+				((AbstractionContext)_localctx).parameters = params();
+				setState(58);
 				match(T__1);
-				setState(50);
-				match(T__2);
-				setState(51);
+				setState(59);
+				match(T__4);
+				setState(60);
 				((AbstractionContext)_localctx).body = expr(0);
-				setState(52);
-				match(T__3);
+				setState(61);
+				match(T__5);
 				}
 				break;
 			case REC:
@@ -494,22 +564,22 @@ public class MMLParser extends Parser {
 				_localctx = new RecAbstractionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(54);
+				setState(63);
 				match(REC);
-				setState(55);
+				setState(64);
 				((RecAbstractionContext)_localctx).name = match(IDENT);
-				setState(56);
+				setState(65);
 				match(T__0);
-				setState(57);
+				setState(66);
 				((RecAbstractionContext)_localctx).param = match(IDENT);
-				setState(58);
+				setState(67);
 				match(T__1);
-				setState(59);
-				match(T__2);
-				setState(60);
+				setState(68);
+				match(T__4);
+				setState(69);
 				((RecAbstractionContext)_localctx).body = expr(0);
-				setState(61);
-				match(T__3);
+				setState(70);
+				match(T__5);
 				}
 				break;
 			case LET:
@@ -517,17 +587,17 @@ public class MMLParser extends Parser {
 				_localctx = new LetInContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(63);
+				setState(72);
 				match(LET);
-				setState(64);
+				setState(73);
 				((LetInContext)_localctx).name = match(IDENT);
-				setState(65);
-				match(T__4);
-				setState(66);
+				setState(74);
+				match(T__6);
+				setState(75);
 				((LetInContext)_localctx).value = expr(0);
-				setState(67);
+				setState(76);
 				match(IN);
-				setState(68);
+				setState(77);
 				((LetInContext)_localctx).body = expr(1);
 				}
 				break;
@@ -535,7 +605,7 @@ public class MMLParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(82);
+			setState(91);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -543,7 +613,7 @@ public class MMLParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(80);
+					setState(89);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 					case 1:
@@ -551,11 +621,11 @@ public class MMLParser extends Parser {
 						_localctx = new BinOpContext(new ExprContext(_parentctx, _parentState));
 						((BinOpContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(72);
+						setState(81);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(73);
+						setState(82);
 						((BinOpContext)_localctx).op = match(BIN_OP);
-						setState(74);
+						setState(83);
 						((BinOpContext)_localctx).right = expr(9);
 						}
 						break;
@@ -564,20 +634,20 @@ public class MMLParser extends Parser {
 						_localctx = new ApplicationContext(new ExprContext(_parentctx, _parentState));
 						((ApplicationContext)_localctx).func = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(75);
+						setState(84);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(76);
+						setState(85);
 						match(T__0);
-						setState(77);
+						setState(86);
 						((ApplicationContext)_localctx).arg = expr(0);
-						setState(78);
+						setState(87);
 						match(T__1);
 						}
 						break;
 					}
 					} 
 				}
-				setState(84);
+				setState(93);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			}
@@ -594,71 +664,161 @@ public class MMLParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ArgsContext extends ParserRuleContext {
-		public ArgsContext(ParserRuleContext parent, int invokingState) {
+	public static class ExprsContext extends ParserRuleContext {
+		public ExprsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_args; }
+		@Override public int getRuleIndex() { return RULE_exprs; }
 	 
-		public ArgsContext() { }
-		public void copyFrom(ArgsContext ctx) {
+		public ExprsContext() { }
+		public void copyFrom(ExprsContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class SoleArgsContext extends ArgsContext {
-		public ExprContext arg;
+	public static class SingleExprsContext extends ExprsContext {
+		public ExprContext head;
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public SoleArgsContext(ArgsContext ctx) { copyFrom(ctx); }
+		public SingleExprsContext(ExprsContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitSoleArgs(this);
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitSingleExprs(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class MultiArgsContext extends ArgsContext {
-		public ExprContext arg;
-		public ArgsContext tail;
+	public static class MultiExprsContext extends ExprsContext {
+		public ExprContext head;
+		public ExprsContext tail;
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public ArgsContext args() {
-			return getRuleContext(ArgsContext.class,0);
+		public ExprsContext exprs() {
+			return getRuleContext(ExprsContext.class,0);
 		}
-		public MultiArgsContext(ArgsContext ctx) { copyFrom(ctx); }
+		public MultiExprsContext(ExprsContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitMultiArgs(this);
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitMultiExprs(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class VoidExprsContext extends ExprsContext {
+		public VoidExprsContext(ExprsContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitVoidExprs(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ArgsContext args() throws RecognitionException {
-		ArgsContext _localctx = new ArgsContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_args);
+	public final ExprsContext exprs() throws RecognitionException {
+		ExprsContext _localctx = new ExprsContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_exprs);
 		try {
-			setState(90);
+			setState(100);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
-				_localctx = new SoleArgsContext(_localctx);
+				_localctx = new VoidExprsContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(85);
-				((SoleArgsContext)_localctx).arg = expr(0);
 				}
 				break;
 			case 2:
-				_localctx = new MultiArgsContext(_localctx);
+				_localctx = new SingleExprsContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(86);
-				((MultiArgsContext)_localctx).arg = expr(0);
-				setState(87);
-				match(T__5);
-				setState(88);
-				((MultiArgsContext)_localctx).tail = args();
+				setState(95);
+				((SingleExprsContext)_localctx).head = expr(0);
+				}
+				break;
+			case 3:
+				_localctx = new MultiExprsContext(_localctx);
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(96);
+				((MultiExprsContext)_localctx).head = expr(0);
+				setState(97);
+				match(T__7);
+				setState(98);
+				((MultiExprsContext)_localctx).tail = exprs();
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ParamsContext extends ParserRuleContext {
+		public ParamsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_params; }
+	 
+		public ParamsContext() { }
+		public void copyFrom(ParamsContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class MultipleParamsContext extends ParamsContext {
+		public Token head;
+		public ParamsContext tail;
+		public TerminalNode IDENT() { return getToken(MMLParser.IDENT, 0); }
+		public ParamsContext params() {
+			return getRuleContext(ParamsContext.class,0);
+		}
+		public MultipleParamsContext(ParamsContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitMultipleParams(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class SingleParamsContext extends ParamsContext {
+		public Token head;
+		public TerminalNode IDENT() { return getToken(MMLParser.IDENT, 0); }
+		public SingleParamsContext(ParamsContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MMLVisitor ) return ((MMLVisitor<? extends T>)visitor).visitSingleParams(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ParamsContext params() throws RecognitionException {
+		ParamsContext _localctx = new ParamsContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_params);
+		try {
+			setState(106);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			case 1:
+				_localctx = new SingleParamsContext(_localctx);
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(102);
+				((SingleParamsContext)_localctx).head = match(IDENT);
+				}
+				break;
+			case 2:
+				_localctx = new MultipleParamsContext(_localctx);
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(103);
+				((MultipleParamsContext)_localctx).head = match(IDENT);
+				setState(104);
+				match(T__7);
+				setState(105);
+				((MultipleParamsContext)_localctx).tail = params();
 				}
 				break;
 			}
@@ -692,30 +852,34 @@ public class MMLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\25_\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\31o\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\4\5\t\5\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3I\n\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3S\n\3\f\3\16\3V\13\3\3\4\3\4\3\4\3\4\3"+
-		"\4\5\4]\n\4\3\4\2\3\4\5\2\4\6\2\2\2g\2\b\3\2\2\2\4H\3\2\2\2\6\\\3\2\2"+
-		"\2\b\t\5\4\3\2\t\n\7\2\2\3\n\3\3\2\2\2\13\f\b\3\1\2\fI\7\24\2\2\rI\7\23"+
-		"\2\2\16I\7\13\2\2\17\20\7\3\2\2\20\21\5\4\3\2\21\22\7\4\2\2\22I\3\2\2"+
-		"\2\23\24\7\22\2\2\24\25\7\3\2\2\25\26\5\6\4\2\26\27\7\4\2\2\27I\3\2\2"+
-		"\2\30\31\7\f\2\2\31\32\7\3\2\2\32\33\5\4\3\2\33\34\7\4\2\2\34\35\7\5\2"+
-		"\2\35\36\5\4\3\2\36\37\7\6\2\2\37 \7\16\2\2 !\7\5\2\2!\"\5\4\3\2\"#\7"+
-		"\6\2\2#I\3\2\2\2$%\7\r\2\2%&\7\3\2\2&\'\5\4\3\2\'(\7\4\2\2()\7\5\2\2)"+
-		"*\5\4\3\2*+\7\6\2\2+,\7\16\2\2,-\7\5\2\2-.\5\4\3\2./\7\6\2\2/I\3\2\2\2"+
-		"\60\61\7\t\2\2\61\62\7\3\2\2\62\63\7\24\2\2\63\64\7\4\2\2\64\65\7\5\2"+
-		"\2\65\66\5\4\3\2\66\67\7\6\2\2\67I\3\2\2\289\7\n\2\29:\7\24\2\2:;\7\3"+
-		"\2\2;<\7\24\2\2<=\7\4\2\2=>\7\5\2\2>?\5\4\3\2?@\7\6\2\2@I\3\2\2\2AB\7"+
-		"\17\2\2BC\7\24\2\2CD\7\7\2\2DE\5\4\3\2EF\7\20\2\2FG\5\4\3\3GI\3\2\2\2"+
-		"H\13\3\2\2\2H\r\3\2\2\2H\16\3\2\2\2H\17\3\2\2\2H\23\3\2\2\2H\30\3\2\2"+
-		"\2H$\3\2\2\2H\60\3\2\2\2H8\3\2\2\2HA\3\2\2\2IT\3\2\2\2JK\f\n\2\2KL\7\21"+
-		"\2\2LS\5\4\3\13MN\f\b\2\2NO\7\3\2\2OP\5\4\3\2PQ\7\4\2\2QS\3\2\2\2RJ\3"+
-		"\2\2\2RM\3\2\2\2SV\3\2\2\2TR\3\2\2\2TU\3\2\2\2U\5\3\2\2\2VT\3\2\2\2W]"+
-		"\5\4\3\2XY\5\4\3\2YZ\7\b\2\2Z[\5\6\4\2[]\3\2\2\2\\W\3\2\2\2\\X\3\2\2\2"+
-		"]\7\3\2\2\2\6HRT\\";
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\5\3R\n\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3\\"+
+		"\n\3\f\3\16\3_\13\3\3\4\3\4\3\4\3\4\3\4\3\4\5\4g\n\4\3\5\3\5\3\5\3\5\5"+
+		"\5m\n\5\3\5\2\3\4\6\2\4\6\b\2\2\2{\2\n\3\2\2\2\4Q\3\2\2\2\6f\3\2\2\2\b"+
+		"l\3\2\2\2\n\13\5\4\3\2\13\f\7\2\2\3\f\3\3\2\2\2\r\16\b\3\1\2\16R\7\30"+
+		"\2\2\17R\7\27\2\2\20R\7\22\2\2\21R\7\23\2\2\22\23\7\3\2\2\23\24\5\4\3"+
+		"\2\24\25\7\4\2\2\25R\3\2\2\2\26\27\7\5\2\2\27\30\5\6\4\2\30\31\7\6\2\2"+
+		"\31R\3\2\2\2\32\33\7\24\2\2\33R\5\4\3\13\34\35\7\26\2\2\35\36\7\3\2\2"+
+		"\36\37\5\6\4\2\37 \7\4\2\2 R\3\2\2\2!\"\7\r\2\2\"#\7\3\2\2#$\5\4\3\2$"+
+		"%\7\4\2\2%&\7\7\2\2&\'\5\4\3\2\'(\7\b\2\2()\7\17\2\2)*\7\7\2\2*+\5\4\3"+
+		"\2+,\7\b\2\2,R\3\2\2\2-.\7\16\2\2./\7\3\2\2/\60\5\4\3\2\60\61\7\4\2\2"+
+		"\61\62\7\7\2\2\62\63\5\4\3\2\63\64\7\b\2\2\64\65\7\17\2\2\65\66\7\7\2"+
+		"\2\66\67\5\4\3\2\678\7\b\2\28R\3\2\2\29:\7\13\2\2:;\7\3\2\2;<\5\b\5\2"+
+		"<=\7\4\2\2=>\7\7\2\2>?\5\4\3\2?@\7\b\2\2@R\3\2\2\2AB\7\f\2\2BC\7\30\2"+
+		"\2CD\7\3\2\2DE\7\30\2\2EF\7\4\2\2FG\7\7\2\2GH\5\4\3\2HI\7\b\2\2IR\3\2"+
+		"\2\2JK\7\20\2\2KL\7\30\2\2LM\7\t\2\2MN\5\4\3\2NO\7\21\2\2OP\5\4\3\3PR"+
+		"\3\2\2\2Q\r\3\2\2\2Q\17\3\2\2\2Q\20\3\2\2\2Q\21\3\2\2\2Q\22\3\2\2\2Q\26"+
+		"\3\2\2\2Q\32\3\2\2\2Q\34\3\2\2\2Q!\3\2\2\2Q-\3\2\2\2Q9\3\2\2\2QA\3\2\2"+
+		"\2QJ\3\2\2\2R]\3\2\2\2ST\f\n\2\2TU\7\25\2\2U\\\5\4\3\13VW\f\b\2\2WX\7"+
+		"\3\2\2XY\5\4\3\2YZ\7\4\2\2Z\\\3\2\2\2[S\3\2\2\2[V\3\2\2\2\\_\3\2\2\2]"+
+		"[\3\2\2\2]^\3\2\2\2^\5\3\2\2\2_]\3\2\2\2`g\3\2\2\2ag\5\4\3\2bc\5\4\3\2"+
+		"cd\7\n\2\2de\5\6\4\2eg\3\2\2\2f`\3\2\2\2fa\3\2\2\2fb\3\2\2\2g\7\3\2\2"+
+		"\2hm\7\30\2\2ij\7\30\2\2jk\7\n\2\2km\5\b\5\2lh\3\2\2\2li\3\2\2\2m\t\3"+
+		"\2\2\2\7Q[]fl";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

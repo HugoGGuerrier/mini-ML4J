@@ -49,6 +49,8 @@ public class EquationGenerator {
     // ----- Class methods -----
 
 
+    // --- Function definition and application
+
     // Generate equations for an abstraction
     public void generate(ASTAbs abs, Node target, Map<String, Node> context) throws TypingException {
         // Create the new nodes
@@ -97,6 +99,8 @@ public class EquationGenerator {
         app.getArg().acceptEqGenerator(this, argNode, context);
     }
 
+
+    // --- Control structure
 
     // Generate equations for an if empty
     public void generate(ASTIfem ifem, Node target, Map<String, Node> context) throws TypingException {
@@ -182,6 +186,34 @@ public class EquationGenerator {
     }
 
 
+    // --- Operators and build-in
+
+    // Generate equation for a reference creation
+    public void generate(ASTRef ref, Node target, Map<String, Node> context) throws TypingException {
+        // Create the new nodes
+        SimpleNode valNode = getNewNode();
+        RefNode refNode = new RefNode(valNode);
+
+        // Add the equation to the system
+        system.addEquation(target, refNode);
+
+        // Generate equations for the reference with the val node
+        ref.getValue().acceptEqGenerator(this, valNode, context);
+    }
+
+    // Generate equation for a de-reference operator
+    public void generate(ASTDeref deref, Node target, Map<String, Node> context) throws TypingException {
+        // Create the new nodes
+        SimpleNode valNode = getNewNode();
+        RefNode refNode = new RefNode(valNode);
+
+        // Add the equation to the system
+        system.addEquation(target, valNode);
+
+        // Generate the equations for the dereference
+        deref.getReference().acceptEqGenerator(this, refNode, context);
+    }
+
     // Generate equations for an addition
     public void generate(ASTAdd add, Node target, Map<String, Node> context) throws TypingException {
         // Add the equation to the system
@@ -202,16 +234,18 @@ public class EquationGenerator {
         sub.getRight().acceptEqGenerator(this, IntNode.getInstance(), context);
     }
 
-
-    // Generate equations for a Nil
-    public void generate(ASTNil nil, Node target, Map<String, Node> context) throws TypingException {
-        // Create the new nodes
-        ForAllNode nilNode = new ForAllNode();
-        ListNode generalListNode = new ListNode(nilNode.getNewNode());
-        nilNode.setType(generalListNode);
-
+    // Generate equation for an assignment
+    public void generate(ASTAssign assign, Node target, Map<String, Node> context) throws TypingException {
         // Add the equation to the system
-        system.addEquation(target, nilNode);
+        system.addEquation(target, UnitNode.getInstance());
+
+        // Create the new type
+        SimpleNode valNode = getNewNode();
+        RefNode refNode = new RefNode(valNode);
+
+        // Type the left and the right
+        assign.getLeft().acceptEqGenerator(this, refNode, context);
+        assign.getRight().acceptEqGenerator(this, valNode, context);
     }
 
     // Generate equations for a list constructor
@@ -255,6 +289,30 @@ public class EquationGenerator {
     }
 
 
+    // --- Basic expressions
+
+    // Generate equations for an integer
+    public void generate(ASTInt intg, Node target, Map<String, Node> context) throws TypingException {
+        // Add the equation in the system
+        system.addEquation(target, IntNode.getInstance());
+    }
+
+    // Generate equations for a Nil
+    public void generate(ASTNil nil, Node target, Map<String, Node> context) throws TypingException {
+        // Create the new nodes
+        ForAllNode nilNode = new ForAllNode();
+        ListNode generalListNode = new ListNode(nilNode.getNewNode());
+        nilNode.setType(generalListNode);
+
+        // Add the equation to the system
+        system.addEquation(target, nilNode);
+    }
+
+    // Generate equation for a unit value
+    public void generate(ASTUnit unit, Node target, Map<String, Node> context) throws TypingException {
+        system.addEquation(target, UnitNode.getInstance());
+    }
+
     // Generate equations for a variable
     public void generate(ASTVar var, Node target, Map<String, Node> context) throws TypingException {
         // Get the var node or null
@@ -267,12 +325,6 @@ public class EquationGenerator {
 
         // Add the equation
         system.addEquation(target, varNode);
-    }
-
-    // Generate equations for an integer
-    public void generate(ASTInt intg, Node target, Map<String, Node> context) throws TypingException {
-        // Add the equation in the system
-        system.addEquation(target, IntNode.getInstance());
     }
 
 }

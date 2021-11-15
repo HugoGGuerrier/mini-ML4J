@@ -1,6 +1,5 @@
 package MML4J.main.typist;
 
-import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_system.*;
 import MML4J.main.typist.type.*;
 
@@ -16,7 +15,7 @@ public class TypeTranslator {
 
 
     private int counter;
-    private Map<Node, Type> typeMap;
+    private final Map<Node, Type> typeMap;
 
 
     // ----- Constructors -----
@@ -63,9 +62,19 @@ public class TypeTranslator {
         return new ListType(listNode.getType().acceptTranslator(this));
     }
 
+    // Translate a reference node
+    public Type translate(RefNode refNode) {
+        return new RefType(refNode.getContent().acceptTranslator(this));
+    }
+
     // Translate a simple node
     public Type translate(SimpleNode simpleNode) {
         return typeForNode(simpleNode);
+    }
+
+    // Translate a unit node
+    public Type translate(UnitNode unitNode) {
+        return UnitType.getInstance();
     }
 
 }

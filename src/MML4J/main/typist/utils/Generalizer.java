@@ -4,6 +4,11 @@ import MML4J.main.typist.equation_system.*;
 
 import java.util.*;
 
+/**
+ * This class is used to construct "for all" node from any source node and context
+ *
+ * @author Hugo GUERRIER
+ */
 public class Generalizer {
 
     // ----- Attributes -----
@@ -79,6 +84,11 @@ public class Generalizer {
         return new ListNode(listNode.getType().acceptGeneralizer(this));
     }
 
+    // Generalize a reference node
+    public Node generalize(RefNode refNode) {
+        return new RefNode(refNode.getContent().acceptGeneralizer(this));
+    }
+
     // Generalize a simple node
     public Node generalize(SimpleNode simpleNode) {
         if(linked.contains(simpleNode)) {
@@ -90,6 +100,11 @@ public class Generalizer {
             processedNodes.put(simpleNode, res);
         }
         return res;
+    }
+
+    // Generalize a unit node
+    public Node generalize(UnitNode unitNode) {
+        return unitNode;
     }
 
 }

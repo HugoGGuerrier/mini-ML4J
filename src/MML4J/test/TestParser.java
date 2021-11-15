@@ -46,10 +46,11 @@ public class TestParser {
     void testAbs() {
         try {
             assertEquals(parser.parseString("fn(a){a}"), new ASTAbs("a", new ASTVar("a")));
+            assertEquals(parser.parseString("fn(a, b){a(b)}"), parser.parseString("fn(a){fn(b){a(b)}}"));
 
             assertThrows(ParsingException.class, () -> parser.parseString("fn(a)"));
             assertThrows(ParsingException.class, () -> parser.parseString("fn(a){a"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -64,7 +65,7 @@ public class TestParser {
 
             assertThrows(ParsingException.class, () -> parser.parseString("rec f(a)"));
             assertThrows(ParsingException.class, () -> parser.parseString("rec f(a){a"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -80,7 +81,7 @@ public class TestParser {
             assertThrows(ParsingException.class, () -> parser.parseString(" + b"));
             assertThrows(ParsingException.class, () -> parser.parseString("a +"));
             assertThrows(ParsingException.class, () -> parser.parseString("+"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -94,7 +95,23 @@ public class TestParser {
             assertEquals(parser.parseString("a(b)"), new ASTApp(new ASTVar("a"), new ASTVar("b")));
 
             assertThrows(ParsingException.class, () -> parser.parseString("a(b"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
+     * Test the assign term
+     */
+    @Test
+    void testAssign() {
+        try {
+            assertEquals(parser.parseString("a := b"), new ASTAssign(new ASTVar("a"), new ASTVar("b")));
+
+            assertThrows(ParsingException.class, () -> parser.parseString(":="));
+            assertThrows(ParsingException.class, () -> parser.parseString("a := "));
+            assertThrows(ParsingException.class, () -> parser.parseString(":= b"));
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -106,11 +123,32 @@ public class TestParser {
     void testCons() {
         try {
             assertEquals(parser.parseString("cons(a, b)"), new ASTCons(new ASTVar("a"), new ASTVar("b")));
+            assertEquals(parser.parseString("[]"), new ASTCons(new ASTNil(), new ASTNil()));
+            assertEquals(parser.parseString("[a]"), parser.parseString("cons(a, nil)"));
+            assertEquals(parser.parseString("[a, b]"), parser.parseString("cons(a, cons(b, nil))"));
+            assertEquals(parser.parseString("[a, b, c, d]"), parser.parseString("cons(a, cons(b, cons(c, cons(d, nil))))"));
 
             assertThrows(ParsingException.class, () -> parser.parseString("cons(a)"));
             assertThrows(ParsingException.class, () -> parser.parseString("cons(a, b, c)"));
             assertThrows(ParsingException.class, () -> parser.parseString("cons(a"));
-        } catch (ParsingException e) {
+            assertThrows(ParsingException.class, () -> parser.parseString("[a, b, c"));
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
+     * Test the de-referencing parsing
+     */
+    @Test
+    void testDeref() {
+        try {
+            assertEquals(parser.parseString("!a"), new ASTDeref(new ASTVar("a")));
+            assertEquals(parser.parseString("!(a + b)"), new ASTDeref(new ASTAdd(new ASTVar("a"), new ASTVar("b"))));
+
+            assertThrows(ParsingException.class, () -> parser.parseString("!"));
+            assertThrows(ParsingException.class, () -> parser.parseString("!(a"));
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -126,7 +164,7 @@ public class TestParser {
             assertThrows(ParsingException.class, () -> parser.parseString("head()"));
             assertThrows(ParsingException.class, () -> parser.parseString("head(a, b, c)"));
             assertThrows(ParsingException.class, () -> parser.parseString("head(a"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -143,7 +181,7 @@ public class TestParser {
             assertThrows(ParsingException.class, () -> parser.parseString("ifem(a) {b}"));
             assertThrows(ParsingException.class, () -> parser.parseString("ifem(a) {} else {c}"));
             assertThrows(ParsingException.class, () -> parser.parseString("ifem(a) {b} else {}"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -160,7 +198,7 @@ public class TestParser {
             assertThrows(ParsingException.class, () -> parser.parseString("ifz(a) {b}"));
             assertThrows(ParsingException.class, () -> parser.parseString("ifz(a) {} else {c}"));
             assertThrows(ParsingException.class, () -> parser.parseString("ifz(a) {b} else {}"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -173,7 +211,7 @@ public class TestParser {
         try {
             assertEquals(parser.parseString("1"), new ASTInt(1));
             assertEquals(parser.parseString("-1"), new ASTInt(-1));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -189,7 +227,7 @@ public class TestParser {
             assertThrows(ParsingException.class, () -> parser.parseString("let a = in c"));
             assertThrows(ParsingException.class, () -> parser.parseString("let a = b in"));
             assertThrows(ParsingException.class, () -> parser.parseString("let = b in c"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -201,7 +239,23 @@ public class TestParser {
     void testNil() {
         try {
             assertEquals(parser.parseString("nil"), new ASTNil());
-        } catch (ParsingException e) {
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
+     * Test the referencing parsing
+     */
+    @Test
+    void testRef() {
+        try {
+            assertEquals(parser.parseString("@a"), new ASTRef(new ASTVar("a")));
+            assertEquals(parser.parseString("@(a + b)"), new ASTRef(new ASTAdd(new ASTVar("a"), new ASTVar("b"))));
+
+            assertThrows(ParsingException.class, () -> parser.parseString("@"));
+            assertThrows(ParsingException.class, () -> parser.parseString("@(f"));
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -217,7 +271,7 @@ public class TestParser {
             assertThrows(ParsingException.class, () -> parser.parseString(" - b"));
             assertThrows(ParsingException.class, () -> parser.parseString("a -"));
             assertThrows(ParsingException.class, () -> parser.parseString("-"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -233,7 +287,22 @@ public class TestParser {
             assertThrows(ParsingException.class, () -> parser.parseString("tail()"));
             assertThrows(ParsingException.class, () -> parser.parseString("tail(a, b, c)"));
             assertThrows(ParsingException.class, () -> parser.parseString("tail(a"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
+     * Test the unit term parsing
+     */
+    @Test
+    void testUnit() {
+        try {
+            assertEquals(parser.parseString("()"), new ASTUnit());
+            assertEquals(parser.parseString("let a = () in a"), new ASTLet("a", new ASTUnit(), new ASTVar("a")));
+
+            assertThrows(ParsingException.class, () -> parser.parseString("("));
+        } catch (Exception e) {
             fail(e);
         }
     }
@@ -252,7 +321,7 @@ public class TestParser {
             assertThrows(ParsingException.class, () -> parser.parseString("a b"));
             assertThrows(ParsingException.class, () -> parser.parseString("(a"));
             assertThrows(ParsingException.class, () -> parser.parseString("(a))"));
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             fail(e);
         }
     }

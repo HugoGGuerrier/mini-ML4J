@@ -1,6 +1,5 @@
 package MML4J.main.typist.equation_system;
 
-import MML4J.main.Utils;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.TypeTranslator;
 import MML4J.main.typist.type.Type;

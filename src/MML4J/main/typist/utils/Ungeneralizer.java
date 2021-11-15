@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class is used to instantiate "for all" node, its name is not final
+ *
+ * @author Hugo GUERRIER
+ */
 public class Ungeneralizer {
 
     // ----- Attributes -----
@@ -45,12 +50,12 @@ public class Ungeneralizer {
     // ----- Ungeneralize methods -----
 
 
-    // Generalize an arrow node
+    // Ungeneralize an arrow node
     public Node ungeneralize(ArrowNode arrowNode) {
         return new ArrowNode(arrowNode.getLeft().acceptUngeneralizer(this), arrowNode.getRight().acceptUngeneralizer(this));
     }
 
-    // Generalize a for all node
+    // Ungeneralize a for all node
     public Node ungeneralize(ForAllNode forAllNode) {
         ForAllNode res = new ForAllNode();
         res.getGeneralizedNodes().addAll(forAllNode.getGeneralizedNodes());
@@ -58,17 +63,22 @@ public class Ungeneralizer {
         return res;
     }
 
-    // Generalize an int node
+    // Ungeneralize an int node
     public Node ungeneralize(IntNode intNode) {
         return intNode;
     }
 
-    // Generalize a list node
+    // Ungeneralize a list node
     public Node ungeneralize(ListNode listNode) {
         return new ListNode(listNode.getType().acceptUngeneralizer(this));
     }
 
-    // Generalize a simple node
+    // Ungeneralize a reference node
+    public Node ungeneralize(RefNode refNode) {
+        return new RefNode(refNode.getContent().acceptUngeneralizer(this));
+    }
+
+    // Ungeneralize a simple node
     public Node ungeneralize(SimpleNode simpleNode) {
         if(!generalNodes.contains(simpleNode)) {
             return simpleNode;
@@ -79,6 +89,11 @@ public class Ungeneralizer {
             processedNodes.put(simpleNode, res);
         }
         return res;
+    }
+
+    // Ungeneralize a unit node
+    public Node ungeneralize(UnitNode unitNode) {
+        return unitNode;
     }
 
 }

@@ -4,7 +4,6 @@ import MML4J.main.Utils;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.utils.NodePair;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -188,7 +187,7 @@ public class EquationSystem {
         }
 
         // Return the unification result
-        return initialEquation.getRight();
+        return initialEquation.getRight().instantiate(this);
     }
 
 }

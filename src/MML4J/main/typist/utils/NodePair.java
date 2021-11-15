@@ -1,7 +1,6 @@
 package MML4J.main.typist.utils;
 
 import MML4J.main.Pair;
-import MML4J.main.Utils;
 import MML4J.main.typist.equation_system.Node;
 
 public class NodePair extends Pair<Node, Node> implements INodeContainer {
