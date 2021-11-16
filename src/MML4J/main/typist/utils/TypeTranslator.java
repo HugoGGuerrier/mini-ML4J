@@ -1,13 +1,15 @@
-package MML4J.main.typist;
+package MML4J.main.typist.utils;
 
-import MML4J.main.typist.equation_system.*;
-import MML4J.main.typist.type.*;
+import MML4J.main.typist.equation_system.nodes.*;
+import MML4J.main.typist.types.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class translate a type graph into a type
+ * This class translate a node into a usable type
+ *
+ * @author Hugo GUERRIER
  */
 public class TypeTranslator {
 
@@ -59,12 +61,12 @@ public class TypeTranslator {
 
     // Translate a list node
     public Type translate(ListNode listNode) {
-        return new ListType(listNode.getType().acceptTranslator(this));
+        return new ListType(listNode.getListType().acceptTranslator(this));
     }
 
     // Translate a reference node
     public Type translate(RefNode refNode) {
-        return new RefType(refNode.getContent().acceptTranslator(this));
+        return new RefType(refNode.getRefType().acceptTranslator(this));
     }
 
     // Translate a simple node

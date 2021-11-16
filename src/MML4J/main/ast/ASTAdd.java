@@ -1,8 +1,8 @@
 package MML4J.main.ast;
 
 import MML4J.main.exceptions.TypingException;
-import MML4J.main.typist.EquationGenerator;
-import MML4J.main.typist.equation_system.Node;
+import MML4J.main.typist.utils.EquationGenerator;
+import MML4J.main.typist.equation_system.nodes.Node;
 
 import java.util.Map;
 import java.util.Objects;

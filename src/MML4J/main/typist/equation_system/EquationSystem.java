@@ -2,7 +2,7 @@ package MML4J.main.typist.equation_system;
 
 import MML4J.main.Utils;
 import MML4J.main.exceptions.TypingException;
-import MML4J.main.typist.utils.NodePair;
+import MML4J.main.typist.equation_system.nodes.Node;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,13 +21,13 @@ public class EquationSystem {
     private Node initNode;
 
     /** The initial system equation */
-    private NodePair initialEquation;
+    private Equation initialEquation;
 
-    /** The system equation list */
-    private final List<NodePair> equations;
+    /** The system equations list */
+    private final List<Equation> equations;
 
-    /** External equation (used in "let" typing) */
-    private final List<NodePair> externalEquations;
+    /** External equations list (used in "let" typing) */
+    private final List<Equation> externalEquations;
 
 
     // ----- Constructors -----
@@ -60,7 +60,7 @@ public class EquationSystem {
      *
      * @return The external equation list
      */
-    public List<NodePair> getExternalEquations() {
+    public List<Equation> getExternalEquations() {
         return externalEquations;
     }
 
@@ -94,14 +94,14 @@ public class EquationSystem {
         StringBuilder res = new StringBuilder("INIT : ").append(initialEquation).append("\n");
 
         // Add the equations to the system
-        for(NodePair equation : equations) {
+        for(Equation equation : equations) {
             res.append(equation).append("\n");
         }
 
         // If there is external equations, print it
         if(externalEquations.size() > 0) {
             res.append("External equations :\n");
-            for(NodePair extEq : externalEquations) {
+            for(Equation extEq : externalEquations) {
                 res.append(extEq).append("\n");
             }
         }
@@ -122,7 +122,7 @@ public class EquationSystem {
      */
     public void addEquation(Node left, Node right) {
         // Create the new equation
-        NodePair newEquation = new NodePair(left, right);
+        Equation newEquation = new Equation(left, right);
 
         // If the equation contains the init node and the init equation is null, put it as init equation
         if(initialEquation == null) {
@@ -149,7 +149,7 @@ public class EquationSystem {
      */
     public void addExternalEquation(Node externalNode, Node internalNode) {
         // Simply add the external equation to the external equation list
-        NodePair newExtEq = new NodePair(externalNode, internalNode);
+        Equation newExtEq = new Equation(externalNode, internalNode);
         externalEquations.add(newExtEq);
     }
 
@@ -164,7 +164,7 @@ public class EquationSystem {
         while(equations.size() > 0) {
 
             // Get the head of the list
-            NodePair equation = equations.remove(0);
+            Equation equation = equations.remove(0);
             Node left = equation.getLeft().instantiate(this);
             Node right = equation.getRight().instantiate(this);
 
@@ -172,7 +172,7 @@ public class EquationSystem {
             equation.destroy();
 
             // If the left and the right are not the same
-            if(left != right) {
+            if(!left.equals(right)) {
                 // Test containing
                 if(left.contains(right) || right.contains(left)) {
                     throw new TypingException("Recursive type definition : " + equation);

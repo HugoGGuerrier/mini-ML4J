@@ -1,4 +1,4 @@
-package MML4J.main.typist.type;
+package MML4J.main.typist.types;
 
 import java.util.Objects;
 

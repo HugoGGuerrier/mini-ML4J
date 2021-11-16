@@ -3,9 +3,11 @@ package MML4J.main.typist;
 import MML4J.main.Utils;
 import MML4J.main.ast.ASTExpr;
 import MML4J.main.exceptions.TypingException;
-import MML4J.main.typist.equation_system.Node;
+import MML4J.main.typist.equation_system.nodes.Node;
 import MML4J.main.typist.equation_system.EquationSystem;
-import MML4J.main.typist.type.Type;
+import MML4J.main.typist.types.Type;
+import MML4J.main.typist.utils.EquationGenerator;
+import MML4J.main.typist.utils.TypeTranslator;
 
 import java.util.HashMap;
 

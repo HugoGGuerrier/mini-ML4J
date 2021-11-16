@@ -2,7 +2,7 @@
 
 Author : Hugo GUERRIER \
 Licence : MIT \
-Version : 0.1
+Version : 0.3
 
 ## Requirements
 
@@ -12,10 +12,12 @@ Version : 0.1
 ## How to compile and test
 
 * Compile : `ant build`
-* Create a reusable JAR : `ant jar`
-* Start all unit tests : `ant test`
+* Create a JAR : `ant jar`
+* Start all unit tests : `ant test` (if there is a library error : `ant test -lib lib`)
 * Clean the generated files : `ant clean`
 
 ## Todos
 
-* Replace the equation graph by an equational system
+* Create merging strategies
+* Create a node cloning system
+* Create a node generator interface

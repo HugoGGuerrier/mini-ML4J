@@ -1,11 +1,10 @@
 package MML4J.test;
 
-import MML4J.main.ast.AST;
 import MML4J.main.ast.ASTExpr;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.parser.Parser;
 import MML4J.main.typist.Typist;
-import MML4J.main.typist.type.*;
+import MML4J.main.typist.types.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -404,7 +403,7 @@ public class TestTypist {
     @Test
     void testAssign() {
         try {
-            ASTExpr expr = (ASTExpr) parser.parseString("let a = @8 in let _ = a := 10 in a");
+            ASTExpr expr = (ASTExpr) parser.parseString("let a = @8 in let _ = a := [10] in a");
             Type real = Typist.typeExpression(expr);
         } catch (Exception e) {
             fail(e);

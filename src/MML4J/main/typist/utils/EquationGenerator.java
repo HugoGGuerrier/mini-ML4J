@@ -1,32 +1,49 @@
-package MML4J.main.typist;
+package MML4J.main.typist.utils;
 
 import MML4J.main.Utils;
 import MML4J.main.ast.*;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_system.*;
-import MML4J.main.typist.utils.Generalizer;
-import MML4J.main.typist.utils.NodePair;
+import MML4J.main.typist.equation_system.nodes.*;
+import MML4J.main.typist.interfaces.INodeGenerator;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EquationGenerator {
+/**
+ * This class is an equation generator for the inferred typist
+ *
+ * @author Hugo GUERRIER
+ */
+public class EquationGenerator implements INodeGenerator {
 
     // ----- Attributes -----
 
 
+    /** The node counter to name the nodes */
     private int nodeCounter;
+
+    /** The equation system to add the equations in */
     private final EquationSystem system;
+
+    /** The corresponding map to generate nodes */
+    private final Map<Node, Node> correspondence;
 
 
     // ----- Constructors -----
 
 
+    /**
+     * Create a new equation generator bound with an equation system
+     *
+     * @param system The equation system
+     */
     public EquationGenerator(EquationSystem system) {
-        nodeCounter = 0;
+        this.nodeCounter = 0;
         this.system = system;
         this.system.setInitNode(getNewNode());
+        this.correspondence = new HashMap<>();
     }
 
 
@@ -38,15 +55,43 @@ public class EquationGenerator {
     }
 
 
-    // ----- Internal methods -----
+    // ----- Generator methods -----
 
 
-    SimpleNode getNewNode() {
+    /** @see INodeGenerator#getNewNode() */
+    @Override
+    public SimpleNode getNewNode() {
         return new SimpleNode(nodeCounter++);
     }
 
+    @Override
+    public SimpleNode getNewNode(SimpleNode key) {
+        SimpleNode res = (SimpleNode) correspondence.getOrDefault(key, null);
+        if(res == null) {
+            res = getNewNode();
+            correspondence.put(key, res);
+        }
+        return res;
+    }
 
-    // ----- Class methods -----
+    @Override
+    public boolean hasCorrespondence(Node key) {
+        return correspondence.containsKey(key);
+    }
+
+    @Override
+    public void addCorrespondence(Node key, Node value) {
+        correspondence.put(key, value);
+    }
+
+    @Override
+    public void reset() {
+        correspondence.clear();
+        nodeCounter = 0;
+    }
+
+
+    // ----- Generation methods -----
 
 
     // --- Function definition and application
@@ -129,9 +174,6 @@ public class EquationGenerator {
 
     // Generate equations for a let
     public void generate(ASTLet let, Node target, Map<String, Node> context) throws TypingException {
-        // Do debug print
-        if(Utils.DEBUG) System.out.println("=== Internal typing for the expression " + let.getValue() + "\n");
-
         // Generate equations for the let value
         EquationSystem system = new EquationSystem();
         EquationGenerator generator = new EquationGenerator(system);
@@ -155,6 +197,7 @@ public class EquationGenerator {
 
         // Do debug print
         if(Utils.DEBUG) {
+            System.out.println("=== Internal typing for the expression " + let.getValue() + "\n");
             System.out.println("Equation system :");
             System.out.println(system);
         }
@@ -165,14 +208,14 @@ public class EquationGenerator {
         // Do debug print
         if(Utils.DEBUG) {
             System.out.println("Unified equation system : " + letValueNode);
-            List<NodePair> externalEquations = system.getExternalEquations();
+            List<Equation> externalEquations = system.getExternalEquations();
             if(externalEquations.size() > 0) {
                 System.out.println("External equations : " + externalEquations);
             }
         }
 
         // Generalize the let node
-        ForAllNode generalizedLetNode = Generalizer.generalize(letValueNode, context, system.getExternalEquations());
+        ForAllNode generalizedLetNode = ForAllNode.from(letValueNode, context, system.getExternalEquations());
 
         // Do debug print
         if(Utils.DEBUG) System.out.println("Generalized node : " + generalizedLetNode + "\n===\n");
@@ -298,7 +341,7 @@ public class EquationGenerator {
     }
 
     // Generate equations for a Nil
-    public void generate(ASTNil nil, Node target, Map<String, Node> context) throws TypingException {
+    public void generate(ASTNil __, Node target, Map<String, Node> context) throws TypingException {
         // Create the new nodes
         ForAllNode nilNode = new ForAllNode();
         ListNode generalListNode = new ListNode(nilNode.getNewNode());
@@ -309,7 +352,7 @@ public class EquationGenerator {
     }
 
     // Generate equation for a unit value
-    public void generate(ASTUnit unit, Node target, Map<String, Node> context) throws TypingException {
+    public void generate(ASTUnit __, Node target, Map<String, Node> context) throws TypingException {
         system.addEquation(target, UnitNode.getInstance());
     }
 

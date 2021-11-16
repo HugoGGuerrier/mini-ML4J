@@ -1,14 +1,16 @@
-package MML4J.main.typist.utils;
+package MML4J.main.typist.equation_system;
 
 import MML4J.main.Pair;
-import MML4J.main.typist.equation_system.Node;
+import MML4J.main.typist.equation_system.nodes.Node;
+import MML4J.main.typist.interfaces.INodeContained;
+import MML4J.main.typist.interfaces.INodeContainer;
 
-public class NodePair extends Pair<Node, Node> implements INodeContainer {
+public class Equation extends Pair<Node, Node> implements INodeContainer {
 
     // ----- Constructors -----
 
 
-    public NodePair(Node l, Node r) {
+    public Equation(Node l, Node r) {
         super(l, r);
         l.addContainer(this);
         r.addContainer(this);
@@ -42,9 +44,9 @@ public class NodePair extends Pair<Node, Node> implements INodeContainer {
     }
 
     @Override
-    public void replaceNode(Node oldNode, Node newNode) {
-        if(left == oldNode) setLeft(newNode);
-        if(right == oldNode) setRight(newNode);
+    public void replaceContained(INodeContained oldCont, INodeContained newCont) {
+        if(left == oldCont) setLeft((Node) newCont);
+        if(right == oldCont) setRight((Node) newCont);
     }
 
 
