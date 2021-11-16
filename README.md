@@ -18,6 +18,6 @@ Version : 0.3
 
 ## Todos
 
-* Create merging strategies
-* Create a node cloning system
-* Create a node generator interface
+* Implement an evaluator
+* Implement the REPL
+* Add the record types

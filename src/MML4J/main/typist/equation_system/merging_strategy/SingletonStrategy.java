@@ -14,7 +14,7 @@ public class SingletonStrategy implements IMergeStrategy {
         // Verify the other nature
         boolean sameClass = right.getClass().getCanonicalName().equals(left.getClass().getCanonicalName());
         if(right.isConstructor() && !(sameClass))
-            throw new TypingException("Cannot merge non identical constructor nodes");
+            throw new TypingException("Cannot merge non identical constructor nodes : " + left + " and " + right);
 
         // Replace the right node by the left one
         for(INodeContainer rightContainer : new HashSet<>(right.getContainers())) {

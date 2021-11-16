@@ -53,6 +53,9 @@ public class TestTypist {
 
             ASTExpr wrong4 = (ASTExpr) parser.parseString("let l = @[fn(x){x}] in let _ = l := [fn(x){x}] in head(!l) + 2");
             assertThrows(TypingException.class, () -> Typist.typeExpression(wrong4));
+
+            ASTExpr wrong5 = (ASTExpr) parser.parseString("let a = let b = let c = @5 in c in b in let _ = a := [5] in a");
+            assertThrows(TypingException.class, () -> Typist.typeExpression(wrong5));
         } catch (Exception e) {
             fail(e);
         }

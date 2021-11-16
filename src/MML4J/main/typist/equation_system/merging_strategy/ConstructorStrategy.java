@@ -15,7 +15,7 @@ public class ConstructorStrategy implements IMergeStrategy {
     public void doMerge(Node left, Node right, EquationSystem system) throws TypingException {
         // Verify that the left is a constructor node
         if(!(left instanceof ConstructorNode))
-            throw new TypingException("Cannot apply constructor strategy on non-constructor node");
+            throw new TypingException("Trying to apply a constructor strategy on a non-constructor node !!!");
 
         // Verify the other node nature
         boolean sameClass = right.getClass().getCanonicalName().equals(left.getClass().getCanonicalName());

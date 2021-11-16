@@ -76,7 +76,7 @@ public abstract class Node implements INodeContained {
      * @throws TypingException If there is a problem during merging
      */
     public void merge(Node other, EquationSystem system) throws TypingException {
-        if(mergeStrategy == null) throw new TypingException("Cannot merge this node");
+        if(mergeStrategy == null) throw new TypingException("Try to merge an un-mergable node");
         mergeStrategy.doMerge(this, other, system);
     }
 

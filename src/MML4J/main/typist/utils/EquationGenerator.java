@@ -184,7 +184,7 @@ public class EquationGenerator implements INodeGenerator {
         for(String var : context.keySet()) {
             // Get the external and the internal value
             Node externalNode = context.get(var);
-            Node internalNode = externalNode.clone(generator);
+            Node internalNode = generator.getNewNode();
 
             // Add the external equation to the system
             system.addExternalEquation(externalNode, internalNode);
@@ -367,7 +367,7 @@ public class EquationGenerator implements INodeGenerator {
 
         // Test if the var node is null
         if(varNode == null) {
-            throw new TypingException("Error during equation generation : " + var.getName() + " doesn't exists in context");
+            throw new TypingException("Variable \"" + var.getName() + "\" doesn't exists in context");
         }
 
         // Add the equation with an instance of the variable (to avoid late instantiation)

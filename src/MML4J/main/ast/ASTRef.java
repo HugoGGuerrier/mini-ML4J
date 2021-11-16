@@ -41,7 +41,7 @@ public class ASTRef extends ASTExpr {
 
     @Override
     public String toString() {
-        return "*" + value;
+        return "@" + value;
     }
 
     @Override
