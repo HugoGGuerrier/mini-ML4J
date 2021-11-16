@@ -7,6 +7,7 @@ import MML4J.main.typist.equation_system.*;
 import MML4J.main.typist.equation_system.nodes.*;
 import MML4J.main.typist.interfaces.INodeGenerator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,7 +184,7 @@ public class EquationGenerator implements INodeGenerator {
         for(String var : context.keySet()) {
             // Get the external and the internal value
             Node externalNode = context.get(var);
-            Node internalNode = generator.getNewNode();
+            Node internalNode = externalNode.clone(generator);
 
             // Add the external equation to the system
             system.addExternalEquation(externalNode, internalNode);
@@ -212,6 +213,11 @@ public class EquationGenerator implements INodeGenerator {
             if(externalEquations.size() > 0) {
                 System.out.println("External equations : " + externalEquations);
             }
+        }
+
+        // Export the general from constraint to the equation system
+        for(Equation extEq : system.getExternalEquations()) {
+            this.system.addEquation(extEq.getLeft(), ForAllNode.from(extEq.getRight(), context, null));
         }
 
         // Generalize the let node
@@ -343,9 +349,7 @@ public class EquationGenerator implements INodeGenerator {
     // Generate equations for a Nil
     public void generate(ASTNil __, Node target, Map<String, Node> context) throws TypingException {
         // Create the new nodes
-        ForAllNode nilNode = new ForAllNode();
-        ListNode generalListNode = new ListNode(nilNode.getNewNode());
-        nilNode.setType(generalListNode);
+        ListNode nilNode = new ListNode(getNewNode());
 
         // Add the equation to the system
         system.addEquation(target, nilNode);
@@ -366,8 +370,8 @@ public class EquationGenerator implements INodeGenerator {
             throw new TypingException("Error during equation generation : " + var.getName() + " doesn't exists in context");
         }
 
-        // Add the equation
-        system.addEquation(target, varNode);
+        // Add the equation with an instance of the variable (to avoid late instantiation)
+        system.addEquation(target, varNode.instantiate(system));
     }
 
 }

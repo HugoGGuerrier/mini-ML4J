@@ -186,7 +186,8 @@ public class EquationSystem {
 
         }
 
-        // Return the unification result
+        // Return the unification result or the init node if there is no initial equation
+        if(initialEquation == null) return initNode.instantiate(this);
         return initialEquation.getRight().instantiate(this);
     }
 

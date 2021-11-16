@@ -61,6 +61,9 @@ public class ForAllNode extends Node implements INodeGenerator {
      * @return The newly created for all node
      */
     public static ForAllNode from(Node toGeneralize, Map<String, Node> context, List<Equation> instanceConstraints) {
+        // Verify if the node is not already general
+        if(toGeneralize instanceof ForAllNode) return (ForAllNode) toGeneralize;
+
         // Create the result
         ForAllNode res = new ForAllNode();
 

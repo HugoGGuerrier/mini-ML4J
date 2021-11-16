@@ -58,10 +58,7 @@ public class Instantiater {
 
     // Instantiate a for all node
     public Node instantiate(ForAllNode forAllNode) {
-        ForAllNode res = new ForAllNode();
-        res.getGeneralizedNodes().addAll(forAllNode.getGeneralizedNodes());
-        res.setType(forAllNode.getType().acceptInstantiater(this));
-        return res;
+        return forAllNode;
     }
 
     // Instantiate an int node

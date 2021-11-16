@@ -42,8 +42,17 @@ public class TestTypist {
     @Test
     void testError() {
         try {
-            ASTExpr expr = (ASTExpr) parser.parseString("fn(a){a(a)}");
-            assertThrows(TypingException.class, () -> Typist.typeExpression(expr));
+            ASTExpr wrong1 = (ASTExpr) parser.parseString("fn(a){a(a)}");
+            assertThrows(TypingException.class, () -> Typist.typeExpression(wrong1));
+
+            ASTExpr wrong2 = (ASTExpr) parser.parseString("let a = @[15, 3, 5] in let _ = a := 5 in a");
+            assertThrows(TypingException.class, () -> Typist.typeExpression(wrong2));
+
+            ASTExpr wrong3 = (ASTExpr) parser.parseString("fn(a, b){ let x = a + 5 in a(b) }");
+            assertThrows(TypingException.class, () -> Typist.typeExpression(wrong3));
+
+            ASTExpr wrong4 = (ASTExpr) parser.parseString("let l = @[fn(x){x}] in let _ = l := [fn(x){x}] in head(!l) + 2");
+            assertThrows(TypingException.class, () -> Typist.typeExpression(wrong4));
         } catch (Exception e) {
             fail(e);
         }
@@ -366,6 +375,23 @@ public class TestTypist {
     }
 
     /**
+     * Test a very complex let structure
+     */
+    @Test
+    void testLet5() {
+        try {
+            ASTExpr expr = (ASTExpr) parser.parseString("fn(a){ let x = let y = a(42) in y in x }");
+            Type real = Typist.typeExpression(expr);
+
+            SimpleType t0 = new SimpleType(0);
+            ArrowType expected = new ArrowType(new ArrowType(IntType.getInstance(), t0), t0);
+            assertEquals(expected, real);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    /**
      * Test the unit
      */
     @Test
@@ -403,8 +429,11 @@ public class TestTypist {
     @Test
     void testAssign() {
         try {
-            ASTExpr expr = (ASTExpr) parser.parseString("let a = @8 in let _ = a := [10] in a");
+            ASTExpr expr = (ASTExpr) parser.parseString("let a = @8 in let _ = a := (10 + 5) in a");
             Type real = Typist.typeExpression(expr);
+
+            Type expected = new RefType(IntType.getInstance());
+            assertEquals(expected, real);
         } catch (Exception e) {
             fail(e);
         }

@@ -20,7 +20,7 @@ public class ConstructorStrategy implements IMergeStrategy {
         // Verify the other node nature
         boolean sameClass = right.getClass().getCanonicalName().equals(left.getClass().getCanonicalName());
         if(right.isConstructor() && !(sameClass))
-            throw new TypingException("Cannot merge non identical constructor nodes");
+            throw new TypingException("Cannot merge non identical constructor nodes : " + left + " and " + right);
 
         // If the other node is the same class
         if(sameClass) {
