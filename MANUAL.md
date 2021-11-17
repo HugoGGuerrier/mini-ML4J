@@ -22,6 +22,7 @@ List of functions and operations that are natively supported by MML.
 * Reference creation -> `@5` create an integer reference
 * Dereference -> `!@5` is simply an integer (deref of a ref)
 * Assignment -> `@5 := 46` affect 46 to the newly created reference
+* Imperative semi-colon -> `42 ; 46 ; 50` evaluate 42, 46 and 50 bu return only 50
 
 ### Language structures
 
@@ -44,4 +45,9 @@ Named function : `a(5)`
 #### If structures
 
 If zero : `ifz(5) {42} else {0}`
-If list is empty : `ifem([])`
+If list is empty : `ifem([]) {42} else {0}`
+
+#### Let structures
+
+Simple let : `let a = 42 in a`
+Let and : `let a = 42 and b = 46 in a + b`

@@ -4,6 +4,11 @@ import MML4J.main.typist.types.abstracts.Type;
 
 import java.util.Objects;
 
+/**
+ * This class represents a list type
+ *
+ * @author Hugo GUERRIER
+ */
 public class ListType extends Type {
 
     // ----- Attributes -----

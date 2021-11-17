@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * This class represents an equation system
+ * This class represents an equation system with all the type equations
  *
  * @author Hugo GUERRIER
  */
@@ -81,13 +81,6 @@ public class EquationSystem {
     // ----- Override methods -----
 
 
-    /**
-     * Get the string representation of an equation system
-     *
-     * @see Object#toString()
-     *
-     * @return The string for the equation system
-     */
     @Override
     public String toString() {
         // Prepare the result and the init equation

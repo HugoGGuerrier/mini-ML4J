@@ -2,6 +2,11 @@ package MML4J.main.typist.types;
 
 import MML4J.main.typist.types.abstracts.Type;
 
+/**
+ * This class represent the only instance of the int type
+ *
+ * @author Hugo GUERRIER
+ */
 public class IntType extends Type {
 
     // ----- Attributes -----

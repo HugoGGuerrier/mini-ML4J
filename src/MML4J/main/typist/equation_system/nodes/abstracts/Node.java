@@ -13,6 +13,11 @@ import MML4J.main.typist.utils.Instantiater;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class is the base class for all nodes it contains default functions and behavior
+ *
+ * @author Hugo GUERRIER
+ */
 public abstract class Node implements INodeContained {
 
     // ----- Attributes -----

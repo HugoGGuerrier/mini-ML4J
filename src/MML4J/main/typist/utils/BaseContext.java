@@ -6,6 +6,11 @@ import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class contains the typing base context
+ *
+ * @author Hugo GUERRIER
+ */
 public class BaseContext {
 
     // ----- Attributes -----

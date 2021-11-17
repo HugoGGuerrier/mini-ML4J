@@ -10,7 +10,13 @@ import MML4J.main.typist.interfaces.INodeContainer;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * This class implements the strategy to merge a constructor node with another node
+ *
+ * @author Hugo GUERRIER
+ */
 public class ConstructorStrategy implements IMergeStrategy {
+    /** @see IMergeStrategy#doMerge(Node, Node, EquationSystem) */
     @Override
     public void doMerge(Node left, Node right, EquationSystem system) throws TypingException {
         // Verify that the left is a constructor node

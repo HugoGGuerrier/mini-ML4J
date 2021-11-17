@@ -4,6 +4,11 @@ import MML4J.main.typist.types.abstracts.Type;
 
 import java.util.Objects;
 
+/**
+ * This class represent a reference type
+ *
+ * @author Hugo GUERRIER
+ */
 public class RefType extends Type {
 
     // ----- Attributes -----

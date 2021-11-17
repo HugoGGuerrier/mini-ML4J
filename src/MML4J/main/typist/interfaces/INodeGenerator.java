@@ -3,6 +3,11 @@ package MML4J.main.typist.interfaces;
 import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import MML4J.main.typist.equation_system.nodes.SimpleNode;
 
+/**
+ * This interface defines the behavior of a node generator
+ *
+ * @author Hugo GUERRIER
+ */
 public interface INodeGenerator {
     /**
      * Get a new node from the generator

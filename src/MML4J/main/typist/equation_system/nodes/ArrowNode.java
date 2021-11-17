@@ -137,11 +137,13 @@ public class ArrowNode extends ConstructorNode implements INodeContainer {
         return new ArrowNode(left.clone(generator), right.clone(generator));
     }
 
+    /** @see Node#acceptTranslator(TypeTranslator) */
     @Override
     public Type acceptTranslator(TypeTranslator translator) {
         return translator.translate(this);
     }
 
+    /** @see Node#acceptInstantiater(Instantiater) */
     @Override
     public Node acceptInstantiater(Instantiater instantiater) {
         return instantiater.instantiate(this);

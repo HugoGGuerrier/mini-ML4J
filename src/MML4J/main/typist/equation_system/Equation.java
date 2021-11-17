@@ -5,11 +5,25 @@ import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import MML4J.main.typist.interfaces.INodeContained;
 import MML4J.main.typist.interfaces.INodeContainer;
 
+/**
+ * This class represent an equation as a pair of nodes
+ * @see Pair
+ *
+ * @author Hugo GUERRIER
+ */
 public class Equation extends Pair<Node, Node> implements INodeContainer {
 
     // ----- Constructors -----
 
 
+    /**
+     * Create a new equation with the left and the right member
+     *
+     * @see Pair#Pair(Object, Object)
+     *
+     * @param l The left member
+     * @param r The right member
+     */
     public Equation(Node l, Node r) {
         super(l, r);
         l.addContainer(this);
@@ -20,6 +34,7 @@ public class Equation extends Pair<Node, Node> implements INodeContainer {
     // ----- Setters -----
 
 
+    /** @see Pair#setLeft(Object) */
     @Override
     public void setLeft(Node left) {
         left.addContainer(this);
@@ -27,6 +42,7 @@ public class Equation extends Pair<Node, Node> implements INodeContainer {
         this.left = left;
     }
 
+    /** @see Pair#setRight(Object) */
     @Override
     public void setRight(Node right) {
         right.addContainer(this);
@@ -43,21 +59,28 @@ public class Equation extends Pair<Node, Node> implements INodeContainer {
         return left + " = " + right;
     }
 
+
+    // ----- Class methods -----
+
+
+    /** @see INodeContainer#replaceContained(INodeContained, INodeContained) */
     @Override
     public void replaceContained(INodeContained oldCont, INodeContained newCont) {
         if(left == oldCont) setLeft((Node) newCont);
         if(right == oldCont) setRight((Node) newCont);
     }
 
-
-    // ----- Class methods -----
-
-
+    /**
+     * Destroy a pair from the existence
+     */
     public void destroy() {
         if(left != null) left.removeContainer(this);
         if(right != null) right.removeContainer(this);
     }
 
+    /**
+     * Simply reverse the pair
+     */
     public void reverse() {
         Node tmp = this.right;
         right = left;

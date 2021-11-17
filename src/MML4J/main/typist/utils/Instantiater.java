@@ -18,13 +18,21 @@ public class Instantiater {
     // ----- Attributes -----
 
 
+    /** The general known nodes */
     private final Set<Node> generalNodes;
+
+    /** The already instantiated nodes map */
     private final HashMap<Node, Node> processedNodes;
 
 
     // ----- Constructors -----
 
 
+    /**
+     * Create a new instantiater with its general nodes
+     *
+     * @param generalNodes The general nodes
+     */
     private Instantiater(Set<Node> generalNodes) {
         this.generalNodes = generalNodes;
         this.processedNodes = new HashMap<>();
@@ -34,6 +42,13 @@ public class Instantiater {
     // ----- Class methods -----
 
 
+    /**
+     * Method to instantiate a for all node in the wanted system
+     *
+     * @param forAllNode The node to instantiate
+     * @param system The system to instantiate the node in
+     * @return The newly created node instance
+     */
     public static Node instantiate(ForAllNode forAllNode, EquationSystem system) {
         // Prepare the instantiater and the result
         Instantiater instantiater = new Instantiater(new HashSet<>(forAllNode.getGeneralizedNodes()));

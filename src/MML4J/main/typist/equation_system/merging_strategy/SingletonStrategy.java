@@ -8,7 +8,13 @@ import MML4J.main.typist.interfaces.INodeContainer;
 
 import java.util.HashSet;
 
+/**
+ * This class implements the strategy to merge singletons
+ * 
+ * @author Hugo GUERRIER
+ */
 public class SingletonStrategy implements IMergeStrategy {
+    /** @see IMergeStrategy#doMerge(Node, Node, EquationSystem) */
     @Override
     public void doMerge(Node left, Node right, EquationSystem system) throws TypingException {
         // Verify the other nature

@@ -1,5 +1,10 @@
 package MML4J.main.typist.interfaces;
 
+/**
+ * This interface represents a node container
+ *
+ * @author Hugo GUERRIER
+ */
 public interface INodeContainer {
     /**
      * Replace an old contained node in the container by a new one

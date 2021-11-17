@@ -4,6 +4,11 @@ import MML4J.main.typist.types.abstracts.Type;
 
 import java.util.Objects;
 
+/**
+ * This class represent an arrow type
+ *
+ * @author Hugo GUERRIER
+ */
 public class ArrowType extends Type {
 
     // ----- Attributes -----

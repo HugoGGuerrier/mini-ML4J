@@ -23,12 +23,18 @@ public class ListNode extends ConstructorNode implements INodeContainer {
     // ----- Attributes -----
 
 
+    /** The type inside the list */
     protected Node listType;
 
 
     // ----- Constructors -----
 
 
+    /**
+     * Create a new list type with the wanted content type
+     *
+     * @param type The type that is inside the list
+     */
     public ListNode(Node type) {
         super(new ConstructorStrategy());
         this.listType = type;
@@ -65,6 +71,7 @@ public class ListNode extends ConstructorNode implements INodeContainer {
     // ----- Container methods -----
 
 
+    /** @see INodeContainer#replaceContained(INodeContained, INodeContained) */
     @Override
     public void replaceContained(INodeContained oldCont, INodeContained newCont) {
         if(listType == oldCont) setListType((Node) newCont);
@@ -79,31 +86,36 @@ public class ListNode extends ConstructorNode implements INodeContainer {
         return "[" + listType + "]";
     }
 
+
+    // ----- Class methods -----
+
+
+    /** @see Node#isConstructor() */
     @Override
     public boolean isConstructor() {
         return true;
     }
 
-
-    // ----- Class methods -----
-
-
+    /** @see Node#contains(Node) */
     @Override
     public boolean contains(Node other) {
         return listType.contains(other);
     }
 
+    /** @see Node#clone(INodeGenerator) */
     @Override
     public Node clone(INodeGenerator generator) {
         if(generator.hasCorrespondence(this)) return this;
         return new ListNode(listType.clone(generator));
     }
 
+    /** @see Node#acceptTranslator(TypeTranslator) */
     @Override
     public Type acceptTranslator(TypeTranslator translator) {
         return translator.translate(this);
     }
 
+    /** @see Node#acceptInstantiater(Instantiater) */
     @Override
     public Node acceptInstantiater(Instantiater instantiater) {
         return instantiater.instantiate(this);

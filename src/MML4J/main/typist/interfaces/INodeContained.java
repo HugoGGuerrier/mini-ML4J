@@ -2,6 +2,11 @@ package MML4J.main.typist.interfaces;
 
 import java.util.Set;
 
+/**
+ * This interface represents all methods that a contained should offer
+ *
+ * @author Hugo GUERRIER
+ */
 public interface INodeContained {
     /**
      * Get the containers that contains the contained

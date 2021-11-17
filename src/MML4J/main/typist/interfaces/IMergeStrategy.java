@@ -4,6 +4,11 @@ import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_system.EquationSystem;
 import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 
+/**
+ * Interface used to create node merging strategy
+ *
+ * @author Hugo GUERRIER
+ */
 public interface IMergeStrategy {
     /**
      * Do the merging action in the wanted equation system

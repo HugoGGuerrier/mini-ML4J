@@ -4,6 +4,11 @@ import MML4J.main.typist.interfaces.IMergeStrategy;
 
 import java.util.List;
 
+/**
+ * This class is the base class for all constructor types nodes
+ *
+ * @author Hugo GUERRIER
+ */
 public abstract class ConstructorNode extends Node {
     /**
      * Create a node with just a container set

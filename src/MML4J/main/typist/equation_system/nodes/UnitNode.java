@@ -41,30 +41,35 @@ public class UnitNode extends Node {
         return "unit";
     }
 
-    @Override
-    public boolean isConstructor() {
-        return true;
-    }
-
 
     // ----- Class methods -----
 
 
+    /** @see Node#isConstructor() */
+    @Override
+    public boolean isConstructor() {
+        return true;
+    }
+    
+    /** @see Node#contains(Node) */
     @Override
     public boolean contains(Node other) {
         return this == other;
     }
 
+    /** @see Node#clone(INodeGenerator) */
     @Override
     public Node clone(INodeGenerator generator) {
         return this;
     }
 
+    /** @see Node#acceptTranslator(TypeTranslator) */
     @Override
     public Type acceptTranslator(TypeTranslator translator) {
         return translator.translate(this);
     }
 
+    /** @see Node#acceptInstantiater(Instantiater) */
     @Override
     public Node acceptInstantiater(Instantiater instantiater) {
         return instantiater.instantiate(this);

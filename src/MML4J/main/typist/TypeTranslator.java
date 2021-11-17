@@ -18,13 +18,19 @@ public class TypeTranslator {
     // ----- Attributes -----
 
 
+    /** The type counter to name all types */
     private int counter;
+
+    /** Corresponding map */
     private final Map<Node, Type> typeMap;
 
 
     // ----- Constructors -----
 
 
+    /**
+     * Create a new type translator with default values
+     */
     public TypeTranslator() {
         this.counter = 0;
         this.typeMap = new HashMap<>();
@@ -34,21 +40,32 @@ public class TypeTranslator {
     // ----- Internal methods -----
 
 
-    private SimpleType getNextType() {
+    /**
+     * Get the next type
+     *
+     * @return A new fresh type
+     */
+    private SimpleType getNewType() {
         return new SimpleType(counter++);
     }
 
-    private Type typeForNode(Node node) {
+    /**
+     * Get the corresponding node type or a new one if none exists
+     *
+     * @param node The node to look for
+     * @return The (newly created) corresponding type
+     */
+    private Type getNewType(Node node) {
         Type res = typeMap.getOrDefault(node, null);
         if(res == null) {
-            res = getNextType();
+            res = getNewType();
             typeMap.put(node, res);
         }
         return res;
     }
 
 
-    // ----- Class methods -----
+    // ----- Translation methods -----
 
 
     // Translate an arrow node
@@ -73,7 +90,7 @@ public class TypeTranslator {
 
     // Translate a simple node
     public Type translate(SimpleNode simpleNode) {
-        return typeForNode(simpleNode);
+        return getNewType(simpleNode);
     }
 
     // Translate a unit node

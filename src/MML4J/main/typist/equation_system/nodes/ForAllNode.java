@@ -121,6 +121,7 @@ public class ForAllNode extends Node implements INodeGenerator {
     // ----- Generator methods -----
 
 
+    /** @see INodeGenerator#getNewNode() */
     @Override
     public SimpleNode getNewNode() {
         SimpleNode res = new SimpleNode(counter++);
@@ -128,6 +129,7 @@ public class ForAllNode extends Node implements INodeGenerator {
         return res;
     }
 
+    /** @see INodeGenerator#getNewNode(SimpleNode) */
     @Override
     public SimpleNode getNewNode(SimpleNode key) {
         SimpleNode res = (SimpleNode) correspondence.getOrDefault(key, null);
@@ -138,16 +140,19 @@ public class ForAllNode extends Node implements INodeGenerator {
         return res;
     }
 
+    /** @see INodeGenerator#hasCorrespondence(Node) */
     @Override
     public boolean hasCorrespondence(Node key) {
         return correspondence.containsKey(key);
     }
 
+    /** @see INodeGenerator#addCorrespondence(Node, Node) */
     @Override
     public void addCorrespondence(Node key, Node value) {
         correspondence.put(key, value);
     }
 
+    /** @see INodeGenerator#reset() */
     @Override
     public void reset() {
         correspondence.clear();
@@ -167,16 +172,19 @@ public class ForAllNode extends Node implements INodeGenerator {
 
     // ----- Class methods -----
 
+    /** @see Node#isConstructor() */
     @Override
     public boolean isConstructor() {
         return true;
     }
 
+    /** @see Node#instantiate(EquationSystem) */
     @Override
     public Node instantiate(EquationSystem system) {
         return Instantiater.instantiate(this, system);
     }
 
+    /** @see Node#clone(INodeGenerator) */
     @Override
     public Node clone(INodeGenerator generator) {
         if(generator.hasCorrespondence(this)) return this;
@@ -197,11 +205,13 @@ public class ForAllNode extends Node implements INodeGenerator {
         return res;
     }
 
+    /** @see Node#acceptTranslator(TypeTranslator) */
     @Override
     public Type acceptTranslator(TypeTranslator translator) {
         return null;
     }
 
+    /** @see Node#acceptInstantiater(Instantiater) */
     @Override
     public Node acceptInstantiater(Instantiater instantiater) {
         return instantiater.instantiate(this);

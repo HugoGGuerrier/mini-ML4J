@@ -17,12 +17,18 @@ public class SimpleNode extends Node {
     // ----- Attributes -----
 
 
+    /** The node id for printing purpose */
     protected final int id;
 
 
     // ----- Constructors -----
 
 
+    /**
+     * Create a new simple node with its id
+     *
+     * @param id The node id
+     */
     public SimpleNode(int id) {
         super(new WeakStrategy());
         this.id = id;
@@ -48,29 +54,35 @@ public class SimpleNode extends Node {
         return "T" + id;
     }
 
+
+    // ----- Class methods -----
+
+
+    /** @see Node#isConstructor() */
     @Override
     public boolean isConstructor() {
         return false;
     }
 
-
-    // ----- Class methods -----
-
+    /** @see Node#contains(Node) */
     @Override
     public boolean contains(Node other) {
         return this == other;
     }
 
+    /** @see Node#clone(INodeGenerator) */
     @Override
     public Node clone(INodeGenerator generator) {
         return generator.getNewNode(this);
     }
 
+    /** @see Node#acceptTranslator(TypeTranslator) */
     @Override
     public Type acceptTranslator(TypeTranslator translator) {
         return translator.translate(this);
     }
 
+    /** @see Node#acceptInstantiater(Instantiater) */
     @Override
     public Node acceptInstantiater(Instantiater instantiater) {
         return instantiater.instantiate(this);
