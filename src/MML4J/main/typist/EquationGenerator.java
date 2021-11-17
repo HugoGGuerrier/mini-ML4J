@@ -272,11 +272,11 @@ public class EquationGenerator implements INodeGenerator {
 
     // Generate equations for a variable
     public void generate(ASTVar var, Node target, Map<String, Node> context) throws TypingException {
-        // Get the var node or null in the default context
-        Node varNode = BaseContext.getBaseContext().getOrDefault(var.getName(), null);
-
         // Get the var node or null in the user context
-        varNode = context.getOrDefault(var.getName(), varNode);
+        Node varNode = context.getOrDefault(var.getName(), null);
+
+        // Get the var node or null in the default context
+        varNode = BaseContext.getBaseContext().getOrDefault(var.getName(), varNode);
 
         // Test if the var node is null
         if(varNode == null) {
