@@ -1,13 +1,14 @@
-package MML4J.main.typist.utils;
+package MML4J.main.typist;
 
 import MML4J.main.Utils;
 import MML4J.main.ast.*;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_system.*;
 import MML4J.main.typist.equation_system.nodes.*;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import MML4J.main.typist.interfaces.INodeGenerator;
+import MML4J.main.typist.utils.BaseContext;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,16 +76,19 @@ public class EquationGenerator implements INodeGenerator {
         return res;
     }
 
+    /** @see INodeGenerator#hasCorrespondence(Node) */
     @Override
     public boolean hasCorrespondence(Node key) {
         return correspondence.containsKey(key);
     }
 
+    /** @see INodeGenerator#addCorrespondence(Node, Node) */
     @Override
     public void addCorrespondence(Node key, Node value) {
         correspondence.put(key, value);
     }
 
+    /** @see INodeGenerator#reset() */
     @Override
     public void reset() {
         correspondence.clear();
@@ -235,109 +239,6 @@ public class EquationGenerator implements INodeGenerator {
     }
 
 
-    // --- Operators and build-in
-
-    // Generate equation for a reference creation
-    public void generate(ASTRef ref, Node target, Map<String, Node> context) throws TypingException {
-        // Create the new nodes
-        SimpleNode valNode = getNewNode();
-        RefNode refNode = new RefNode(valNode);
-
-        // Add the equation to the system
-        system.addEquation(target, refNode);
-
-        // Generate equations for the reference with the val node
-        ref.getValue().acceptEqGenerator(this, valNode, context);
-    }
-
-    // Generate equation for a de-reference operator
-    public void generate(ASTDeref deref, Node target, Map<String, Node> context) throws TypingException {
-        // Create the new nodes
-        SimpleNode valNode = getNewNode();
-        RefNode refNode = new RefNode(valNode);
-
-        // Add the equation to the system
-        system.addEquation(target, valNode);
-
-        // Generate the equations for the dereference
-        deref.getReference().acceptEqGenerator(this, refNode, context);
-    }
-
-    // Generate equations for an addition
-    public void generate(ASTAdd add, Node target, Map<String, Node> context) throws TypingException {
-        // Add the equation to the system
-        system.addEquation(target, IntNode.getInstance());
-
-        // Type the left and right with the int node instance
-        add.getLeft().acceptEqGenerator(this, IntNode.getInstance(), context);
-        add.getRight().acceptEqGenerator(this, IntNode.getInstance(), context);
-    }
-
-    // Generate equations for a sub
-    public void generate(ASTSub sub, Node target, Map<String, Node> context) throws TypingException {
-        // Add the equation to the system
-        system.addEquation(target, IntNode.getInstance());
-
-        // Type the left and right with the int node instance
-        sub.getLeft().acceptEqGenerator(this, IntNode.getInstance(), context);
-        sub.getRight().acceptEqGenerator(this, IntNode.getInstance(), context);
-    }
-
-    // Generate equation for an assignment
-    public void generate(ASTAssign assign, Node target, Map<String, Node> context) throws TypingException {
-        // Add the equation to the system
-        system.addEquation(target, UnitNode.getInstance());
-
-        // Create the new type
-        SimpleNode valNode = getNewNode();
-        RefNode refNode = new RefNode(valNode);
-
-        // Type the left and the right
-        assign.getLeft().acceptEqGenerator(this, refNode, context);
-        assign.getRight().acceptEqGenerator(this, valNode, context);
-    }
-
-    // Generate equations for a list constructor
-    public void generate(ASTCons cons, Node target, Map<String, Node> context) throws TypingException {
-        // Create the new nodes
-        SimpleNode elemNode = getNewNode();
-        ListNode listNode = new ListNode(elemNode);
-
-        // Add the equation to the system
-        system.addEquation(target, listNode);
-
-        // Generate equation for the cons args
-        cons.getHead().acceptEqGenerator(this, elemNode, context);
-        cons.getTail().acceptEqGenerator(this, listNode, context);
-    }
-
-    // Generate equations for a list head operator
-    public void generate(ASTHead head, Node target, Map<String, Node> context) throws TypingException {
-        // Create the new nodes
-        SimpleNode elemNode = getNewNode();
-        ListNode listNode = new ListNode(elemNode);
-
-        // Add the equation to the system
-        system.addEquation(target, elemNode);
-
-        // Generate equation for the head arg
-        head.getList().acceptEqGenerator(this, listNode, context);
-    }
-
-    // Generate equations for a tail operator
-    public void generate(ASTTail tail, Node target, Map<String, Node> context) throws TypingException {
-        // Create the new nodes
-        SimpleNode elemNode = getNewNode();
-        ListNode listNode = new ListNode(elemNode);
-
-        // Add the equation to the system
-        system.addEquation(target, listNode);
-
-        // Generate equations for the tail arg
-        tail.getList().acceptEqGenerator(this, listNode, context);
-    }
-
-
     // --- Basic expressions
 
     // Generate equations for an integer
@@ -362,8 +263,11 @@ public class EquationGenerator implements INodeGenerator {
 
     // Generate equations for a variable
     public void generate(ASTVar var, Node target, Map<String, Node> context) throws TypingException {
-        // Get the var node or null
-        Node varNode = context.getOrDefault(var.getName(), null);
+        // Get the var node or null in the default context
+        Node varNode = BaseContext.getBaseContext().getOrDefault(var.getName(), null);
+
+        // Get the var node or null in the user context
+        varNode = context.getOrDefault(var.getName(), varNode);
 
         // Test if the var node is null
         if(varNode == null) {

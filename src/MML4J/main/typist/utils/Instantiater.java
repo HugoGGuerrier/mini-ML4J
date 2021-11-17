@@ -2,6 +2,7 @@ package MML4J.main.typist.utils;
 
 import MML4J.main.typist.equation_system.*;
 import MML4J.main.typist.equation_system.nodes.*;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 
 import java.util.HashMap;
 import java.util.HashSet;

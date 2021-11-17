@@ -2,7 +2,7 @@ package MML4J.main.parser;
 
 import MML4J.main.parser.antlr.MMLLexer;
 import MML4J.main.parser.antlr.MMLParser;
-import MML4J.main.ast.AST;
+import MML4J.main.ast.abstracts.AST;
 import MML4J.main.exceptions.ParsingException;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;

@@ -1,4 +1,4 @@
-package MML4J.main.ast;
+package MML4J.main.ast.abstracts;
 
 /**
  * This class represent the base AST node, all the AST nodes inherits from this

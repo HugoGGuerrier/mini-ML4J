@@ -44,12 +44,18 @@ expr :
     | op=UN_OP arg=expr # UnOp
     | left=expr op=BIN_OP right=expr # BinOp
     | name=BUILD_IN '(' arguments=exprs ')' # BuildIn
-    | func=expr '(' arg=expr ')' # Application
     | IF_ZERO '(' cond=expr ')' '{' cons=expr '}' ELSE '{' altern=expr '}' # IfZero
     | IF_EMPTY '(' cond=expr ')' '{' cons=expr '}' ELSE '{' altern=expr '}' # IfEmpty
     | FN '(' parameters=params ')' '{' body=expr '}' # Abstraction
     | REC name=IDENT '(' param=IDENT ')' '{' body=expr '}' # RecAbstraction
-    | LET name=IDENT '=' value=expr IN body=expr # LetIn
+    | func=expr '(' arg=expr ')' # Application
+    | ignored=expr ';' real=expr # SeqSugar
+    | LET affect=let_affect IN body=expr # LetIn
+    ;
+
+let_affect:
+    name=IDENT '=' value=expr # SingleAffect
+    | name=IDENT '=' value=expr 'and' next=let_affect # MultipleAffect
     ;
 
 exprs :

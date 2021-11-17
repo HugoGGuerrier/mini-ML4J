@@ -1,10 +1,11 @@
 package MML4J.test;
 
-import MML4J.main.ast.ASTExpr;
+import MML4J.main.ast.abstracts.ASTExpr;
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.parser.Parser;
 import MML4J.main.typist.Typist;
 import MML4J.main.typist.types.*;
+import MML4J.main.typist.types.abstracts.Type;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

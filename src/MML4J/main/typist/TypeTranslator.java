@@ -1,7 +1,9 @@
-package MML4J.main.typist.utils;
+package MML4J.main.typist;
 
 import MML4J.main.typist.equation_system.nodes.*;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import MML4J.main.typist.types.*;
+import MML4J.main.typist.types.abstracts.Type;
 
 import java.util.HashMap;
 import java.util.Map;

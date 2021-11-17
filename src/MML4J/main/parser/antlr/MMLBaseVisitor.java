@@ -40,6 +40,13 @@ public class MMLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MM
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitSeqSugar(MMLParser.SeqSugarContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitPriorised(MMLParser.PriorisedContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -125,6 +132,20 @@ public class MMLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MM
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitLetIn(MMLParser.LetInContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSingleAffect(MMLParser.SingleAffectContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitMultipleAffect(MMLParser.MultipleAffectContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

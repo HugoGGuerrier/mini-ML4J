@@ -1,4 +1,4 @@
-package MML4J.main.typist.equation_system.nodes;
+package MML4J.main.typist.equation_system.nodes.abstracts;
 
 import MML4J.main.typist.interfaces.IMergeStrategy;
 

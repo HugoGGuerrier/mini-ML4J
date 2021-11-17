@@ -1,6 +1,7 @@
 package MML4J.test;
 
 import MML4J.main.ast.*;
+import MML4J.main.ast.abstracts.ASTExpr;
 import MML4J.main.parser.Parser;
 import MML4J.main.exceptions.ParsingException;
 import org.junit.jupiter.api.BeforeAll;
@@ -76,7 +77,7 @@ public class TestParser {
     @Test
     void testAdd() {
         try {
-            assertEquals(parser.parseString("a + b"), new ASTAdd(new ASTVar("a"), new ASTVar("b")));
+            assertEquals(parser.parseString("a + b"), new ASTApp(new ASTApp(new ASTVar("+"), new ASTVar("a")), new ASTVar("b")));
 
             assertThrows(ParsingException.class, () -> parser.parseString(" + b"));
             assertThrows(ParsingException.class, () -> parser.parseString("a +"));
@@ -106,7 +107,7 @@ public class TestParser {
     @Test
     void testAssign() {
         try {
-            assertEquals(parser.parseString("a := b"), new ASTAssign(new ASTVar("a"), new ASTVar("b")));
+            assertEquals(parser.parseString("a := b"), new ASTApp(new ASTApp(new ASTVar(":="), new ASTVar("a")), new ASTVar("b")));
 
             assertThrows(ParsingException.class, () -> parser.parseString(":="));
             assertThrows(ParsingException.class, () -> parser.parseString("a := "));
@@ -122,8 +123,8 @@ public class TestParser {
     @Test
     void testCons() {
         try {
-            assertEquals(parser.parseString("cons(a, b)"), new ASTCons(new ASTVar("a"), new ASTVar("b")));
-            assertEquals(parser.parseString("[]"), new ASTCons(new ASTNil(), new ASTNil()));
+            assertEquals(parser.parseString("cons(a, b)"), new ASTApp(new ASTApp(new ASTVar("cons"), new ASTVar("a")), new ASTVar("b")));
+            assertEquals(parser.parseString("[]"), parser.parseString("cons(nil, nil)"));
             assertEquals(parser.parseString("[a]"), parser.parseString("cons(a, nil)"));
             assertEquals(parser.parseString("[a, b]"), parser.parseString("cons(a, cons(b, nil))"));
             assertEquals(parser.parseString("[a, b, c, d]"), parser.parseString("cons(a, cons(b, cons(c, cons(d, nil))))"));
@@ -143,8 +144,11 @@ public class TestParser {
     @Test
     void testDeref() {
         try {
-            assertEquals(parser.parseString("!a"), new ASTDeref(new ASTVar("a")));
-            assertEquals(parser.parseString("!(a + b)"), new ASTDeref(new ASTAdd(new ASTVar("a"), new ASTVar("b"))));
+            assertEquals(parser.parseString("!a"), new ASTApp(new ASTVar("!"), new ASTVar("a")));
+            assertEquals(parser.parseString("!(a + b)"), new ASTApp(
+                    new ASTVar("!"),
+                    new ASTApp(new ASTApp(new ASTVar("+"), new ASTVar("a")), new ASTVar("b"))
+            ));
 
             assertThrows(ParsingException.class, () -> parser.parseString("!"));
             assertThrows(ParsingException.class, () -> parser.parseString("!(a"));
@@ -159,7 +163,7 @@ public class TestParser {
     @Test
     void testHead() {
         try {
-            assertEquals(parser.parseString("head(a)"), new ASTHead(new ASTVar("a")));
+            assertEquals(parser.parseString("head(a)"), new ASTApp(new ASTVar("head"), new ASTVar("a")));
 
             assertThrows(ParsingException.class, () -> parser.parseString("head()"));
             assertThrows(ParsingException.class, () -> parser.parseString("head(a, b, c)"));
@@ -223,6 +227,12 @@ public class TestParser {
     void testLet() {
         try {
             assertEquals(parser.parseString("let a = b in c"), new ASTLet("a", new ASTVar("b"), new ASTVar("c")));
+            assertEquals(parser.parseString("let a = b and c = d in a + c"), parser.parseString("let a = b in let c = d in a + c"));
+            assertEquals(parser.parseString("let a = @5 in a := (12 + 5) ; !a"),
+                    new ASTLet("a", (ASTExpr) parser.parseString("@5"),
+                            new ASTLet("--ignored", (ASTExpr) parser.parseString("a := (12 + 5)"), (ASTExpr) parser.parseString("!a"))
+                    )
+            );
 
             assertThrows(ParsingException.class, () -> parser.parseString("let a = in c"));
             assertThrows(ParsingException.class, () -> parser.parseString("let a = b in"));
@@ -250,8 +260,11 @@ public class TestParser {
     @Test
     void testRef() {
         try {
-            assertEquals(parser.parseString("@a"), new ASTRef(new ASTVar("a")));
-            assertEquals(parser.parseString("@(a + b)"), new ASTRef(new ASTAdd(new ASTVar("a"), new ASTVar("b"))));
+            assertEquals(parser.parseString("@a"), new ASTApp(new ASTVar("@"), new ASTVar("a")));
+            assertEquals(parser.parseString("@(a + b)"), new ASTApp(
+                    new ASTVar("@"),
+                    new ASTApp(new ASTApp(new ASTVar("+"), new ASTVar("a")), new ASTVar("b"))
+            ));
 
             assertThrows(ParsingException.class, () -> parser.parseString("@"));
             assertThrows(ParsingException.class, () -> parser.parseString("@(f"));
@@ -266,7 +279,7 @@ public class TestParser {
     @Test
     void testSub() {
         try {
-            assertEquals(parser.parseString("a - b"), new ASTSub(new ASTVar("a"), new ASTVar("b")));
+            assertEquals(parser.parseString("a - b"), new ASTApp(new ASTApp(new ASTVar("-"), new ASTVar("a")), new ASTVar("b")));
 
             assertThrows(ParsingException.class, () -> parser.parseString(" - b"));
             assertThrows(ParsingException.class, () -> parser.parseString("a -"));
@@ -282,7 +295,7 @@ public class TestParser {
     @Test
     void testTail() {
         try {
-            assertEquals(parser.parseString("tail(a)"), new ASTTail(new ASTVar("a")));
+            assertEquals(parser.parseString("tail(a)"), new ASTApp(new ASTVar("tail"), new ASTVar("a")));
 
             assertThrows(ParsingException.class, () -> parser.parseString("tail()"));
             assertThrows(ParsingException.class, () -> parser.parseString("tail(a, b, c)"));

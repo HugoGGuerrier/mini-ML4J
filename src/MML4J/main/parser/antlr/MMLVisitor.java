@@ -34,6 +34,13 @@ public interface MMLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfEmpty(MMLParser.IfEmptyContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code SeqSugar}
+	 * labeled alternative in {@link MMLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSeqSugar(MMLParser.SeqSugarContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Priorised}
 	 * labeled alternative in {@link MMLParser#expr}.
 	 * @param ctx the parse tree
@@ -124,6 +131,20 @@ public interface MMLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLetIn(MMLParser.LetInContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SingleAffect}
+	 * labeled alternative in {@link MMLParser#let_affect}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingleAffect(MMLParser.SingleAffectContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code MultipleAffect}
+	 * labeled alternative in {@link MMLParser#let_affect}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultipleAffect(MMLParser.MultipleAffectContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code VoidExprs}
 	 * labeled alternative in {@link MMLParser#exprs}.

@@ -1,12 +1,12 @@
-package MML4J.main.typist.equation_system.nodes;
+package MML4J.main.typist.equation_system.nodes.abstracts;
 
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_system.EquationSystem;
 import MML4J.main.typist.interfaces.IMergeStrategy;
 import MML4J.main.typist.interfaces.INodeContained;
 import MML4J.main.typist.interfaces.INodeGenerator;
-import MML4J.main.typist.utils.TypeTranslator;
-import MML4J.main.typist.types.Type;
+import MML4J.main.typist.TypeTranslator;
+import MML4J.main.typist.types.abstracts.Type;
 import MML4J.main.typist.interfaces.INodeContainer;
 import MML4J.main.typist.utils.Instantiater;
 

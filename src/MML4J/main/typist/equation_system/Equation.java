@@ -1,7 +1,7 @@
 package MML4J.main.typist.equation_system;
 
 import MML4J.main.Pair;
-import MML4J.main.typist.equation_system.nodes.Node;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import MML4J.main.typist.interfaces.INodeContained;
 import MML4J.main.typist.interfaces.INodeContainer;
 

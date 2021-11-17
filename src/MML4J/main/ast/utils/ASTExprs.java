@@ -1,4 +1,7 @@
-package MML4J.main.ast;
+package MML4J.main.ast.utils;
+
+import MML4J.main.ast.abstracts.AST;
+import MML4J.main.ast.abstracts.ASTExpr;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,9 +1,10 @@
 package MML4J.main.typist.equation_system.nodes;
 
 import MML4J.main.typist.equation_system.EquationSystem;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import MML4J.main.typist.interfaces.INodeGenerator;
-import MML4J.main.typist.utils.TypeTranslator;
-import MML4J.main.typist.types.Type;
+import MML4J.main.typist.TypeTranslator;
+import MML4J.main.typist.types.abstracts.Type;
 import MML4J.main.typist.equation_system.Equation;
 import MML4J.main.typist.utils.Instantiater;
 

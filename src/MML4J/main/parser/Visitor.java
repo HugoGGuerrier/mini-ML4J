@@ -1,8 +1,16 @@
 package MML4J.main.parser;
 
+import MML4J.main.Pair;
+import MML4J.main.ast.abstracts.AST;
+import MML4J.main.ast.abstracts.ASTExpr;
+import MML4J.main.ast.utils.ASTAffect;
+import MML4J.main.ast.utils.ASTExprs;
+import MML4J.main.ast.utils.ASTParams;
 import MML4J.main.parser.antlr.MMLBaseVisitor;
 import MML4J.main.parser.antlr.MMLParser;
 import MML4J.main.ast.*;
+
+import java.util.List;
 
 class Visitor extends MMLBaseVisitor<AST> {
 
@@ -74,15 +82,40 @@ class Visitor extends MMLBaseVisitor<AST> {
         return params;
     }
 
+    @Override
+    public AST visitSingleAffect(MMLParser.SingleAffectContext ctx) {
+        return new ASTAffect(new Pair<>(ctx.name.getText(), (ASTExpr) ctx.value.accept(this)));
+    }
+
+    @Override
+    public AST visitMultipleAffect(MMLParser.MultipleAffectContext ctx) {
+        ASTAffect affect = (ASTAffect) ctx.next.accept(this);
+        affect.addAffect(new Pair<>(ctx.name.getText(), (ASTExpr) ctx.value.accept(this)));
+        return affect;
+    }
 
     // --- Syntactic sugars
 
     @Override
     public AST visitListSugar(MMLParser.ListSugarContext ctx) {
         ASTExprs listContent = (ASTExprs) ctx.inside.accept(this);
-        return new ASTCons(listContent.getExprs());
+        return processListSugar(listContent.getExprs());
     }
 
+    protected ASTApp processListSugar(List<ASTExpr> listContent) {
+        if(listContent.size() == 0) {
+            return new ASTApp(new ASTApp(new ASTVar("cons"), new ASTNil()), new ASTNil());
+        } else if(listContent.size() == 1) {
+            return new ASTApp(new ASTApp(new ASTVar("cons"), listContent.get(0)), new ASTNil());
+        } else {
+            return new ASTApp(new ASTApp(new ASTVar("cons"), listContent.get(0)), processListSugar(listContent.subList(1, listContent.size())));
+        }
+    }
+
+    @Override
+    public AST visitSeqSugar(MMLParser.SeqSugarContext ctx) {
+        return new ASTLet("--ignored", (ASTExpr) ctx.ignored.accept(this), (ASTExpr) ctx.real.accept(this));
+    }
 
     // --- Function definition and application
 
@@ -129,10 +162,10 @@ class Visitor extends MMLBaseVisitor<AST> {
 
         switch (opName) {
             case "!":
-                return new ASTDeref(val);
+                return new ASTApp(new ASTVar("!"), val);
 
             case "@":
-                return new ASTRef(val);
+                return new ASTApp(new ASTVar("@"), val);
         }
 
         parser.signalException("Unknown unary operation");
@@ -148,13 +181,13 @@ class Visitor extends MMLBaseVisitor<AST> {
 
         switch (opName) {
             case "+":
-                return new ASTAdd(left, right);
+                return new ASTApp(new ASTApp(new ASTVar("+"), left), right);
 
             case "-":
-                return new ASTSub(left, right);
+                return new ASTApp(new ASTApp(new ASTVar("-"), left), right);
 
             case ":=":
-                return new ASTAssign(left, right);
+                return new ASTApp(new ASTApp(new ASTVar(":="), left), right);
         }
 
         parser.signalException("Unknown binary operation");
@@ -169,17 +202,17 @@ class Visitor extends MMLBaseVisitor<AST> {
 
         switch (buildInName) {
             case "cons":
-                if(args.size() == 2) return new ASTCons(args.get(0), args.get(1));
+                if(args.size() == 2) return new ASTApp(new ASTApp(new ASTVar("cons"), args.get(0)), args.get(1));
                 else parser.signalException("\"cons\" build-in takes exactly 2 arguments");
                 break;
 
             case "head":
-                if(args.size() == 1) return new ASTHead(args.get(0));
+                if(args.size() == 1) return new ASTApp(new ASTVar("head"), args.get(0));
                 else parser.signalException("\"head\" build-in takes exactly 1 argument");
                 break;
 
             case "tail":
-                if(args.size() == 1) return new ASTTail(args.get(0));
+                if(args.size() == 1) return new ASTApp(new ASTVar("tail"), args.get(0));
                 else parser.signalException("\"tail\" build-in takes exactly 1 argument");
                 break;
         }
@@ -214,11 +247,14 @@ class Visitor extends MMLBaseVisitor<AST> {
     // Visit a let in node
     @Override
     public AST visitLetIn(MMLParser.LetInContext ctx) {
-        return new ASTLet(
-                ctx.name.getText(),
-                (ASTExpr) ctx.value.accept(this),
-                (ASTExpr) ctx.body.accept(this)
-        );
+        ASTAffect affect = (ASTAffect) ctx.affect.accept(this);
+        ASTExpr res = (ASTExpr) ctx.body.accept(this);
+
+        for(Pair<String, ASTExpr> curAff : affect.getAffects()) {
+            res = new ASTLet(curAff.getLeft(), curAff.getRight(), res);
+        }
+
+        return res;
     }
 
 

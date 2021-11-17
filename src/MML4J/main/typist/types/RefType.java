@@ -1,5 +1,7 @@
 package MML4J.main.typist.types;
 
+import MML4J.main.typist.types.abstracts.Type;
+
 import java.util.Objects;
 
 public class RefType extends Type {

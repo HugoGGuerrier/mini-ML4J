@@ -1,6 +1,6 @@
 package MML4J.main.typist.interfaces;
 
-import MML4J.main.typist.equation_system.nodes.Node;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import MML4J.main.typist.equation_system.nodes.SimpleNode;
 
 public interface INodeGenerator {

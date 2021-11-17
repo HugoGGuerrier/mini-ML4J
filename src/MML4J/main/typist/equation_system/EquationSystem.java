@@ -2,7 +2,7 @@ package MML4J.main.typist.equation_system;
 
 import MML4J.main.Utils;
 import MML4J.main.exceptions.TypingException;
-import MML4J.main.typist.equation_system.nodes.Node;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 
 import java.util.LinkedList;
 import java.util.List;

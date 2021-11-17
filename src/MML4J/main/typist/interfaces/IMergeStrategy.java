@@ -2,7 +2,7 @@ package MML4J.main.typist.interfaces;
 
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_system.EquationSystem;
-import MML4J.main.typist.equation_system.nodes.Node;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 
 public interface IMergeStrategy {
     /**

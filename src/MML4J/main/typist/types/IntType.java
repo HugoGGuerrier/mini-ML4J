@@ -1,5 +1,7 @@
 package MML4J.main.typist.types;
 
+import MML4J.main.typist.types.abstracts.Type;
+
 public class IntType extends Type {
 
     // ----- Attributes -----

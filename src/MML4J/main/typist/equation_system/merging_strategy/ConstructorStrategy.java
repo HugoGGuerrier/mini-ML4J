@@ -2,8 +2,8 @@ package MML4J.main.typist.equation_system.merging_strategy;
 
 import MML4J.main.exceptions.TypingException;
 import MML4J.main.typist.equation_system.EquationSystem;
-import MML4J.main.typist.equation_system.nodes.ConstructorNode;
-import MML4J.main.typist.equation_system.nodes.Node;
+import MML4J.main.typist.equation_system.nodes.abstracts.ConstructorNode;
+import MML4J.main.typist.equation_system.nodes.abstracts.Node;
 import MML4J.main.typist.interfaces.IMergeStrategy;
 import MML4J.main.typist.interfaces.INodeContainer;
 
