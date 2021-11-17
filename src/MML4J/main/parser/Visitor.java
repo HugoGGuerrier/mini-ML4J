@@ -104,7 +104,7 @@ class Visitor extends MMLBaseVisitor<AST> {
 
     protected ASTApp processListSugar(List<ASTExpr> listContent) {
         if(listContent.size() == 0) {
-            return new ASTApp(new ASTApp(new ASTVar("cons"), new ASTNil()), new ASTNil());
+            return new ASTApp(new ASTApp(new ASTVar("cons"), new ASTVar("--weak")), new ASTNil());
         } else if(listContent.size() == 1) {
             return new ASTApp(new ASTApp(new ASTVar("cons"), listContent.get(0)), new ASTNil());
         } else {

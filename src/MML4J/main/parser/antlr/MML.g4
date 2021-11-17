@@ -49,7 +49,7 @@ expr :
     | FN '(' parameters=params ')' '{' body=expr '}' # Abstraction
     | REC name=IDENT '(' param=IDENT ')' '{' body=expr '}' # RecAbstraction
     | func=expr '(' arg=expr ')' # Application
-    | ignored=expr ';' real=expr # SeqSugar
+    | ignored=expr (';' real=expr) # SeqSugar
     | LET affect=let_affect IN body=expr # LetIn
     ;
 

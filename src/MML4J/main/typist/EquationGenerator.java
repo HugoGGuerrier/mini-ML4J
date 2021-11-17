@@ -207,8 +207,9 @@ public class EquationGenerator implements INodeGenerator {
             System.out.println(system);
         }
 
-        // Get the type node
+        // Get the type node and generalize it
         Node letValueNode = system.unify();
+        ForAllNode generalizedLetNode = ForAllNode.from(letValueNode, context, system.getExternalEquations());
 
         // Do debug print
         if(Utils.DEBUG) {
@@ -217,21 +218,29 @@ public class EquationGenerator implements INodeGenerator {
             if(externalEquations.size() > 0) {
                 System.out.println("External equations : " + externalEquations);
             }
+            System.out.println("Generalized node : " + generalizedLetNode + "\n===\n");
         }
 
-        // Export the general from constraint to the equation system
+        // Create a context copy
+        Map<String, Node> contextCopy = Utils.cloneMap(context);
+
+        // Create the reverse context$
+        Map<Node, String> reverseContext = new HashMap<>();
+        for(String key : contextCopy.keySet()) {
+            reverseContext.put(contextCopy.get(key), key);
+        }
+
+        // Extends the context with the new types and export the constraints
         for(Equation extEq : system.getExternalEquations()) {
-            this.system.addEquation(extEq.getLeft(), ForAllNode.from(extEq.getRight(), context, null));
+            Node externalNode = extEq.getLeft();
+            Node internalNode = extEq.getRight();
+
+            ForAllNode genInt = ForAllNode.from(internalNode, contextCopy, null);
+            contextCopy.put(reverseContext.get(externalNode), genInt);
+            this.system.addEquation(externalNode, genInt);
         }
-
-        // Generalize the let node
-        ForAllNode generalizedLetNode = ForAllNode.from(letValueNode, context, system.getExternalEquations());
-
-        // Do debug print
-        if(Utils.DEBUG) System.out.println("Generalized node : " + generalizedLetNode + "\n===\n");
 
         // Put the generalized node in the context
-        Map<String, Node> contextCopy = Utils.cloneMap(context);
         contextCopy.put(let.getName(), generalizedLetNode);
 
         // Generate equation for the let in

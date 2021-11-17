@@ -644,30 +644,32 @@ public class MMLParser extends Parser {
 						break;
 					case 2:
 						{
-						_localctx = new SeqSugarContext(new ExprContext(_parentctx, _parentState));
-						((SeqSugarContext)_localctx).ignored = _prevctx;
+						_localctx = new ApplicationContext(new ExprContext(_parentctx, _parentState));
+						((ApplicationContext)_localctx).func = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(84);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 						setState(85);
-						match(T__6);
+						match(T__0);
 						setState(86);
-						((SeqSugarContext)_localctx).real = expr(3);
+						((ApplicationContext)_localctx).arg = expr(0);
+						setState(87);
+						match(T__1);
 						}
 						break;
 					case 3:
 						{
-						_localctx = new ApplicationContext(new ExprContext(_parentctx, _parentState));
-						((ApplicationContext)_localctx).func = _prevctx;
+						_localctx = new SeqSugarContext(new ExprContext(_parentctx, _parentState));
+						((SeqSugarContext)_localctx).ignored = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(87);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(88);
-						match(T__0);
 						setState(89);
-						((ApplicationContext)_localctx).arg = expr(0);
+						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						{
 						setState(90);
-						match(T__1);
+						match(T__6);
+						setState(91);
+						((SeqSugarContext)_localctx).real = expr(0);
+						}
 						}
 						break;
 					}
@@ -964,9 +966,9 @@ public class MMLParser extends Parser {
 		case 0:
 			return precpred(_ctx, 9);
 		case 1:
-			return precpred(_ctx, 2);
-		case 2:
 			return precpred(_ctx, 3);
+		case 2:
+			return precpred(_ctx, 2);
 		}
 		return true;
 	}
@@ -995,8 +997,8 @@ public class MMLParser extends Parser {
 		"\7\22\2\2MN\5\6\4\2NO\7\23\2\2OP\5\4\3\3PR\3\2\2\2Q\17\3\2\2\2Q\21\3\2"+
 		"\2\2Q\22\3\2\2\2Q\23\3\2\2\2Q\24\3\2\2\2Q\30\3\2\2\2Q\34\3\2\2\2Q\36\3"+
 		"\2\2\2Q#\3\2\2\2Q/\3\2\2\2Q;\3\2\2\2QC\3\2\2\2QL\3\2\2\2R`\3\2\2\2ST\f"+
-		"\13\2\2TU\7\27\2\2U_\5\4\3\fVW\f\4\2\2WX\7\t\2\2X_\5\4\3\5YZ\f\5\2\2Z"+
-		"[\7\3\2\2[\\\5\4\3\2\\]\7\4\2\2]_\3\2\2\2^S\3\2\2\2^V\3\2\2\2^Y\3\2\2"+
+		"\13\2\2TU\7\27\2\2U_\5\4\3\fVW\f\5\2\2WX\7\3\2\2XY\5\4\3\2YZ\7\4\2\2Z"+
+		"_\3\2\2\2[\\\f\4\2\2\\]\7\t\2\2]_\5\4\3\2^S\3\2\2\2^V\3\2\2\2^[\3\2\2"+
 		"\2_b\3\2\2\2`^\3\2\2\2`a\3\2\2\2a\5\3\2\2\2b`\3\2\2\2cd\7\32\2\2de\7\n"+
 		"\2\2em\5\4\3\2fg\7\32\2\2gh\7\n\2\2hi\5\4\3\2ij\7\13\2\2jk\5\6\4\2km\3"+
 		"\2\2\2lc\3\2\2\2lf\3\2\2\2m\7\3\2\2\2nu\3\2\2\2ou\5\4\3\2pq\5\4\3\2qr"+

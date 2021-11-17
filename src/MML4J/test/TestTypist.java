@@ -9,6 +9,8 @@ import MML4J.main.typist.types.abstracts.Type;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTypist {
@@ -57,6 +59,9 @@ public class TestTypist {
 
             ASTExpr wrong5 = (ASTExpr) parser.parseString("let a = let b = let c = @5 in c in b in let _ = a := [5] in a");
             assertThrows(TypingException.class, () -> Typist.typeExpression(wrong5));
+
+            ASTExpr wrong6 = (ASTExpr) parser.parseString("let a = @[] in a := [5] ; a := [[5]] ; a");
+            assertThrows(TypingException.class, () -> Typist.typeExpression(wrong6));
         } catch (Exception e) {
             fail(e);
         }
@@ -442,4 +447,21 @@ public class TestTypist {
             fail(e);
         }
     }
+
+    /**
+     * Test the weak type
+     */
+    @Test
+    void testPolymorph() {
+        try {
+            ASTExpr expr = (ASTExpr) parser.parseString("let a = @[] in a := [1] ; a := [23, 4] ; tail(!a)");
+            Type real = Typist.typeExpression(expr);
+
+            ListType expected = new ListType(IntType.getInstance());
+            assertEquals(expected, real);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
 }

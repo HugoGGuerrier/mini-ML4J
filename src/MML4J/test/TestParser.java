@@ -228,9 +228,11 @@ public class TestParser {
         try {
             assertEquals(parser.parseString("let a = b in c"), new ASTLet("a", new ASTVar("b"), new ASTVar("c")));
             assertEquals(parser.parseString("let a = b and c = d in a + c"), parser.parseString("let a = b in let c = d in a + c"));
-            assertEquals(parser.parseString("let a = @5 in a := (12 + 5) ; !a"),
+            assertEquals(parser.parseString("let a = @5 in a := (12 + 5) ; b ; !a"),
                     new ASTLet("a", (ASTExpr) parser.parseString("@5"),
-                            new ASTLet("--ignored", (ASTExpr) parser.parseString("a := (12 + 5)"), (ASTExpr) parser.parseString("!a"))
+                        new ASTLet("--ignored", (ASTExpr) parser.parseString("a := (12 + 5)"),
+                        new ASTLet("--ignored", new ASTVar("b"), (ASTExpr) parser.parseString("!a"))
+                        )
                     )
             );
 
