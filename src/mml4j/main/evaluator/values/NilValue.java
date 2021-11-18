@@ -1,9 +1,5 @@
 package mml4j.main.evaluator.values;
 
-import mml4j.main.evaluator.values.abstracts.Value;
-
-import javax.xml.bind.ValidationEvent;
-
 /**
  * This class represents the only instance of the nil value
  *

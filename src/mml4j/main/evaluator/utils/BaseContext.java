@@ -1,7 +1,6 @@
 package mml4j.main.evaluator.utils;
 
 import mml4j.main.evaluator.build_ins.*;
-import mml4j.main.evaluator.values.WeakValue;
 import mml4j.main.evaluator.values.abstracts.Value;
 
 import java.util.HashMap;

@@ -30,6 +30,7 @@
         <mkdir dir="${bin_dir}" />
 
         <jar destfile="${jar_file}" basedir="${build_dir}" excludes="**/test/**">
+            <zipgroupfileset dir="${lib_dir}" includes="antlr-4.9.2-complete.jar" />
             <manifest>
                 <attribute name="Main-Class" value="mml4j.main.Main"/>
             </manifest>

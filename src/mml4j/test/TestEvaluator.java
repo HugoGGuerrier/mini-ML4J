@@ -7,7 +7,6 @@ import mml4j.main.evaluator.values.abstracts.Value;
 import mml4j.main.parser.Parser;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import sun.security.jgss.GSSUtil;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -8,7 +8,7 @@ public class Utils {
     // ----- Macros -----
 
 
-    public static final boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
 
     // ----- Utils functions ------

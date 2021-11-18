@@ -6,7 +6,6 @@ import mml4j.main.evaluator.Evaluator;
 import mml4j.main.evaluator.values.abstracts.Value;
 import mml4j.main.exceptions.EvaluationException;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
