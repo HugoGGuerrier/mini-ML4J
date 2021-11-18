@@ -2,7 +2,7 @@
 
 Author : Hugo GUERRIER \
 Licence : MIT \
-Version : 0.5
+Version : 0.6
 
 ## Requirements
 
@@ -12,12 +12,10 @@ Version : 0.5
 ## How to compile and test
 
 * Compile : `ant build`
-* Create a JAR : `ant jar`
+* Create a JAR : `ant jar` (jar is now in the bin folder)
 * Start all unit tests : `ant test` (if there is a library error : `ant test -lib lib`)
 * Clean the generated files : `ant clean`
 
 ## Todos
 
-* Implement an evaluator
-* Implement the REPL
 * Add the record types

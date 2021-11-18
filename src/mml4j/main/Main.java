@@ -119,7 +119,7 @@ public class Main {
     public static void main(String[] args) {
         // Print the header
         System.out.println("=============================================");
-        System.out.println("  mini-ML4J 0.5 | REPL\n");
+        System.out.println("  mini-ML4J 0.6 | REPL\n");
         System.out.println("  License : MIT");
         System.out.println("  Author : Hugo GUERRIER\n");
         System.out.println("  Type \"help\" for a little help message");
