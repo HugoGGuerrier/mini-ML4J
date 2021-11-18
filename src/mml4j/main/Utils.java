@@ -23,11 +23,7 @@ public class Utils {
      * @return The newly created map
      */
     public static <K, V> HashMap<K, V> cloneMap(Map<K, V> map) {
-        HashMap<K, V> res = new HashMap<>();
-        for(K key : map.keySet()) {
-            res.put(key, map.get(key));
-        }
-        return res;
+        return new HashMap<>(map);
     }
 
 }

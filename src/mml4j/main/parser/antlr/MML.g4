@@ -41,6 +41,7 @@ expr :
     | UNIT # Unit
     | '(' inside=expr ')' # Priorised
     | '[' inside=exprs ']' # ListSugar
+    | func=expr '(' args=exprs ')' # Application
     | op=UN_OP arg=expr # UnOp
     | left=expr op=BIN_OP right=expr # BinOp
     | name=BUILD_IN '(' arguments=exprs ')' # BuildIn
@@ -48,7 +49,6 @@ expr :
     | IF_EMPTY '(' cond=expr ')' '{' cons=expr '}' ELSE '{' altern=expr '}' # IfEmpty
     | FN '(' parameters=params ')' '{' body=expr '}' # Abstraction
     | REC name=IDENT '(' param=IDENT ')' '{' body=expr '}' # RecAbstraction
-    | func=expr '(' arg=expr ')' # Application
     | ignored=expr (';' real=expr) # SeqSugar
     | LET affect=let_affect IN body=expr # LetIn
     ;

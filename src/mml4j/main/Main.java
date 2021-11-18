@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         // Print the header
         System.out.println("===================================");
-        System.out.println("\tmini-ML4J 0.4 | REPL\n");
+        System.out.println("\tmini-ML4J 0.5 | REPL\n");
         System.out.println("\tLicense : MIT");
         System.out.println("\tAuthor : Hugo GUERRIER");
         System.out.println("===================================");

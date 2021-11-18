@@ -94,8 +94,12 @@ public class TestParser {
     void testApp() {
         try {
             assertEquals(parser.parseString("a(b)"), new ASTApp(new ASTVar("a"), new ASTVar("b")));
+            assertEquals(parser.parseString("a(b)(c)"), new ASTApp(new ASTApp(new ASTVar("a"), new ASTVar("b")), new ASTVar("c")));
+            assertEquals(parser.parseString("a(b, c)"), parser.parseString("a(b)(c)"));
+            assertEquals(parser.parseString("a(b, c, d)"), parser.parseString("a(b)(c)(d)"));
 
             assertThrows(ParsingException.class, () -> parser.parseString("a(b"));
+            assertThrows(ParsingException.class, () -> parser.parseString("a()"));
         } catch (Exception e) {
             fail(e);
         }
@@ -124,7 +128,7 @@ public class TestParser {
     void testCons() {
         try {
             assertEquals(parser.parseString("cons(a, b)"), new ASTApp(new ASTApp(new ASTVar("cons"), new ASTVar("a")), new ASTVar("b")));
-            assertEquals(parser.parseString("[]"), parser.parseString("cons(nil, nil)"));
+            assertEquals(parser.parseString("[]"), parser.parseString("nil"));
             assertEquals(parser.parseString("[a]"), parser.parseString("cons(a, nil)"));
             assertEquals(parser.parseString("[a, b]"), parser.parseString("cons(a, cons(b, nil))"));
             assertEquals(parser.parseString("[a, b, c, d]"), parser.parseString("cons(a, cons(b, cons(c, cons(d, nil))))"));

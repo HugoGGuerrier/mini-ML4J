@@ -12,6 +12,7 @@ import mml4j.main.typist.utils.Instantiater;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class represent an arrow type node

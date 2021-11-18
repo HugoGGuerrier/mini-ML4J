@@ -102,9 +102,9 @@ class Visitor extends MMLBaseVisitor<AST> {
         return processListSugar(listContent.getExprs());
     }
 
-    protected ASTApp processListSugar(List<ASTExpr> listContent) {
+    protected ASTExpr processListSugar(List<ASTExpr> listContent) {
         if(listContent.size() == 0) {
-            return new ASTApp(new ASTApp(new ASTVar("cons"), new ASTVar("--weak")), new ASTNil());
+            return new ASTNil();
         } else if(listContent.size() == 1) {
             return new ASTApp(new ASTApp(new ASTVar("cons"), listContent.get(0)), new ASTNil());
         } else {
@@ -145,10 +145,19 @@ class Visitor extends MMLBaseVisitor<AST> {
     // Visit an application node
     @Override
     public AST visitApplication(MMLParser.ApplicationContext ctx) {
-        return new ASTApp(
-                (ASTExpr) ctx.func.accept(this),
-                (ASTExpr) ctx.arg.accept(this)
-        );
+        ASTExpr res = (ASTExpr) ctx.func.accept(this);
+        ASTExprs args = (ASTExprs) ctx.args.accept(this);
+
+        if(args.size() == 0) {
+            parser.signalException("Cannot apply a function to 0 arguments");
+            return null;
+        }
+
+        for(ASTExpr arg : args.getExprs()) {
+            res = new ASTApp(res, arg);
+        }
+
+        return res;
     }
 
 

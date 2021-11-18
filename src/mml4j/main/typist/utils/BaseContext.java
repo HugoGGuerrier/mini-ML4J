@@ -44,13 +44,6 @@ public class BaseContext {
         // --- Create the context
         baseContext = new HashMap<>();
 
-        // --- Add the weak type
-        ForAllNode weakType = new ForAllNode();
-        SimpleNode weakNode = weakType.getNewNode();
-        weakType.setType(weakNode);
-
-        baseContext.put("--weak", weakType);
-
         // --- Add the add operation
         baseContext.put("+",
                 new ArrowNode(IntNode.getInstance(), new ArrowNode(IntNode.getInstance(), IntNode.getInstance()))

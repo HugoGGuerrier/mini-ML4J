@@ -41,6 +41,7 @@ Infinite : `rec my_rec (a) {my_rec(a)}`
 
 Lambda : `fn(a){a}(5)`
 Named function : `a(5)`
+Multi parameter : `a(5, 6)` or `a(5)(6)`
 
 #### If structures
 
