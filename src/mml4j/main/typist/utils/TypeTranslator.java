@@ -1,4 +1,4 @@
-package mml4j.main.typist;
+package mml4j.main.typist.utils;
 
 import mml4j.main.typist.equation_system.nodes.*;
 import mml4j.main.typist.equation_system.nodes.abstracts.Node;

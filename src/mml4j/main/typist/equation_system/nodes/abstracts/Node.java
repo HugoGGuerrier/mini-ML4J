@@ -5,7 +5,7 @@ import mml4j.main.typist.equation_system.EquationSystem;
 import mml4j.main.typist.interfaces.IMergeStrategy;
 import mml4j.main.typist.interfaces.INodeContained;
 import mml4j.main.typist.interfaces.INodeGenerator;
-import mml4j.main.typist.TypeTranslator;
+import mml4j.main.typist.utils.TypeTranslator;
 import mml4j.main.typist.types.abstracts.Type;
 import mml4j.main.typist.interfaces.INodeContainer;
 import mml4j.main.typist.utils.Instantiater;

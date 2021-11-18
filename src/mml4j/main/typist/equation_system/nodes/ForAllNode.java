@@ -3,7 +3,7 @@ package mml4j.main.typist.equation_system.nodes;
 import mml4j.main.typist.equation_system.EquationSystem;
 import mml4j.main.typist.equation_system.nodes.abstracts.Node;
 import mml4j.main.typist.interfaces.INodeGenerator;
-import mml4j.main.typist.TypeTranslator;
+import mml4j.main.typist.utils.TypeTranslator;
 import mml4j.main.typist.types.abstracts.Type;
 import mml4j.main.typist.equation_system.Equation;
 import mml4j.main.typist.utils.Instantiater;

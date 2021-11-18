@@ -6,6 +6,7 @@ import mml4j.main.exceptions.TypingException;
 import mml4j.main.typist.equation_system.nodes.abstracts.Node;
 import mml4j.main.typist.equation_system.EquationSystem;
 import mml4j.main.typist.types.abstracts.Type;
+import mml4j.main.typist.utils.TypeTranslator;
 
 import java.util.HashMap;
 
