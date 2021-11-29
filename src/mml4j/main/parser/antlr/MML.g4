@@ -41,8 +41,8 @@ expr :
     | UNIT # Unit
     | '(' inside=expr ')' # Priorised
     | '[' inside=exprs ']' # ListSugar
-    | func=expr '(' args=exprs ')' # Application
     | op=UN_OP arg=expr # UnOp
+    | func=expr '(' args=exprs ')' # Application
     | left=expr op=BIN_OP right=expr # BinOp
     | name=BUILD_IN '(' arguments=exprs ')' # BuildIn
     | IF_ZERO '(' cond=expr ')' '{' cons=expr '}' ELSE '{' altern=expr '}' # IfZero

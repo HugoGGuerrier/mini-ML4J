@@ -5,8 +5,11 @@ package mml4j.main.parser.antlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class MMLParser extends Parser {
@@ -476,7 +479,7 @@ public class MMLParser extends Parser {
 				setState(26);
 				((UnOpContext)_localctx).op = match(UN_OP);
 				setState(27);
-				((UnOpContext)_localctx).arg = expr(9);
+				((UnOpContext)_localctx).arg = expr(10);
 				}
 				break;
 			case BUILD_IN:
@@ -645,7 +648,7 @@ public class MMLParser extends Parser {
 						((ApplicationContext)_localctx).func = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(84);
-						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
+						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
 						setState(85);
 						match(T__0);
 						setState(86);
@@ -963,7 +966,7 @@ public class MMLParser extends Parser {
 		case 0:
 			return precpred(_ctx, 8);
 		case 1:
-			return precpred(_ctx, 10);
+			return precpred(_ctx, 9);
 		case 2:
 			return precpred(_ctx, 2);
 		}
@@ -983,25 +986,25 @@ public class MMLParser extends Parser {
 		"\2\2\nz\3\2\2\2\f\r\5\4\3\2\r\16\7\2\2\3\16\3\3\2\2\2\17\20\b\3\1\2\20"+
 		"R\7\32\2\2\21R\7\31\2\2\22R\7\24\2\2\23R\7\25\2\2\24\25\7\3\2\2\25\26"+
 		"\5\4\3\2\26\27\7\4\2\2\27R\3\2\2\2\30\31\7\5\2\2\31\32\5\b\5\2\32\33\7"+
-		"\6\2\2\33R\3\2\2\2\34\35\7\26\2\2\35R\5\4\3\13\36\37\7\30\2\2\37 \7\3"+
-		"\2\2 !\5\b\5\2!\"\7\4\2\2\"R\3\2\2\2#$\7\17\2\2$%\7\3\2\2%&\5\4\3\2&\'"+
-		"\7\4\2\2\'(\7\7\2\2()\5\4\3\2)*\7\b\2\2*+\7\21\2\2+,\7\7\2\2,-\5\4\3\2"+
-		"-.\7\b\2\2.R\3\2\2\2/\60\7\20\2\2\60\61\7\3\2\2\61\62\5\4\3\2\62\63\7"+
-		"\4\2\2\63\64\7\7\2\2\64\65\5\4\3\2\65\66\7\b\2\2\66\67\7\21\2\2\678\7"+
-		"\7\2\289\5\4\3\29:\7\b\2\2:R\3\2\2\2;<\7\r\2\2<=\7\3\2\2=>\5\n\6\2>?\7"+
-		"\4\2\2?@\7\7\2\2@A\5\4\3\2AB\7\b\2\2BR\3\2\2\2CD\7\16\2\2DE\7\32\2\2E"+
-		"F\7\3\2\2FG\7\32\2\2GH\7\4\2\2HI\7\7\2\2IJ\5\4\3\2JK\7\b\2\2KR\3\2\2\2"+
-		"LM\7\22\2\2MN\5\6\4\2NO\7\23\2\2OP\5\4\3\3PR\3\2\2\2Q\17\3\2\2\2Q\21\3"+
-		"\2\2\2Q\22\3\2\2\2Q\23\3\2\2\2Q\24\3\2\2\2Q\30\3\2\2\2Q\34\3\2\2\2Q\36"+
-		"\3\2\2\2Q#\3\2\2\2Q/\3\2\2\2Q;\3\2\2\2QC\3\2\2\2QL\3\2\2\2R`\3\2\2\2S"+
-		"T\f\n\2\2TU\7\27\2\2U_\5\4\3\13VW\f\f\2\2WX\7\3\2\2XY\5\b\5\2YZ\7\4\2"+
-		"\2Z_\3\2\2\2[\\\f\4\2\2\\]\7\t\2\2]_\5\4\3\2^S\3\2\2\2^V\3\2\2\2^[\3\2"+
-		"\2\2_b\3\2\2\2`^\3\2\2\2`a\3\2\2\2a\5\3\2\2\2b`\3\2\2\2cd\7\32\2\2de\7"+
-		"\n\2\2em\5\4\3\2fg\7\32\2\2gh\7\n\2\2hi\5\4\3\2ij\7\13\2\2jk\5\6\4\2k"+
-		"m\3\2\2\2lc\3\2\2\2lf\3\2\2\2m\7\3\2\2\2nu\3\2\2\2ou\5\4\3\2pq\5\4\3\2"+
-		"qr\7\f\2\2rs\5\b\5\2su\3\2\2\2tn\3\2\2\2to\3\2\2\2tp\3\2\2\2u\t\3\2\2"+
-		"\2v{\7\32\2\2wx\7\32\2\2xy\7\f\2\2y{\5\n\6\2zv\3\2\2\2zw\3\2\2\2{\13\3"+
-		"\2\2\2\bQ^`ltz";
+		"\6\2\2\33R\3\2\2\2\34\35\7\26\2\2\35R\5\4\3\f\36\37\7\30\2\2\37 \7\3\2"+
+		"\2 !\5\b\5\2!\"\7\4\2\2\"R\3\2\2\2#$\7\17\2\2$%\7\3\2\2%&\5\4\3\2&\'\7"+
+		"\4\2\2\'(\7\7\2\2()\5\4\3\2)*\7\b\2\2*+\7\21\2\2+,\7\7\2\2,-\5\4\3\2-"+
+		".\7\b\2\2.R\3\2\2\2/\60\7\20\2\2\60\61\7\3\2\2\61\62\5\4\3\2\62\63\7\4"+
+		"\2\2\63\64\7\7\2\2\64\65\5\4\3\2\65\66\7\b\2\2\66\67\7\21\2\2\678\7\7"+
+		"\2\289\5\4\3\29:\7\b\2\2:R\3\2\2\2;<\7\r\2\2<=\7\3\2\2=>\5\n\6\2>?\7\4"+
+		"\2\2?@\7\7\2\2@A\5\4\3\2AB\7\b\2\2BR\3\2\2\2CD\7\16\2\2DE\7\32\2\2EF\7"+
+		"\3\2\2FG\7\32\2\2GH\7\4\2\2HI\7\7\2\2IJ\5\4\3\2JK\7\b\2\2KR\3\2\2\2LM"+
+		"\7\22\2\2MN\5\6\4\2NO\7\23\2\2OP\5\4\3\3PR\3\2\2\2Q\17\3\2\2\2Q\21\3\2"+
+		"\2\2Q\22\3\2\2\2Q\23\3\2\2\2Q\24\3\2\2\2Q\30\3\2\2\2Q\34\3\2\2\2Q\36\3"+
+		"\2\2\2Q#\3\2\2\2Q/\3\2\2\2Q;\3\2\2\2QC\3\2\2\2QL\3\2\2\2R`\3\2\2\2ST\f"+
+		"\n\2\2TU\7\27\2\2U_\5\4\3\13VW\f\13\2\2WX\7\3\2\2XY\5\b\5\2YZ\7\4\2\2"+
+		"Z_\3\2\2\2[\\\f\4\2\2\\]\7\t\2\2]_\5\4\3\2^S\3\2\2\2^V\3\2\2\2^[\3\2\2"+
+		"\2_b\3\2\2\2`^\3\2\2\2`a\3\2\2\2a\5\3\2\2\2b`\3\2\2\2cd\7\32\2\2de\7\n"+
+		"\2\2em\5\4\3\2fg\7\32\2\2gh\7\n\2\2hi\5\4\3\2ij\7\13\2\2jk\5\6\4\2km\3"+
+		"\2\2\2lc\3\2\2\2lf\3\2\2\2m\7\3\2\2\2nu\3\2\2\2ou\5\4\3\2pq\5\4\3\2qr"+
+		"\7\f\2\2rs\5\b\5\2su\3\2\2\2tn\3\2\2\2to\3\2\2\2tp\3\2\2\2u\t\3\2\2\2"+
+		"v{\7\32\2\2wx\7\32\2\2xy\7\f\2\2y{\5\n\6\2zv\3\2\2\2zw\3\2\2\2{\13\3\2"+
+		"\2\2\bQ^`ltz";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
